@@ -9,12 +9,23 @@ public struct PathHomeView: View {
     private let pack: LanguagePack
     private let state: LearnerState
     private let onStartLesson: (Lesson) -> Void
+    private let onStartBoss: () -> Void
+    private let onShowSpirit: () -> Void
     private let onShowProfile: () -> Void
 
-    public init(pack: LanguagePack, state: LearnerState, onStartLesson: @escaping (Lesson) -> Void, onShowProfile: @escaping () -> Void) {
+    public init(
+        pack: LanguagePack,
+        state: LearnerState,
+        onStartLesson: @escaping (Lesson) -> Void,
+        onStartBoss: @escaping () -> Void,
+        onShowSpirit: @escaping () -> Void,
+        onShowProfile: @escaping () -> Void
+    ) {
         self.pack = pack
         self.state = state
         self.onStartLesson = onStartLesson
+        self.onStartBoss = onStartBoss
+        self.onShowSpirit = onShowSpirit
         self.onShowProfile = onShowProfile
     }
 
@@ -23,6 +34,7 @@ public struct PathHomeView: View {
             VStack(alignment: .leading, spacing: KotobaSpacing.space6) {
                 header
                 nextStep
+                rpgActions
                 pathNodes
             }
             .padding(KotobaSpacing.gutter)
@@ -41,6 +53,7 @@ public struct PathHomeView: View {
                     .foregroundStyle(KotobaColor.textMuted)
             }
             Spacer()
+            KotobaIconButton("sparkles", label: "Spirit", variant: .neutral, action: onShowSpirit)
             Button(action: onShowProfile) {
                 KotobaAvatar(name: "Aiko Tanaka", ringPercent: 70)
             }
@@ -67,6 +80,20 @@ public struct PathHomeView: View {
         }
     }
 
+    private var rpgActions: some View {
+        HStack(spacing: KotobaSpacing.space4) {
+            Button(action: onStartBoss) {
+                KotobaBossNode(state: bossState, size: .md, label: "Kana boss")
+            }
+            .buttonStyle(.plain)
+            .disabled(pack.allLessons.isEmpty)
+
+            KotobaToriiGate(size: 86, state: bossState == .defeated ? .passed : .open, plaque: "言", caption: "Unit gate")
+            Spacer()
+        }
+        .padding(.vertical, KotobaSpacing.space2)
+    }
+
     private var pathNodes: some View {
         VStack(spacing: KotobaSpacing.space6) {
             ForEach(Array(pack.allLessons.enumerated()), id: \.element.id.rawValue) { index, lesson in
@@ -89,5 +116,9 @@ public struct PathHomeView: View {
 
     private var currentLesson: Lesson? {
         pack.allLessons.first { !state.completedLessonIDs.contains($0.id.rawValue) } ?? pack.allLessons.last
+    }
+
+    private var bossState: KotobaBossNodeState {
+        state.defeatedBossIDs.contains("sample-kana-boss") ? .defeated : .available
     }
 }

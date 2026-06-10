@@ -1,11 +1,13 @@
 import SwiftUI
 import KotobaDesignSystem
+import FeatureBattle
 import FeatureLesson
 import FeatureOnboarding
 import FeaturePath
 import FeatureProfile
+import FeatureSpirit
 
-/// Phase 1 shell renders the design-system gallery until product navigation exists.
+/// App composition root wires feature screens to local learner state.
 struct AppRootView: View {
     @State private var model = AppModel()
 
@@ -19,6 +21,8 @@ struct AppRootView: View {
                     pack: model.pack,
                     state: model.state,
                     onStartLesson: { model.startLesson($0) },
+                    onStartBoss: { model.startBoss() },
+                    onShowSpirit: { model.route = .spirit },
                     onShowProfile: { model.route = .profile }
                 )
             case .lesson:
@@ -35,12 +39,37 @@ struct AppRootView: View {
                 if let summary = model.lastSummary {
                     ResultsView(summary: summary) { model.route = .home }
                 } else {
-                    PathHomeView(pack: model.pack, state: model.state, onStartLesson: { model.startLesson($0) }, onShowProfile: { model.route = .profile })
+                    home
                 }
+            case .battle:
+                if let lesson = model.activeLesson {
+                    BossBattleView(
+                        lesson: lesson,
+                        onExit: { model.route = .home },
+                        onWin: { model.completeBoss() }
+                    )
+                } else {
+                    home
+                }
+            case .gate:
+                GatePassageView { model.route = .home }
+            case .spirit:
+                SpiritView(state: model.state) { model.route = .home }
             case .profile:
                 ProfileView(state: model.state) { model.route = .home }
             }
         }
+    }
+
+    private var home: some View {
+        PathHomeView(
+            pack: model.pack,
+            state: model.state,
+            onStartLesson: { model.startLesson($0) },
+            onStartBoss: { model.startBoss() },
+            onShowSpirit: { model.route = .spirit },
+            onShowProfile: { model.route = .profile }
+        )
     }
 }
 

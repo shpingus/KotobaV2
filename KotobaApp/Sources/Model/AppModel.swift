@@ -45,8 +45,25 @@ final class AppModel {
         save()
     }
 
+    func startBoss() {
+        activeLesson = currentLesson ?? pack.allLessons.first
+        route = .battle
+    }
+
+    func completeBoss() {
+        state.defeatedBossIDs.insert("sample-kana-boss")
+        state.totalXP += 30
+        activeLesson = nil
+        route = .gate
+        save()
+    }
+
     func save() {
         try? store.save(state)
+    }
+
+    private var currentLesson: Lesson? {
+        pack.allLessons.first { !state.completedLessonIDs.contains($0.id.rawValue) } ?? pack.allLessons.last
     }
 
     private static let emptyPack = LanguagePack(
@@ -64,5 +81,8 @@ enum AppRoute {
     case home
     case lesson
     case results
+    case battle
+    case gate
+    case spirit
     case profile
 }
