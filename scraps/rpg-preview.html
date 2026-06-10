@@ -1,0 +1,628 @@
+<!DOCTYPE html><html><head><meta charset=utf8>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<style>/* ============================================================
+   Kotoba — Color tokens
+   Palette story:
+   - Ai (藍 indigo)      : the brand. Trust, focus, the deep "summit".
+   - Kaki (柿 persimmon) : energy & streaks. The daily flame.
+   - Wakaba (若葉 green) : growth, success, "you advanced".
+   - Sumi (墨 ink)       : neutral text & surfaces, faint indigo cast.
+   - Tier scale          : the JLPT path, brightening to a deep summit.
+   Light-first. All base ramps + semantic aliases live here.
+   ============================================================ */
+
+:root {
+  /* ---------- Ai · indigo (primary) ---------- */
+  --ai-50:  #EEF0FB;
+  --ai-100: #DDE2F6;
+  --ai-200: #BBC5EC;
+  --ai-300: #94A2DF;
+  --ai-400: #6E7FD0;
+  --ai-500: #4F61BE;
+  --ai-600: #3D4CA0;
+  --ai-700: #313E82;
+  --ai-800: #283367;
+  --ai-900: #1F284F;
+  --ai-950: #141A36;
+
+  /* ---------- Kaki · persimmon (accent / energy) ---------- */
+  --kaki-50:  #FFF2EC;
+  --kaki-100: #FFE1D3;
+  --kaki-200: #FFC2A8;
+  --kaki-300: #FF9D74;
+  --kaki-400: #FB7948;
+  --kaki-500: #F15F2C;
+  --kaki-600: #D94A1C;
+  --kaki-700: #B23A18;
+  --kaki-800: #8E301A;
+  --kaki-900: #722A19;
+
+  /* ---------- Wakaba · green (success / growth) ---------- */
+  --wakaba-50:  #EEF8EE;
+  --wakaba-100: #D6EFD7;
+  --wakaba-200: #AEDFB0;
+  --wakaba-300: #7CCA80;
+  --wakaba-400: #4FB45A;
+  --wakaba-500: #2F9C45;
+  --wakaba-600: #237D38;
+  --wakaba-700: #1E632F;
+  --wakaba-800: #1A4F2A;
+  --wakaba-900: #154023;
+
+  /* ---------- Kihada · gold (warning / highlight) ---------- */
+  --kihada-50:  #FDF6E3;
+  --kihada-100: #FAEABF;
+  --kihada-200: #F4D484;
+  --kihada-300: #ECBC49;
+  --kihada-400: #E2A52E;
+  --kihada-500: #C9881C;
+  --kihada-600: #A36916;
+  --kihada-700: #7E5114;
+
+  /* ---------- Beni · rose (error / wrong answer) ---------- */
+  --beni-50:  #FDEDF0;
+  --beni-100: #FAD3DB;
+  --beni-200: #F2A3B3;
+  --beni-300: #E66E87;
+  --beni-400: #D8556E;
+  --beni-500: #C13355;
+  --beni-600: #A02343;
+  --beni-700: #7E1C36;
+
+  /* ---------- Shu · vermillion (torii red · RPG layer) ---------- */
+  --shu-50:  #FDEFEA;
+  --shu-100: #FAD9CE;
+  --shu-200: #F3B09C;
+  --shu-300: #E88066;
+  --shu-400: #DA5839;
+  --shu-500: #C93A1D;
+  --shu-600: #A82E16;
+  --shu-700: #862513;
+  --shu-800: #6B2013;
+  --shu-900: #571C12;
+
+  /* ---------- Sumi · neutral ink (faint indigo cast) ---------- */
+  --sumi-0:   #FFFFFF;
+  --sumi-50:  #F7F8FB;
+  --sumi-100: #EFF1F6;
+  --sumi-200: #E2E5EE;
+  --sumi-300: #CBD0DE;
+  --sumi-400: #9AA1B5;
+  --sumi-500: #6B7287;
+  --sumi-600: #4D5468;
+  --sumi-700: #383E4F;
+  --sumi-800: #262B38;
+  --sumi-900: #171A24;
+  --sumi-950: #0E1019;
+
+  /* ---------- JLPT tier path (brightening climb to summit) ---------- */
+  --tier-pre: #7FB2D9;   /* Pre-N5 · sora · the start */
+  --tier-n5:  #5FB87A;   /* N5 · wakaba */
+  --tier-n4:  #E2B23C;   /* N4 · kihada */
+  --tier-n3:  #ED7A3D;   /* N3 · kaki */
+  --tier-n2:  #D8556E;   /* N2 · beni */
+  --tier-n1:  #4F61BE;   /* N1 · ai · the summit */
+
+  /* ============================================================
+     Semantic aliases — reference these in product, not raw ramps
+     ============================================================ */
+
+  /* Brand */
+  --brand:            var(--ai-600);
+  --brand-strong:     var(--ai-700);
+  --brand-soft:       var(--ai-100);
+  --brand-subtle:     var(--ai-50);
+  --on-brand:         var(--sumi-0);
+
+  /* Accent / energy (streaks, flames, key CTAs) */
+  --accent:           var(--kaki-500);
+  --accent-strong:    var(--kaki-600);
+  --accent-soft:      var(--kaki-100);
+  --on-accent:        var(--sumi-0);
+
+  /* Text */
+  --text-strong:      var(--sumi-900);
+  --text-body:        var(--sumi-700);
+  --text-muted:       var(--sumi-500);
+  --text-faint:       var(--sumi-400);
+  --text-on-dark:     var(--sumi-0);
+  --text-link:        var(--ai-600);
+
+  /* Surfaces / backgrounds */
+  --bg-canvas:        var(--sumi-50);
+  --bg-raised:        var(--sumi-0);
+  --surface-card:     var(--sumi-0);
+  --surface-sunken:   var(--sumi-100);
+  --surface-inverse:  var(--sumi-900);
+
+  /* Borders / dividers */
+  --border-subtle:    var(--sumi-200);
+  --border-default:   var(--sumi-300);
+  --border-strong:    var(--sumi-400);
+  --border-brand:     var(--ai-300);
+
+  /* Status */
+  --success:          var(--wakaba-500);
+  --success-soft:     var(--wakaba-100);
+  --on-success:       var(--sumi-0);
+  --warning:          var(--kihada-500);
+  --warning-soft:     var(--kihada-100);
+  --danger:           var(--beni-500);
+  --danger-soft:      var(--beni-100);
+  --on-danger:        var(--sumi-0);
+
+  /* Focus ring */
+  --focus-ring:       var(--ai-400);
+
+  /* RPG layer · torii & power */
+  --torii:            var(--shu-500);
+  --torii-deep:       var(--shu-700);
+  --torii-soft:       var(--shu-50);
+  --power:            var(--kihada-400);
+  --power-deep:       var(--kihada-600);
+  --power-soft:       var(--kihada-50);
+}
+
+/* ============================================================
+   Kotoba — Typography tokens
+   Display & numerals : Space Grotesk  (crisp, characterful stats)
+   Body & UI (Latin)  : Plus Jakarta Sans (warm, friendly, readable)
+   Japanese body      : Zen Kaku Gothic New
+   Japanese display    : Zen Maru Gothic (big friendly kana)
+   ============================================================ */
+
+:root {
+  /* ---------- Families ---------- */
+  --font-display: 'Space Grotesk', 'Zen Maru Gothic', system-ui, sans-serif;
+  --font-body:    'Plus Jakarta Sans', 'Zen Kaku Gothic New', system-ui, sans-serif;
+  --font-jp:      'Zen Kaku Gothic New', 'Plus Jakarta Sans', sans-serif;
+  --font-jp-display: 'Zen Maru Gothic', 'Space Grotesk', sans-serif;
+  --font-num:     'Space Grotesk', system-ui, sans-serif; /* tabular stats */
+
+  /* ---------- Weights ---------- */
+  --fw-regular:  400; /* @kind font */
+  --fw-medium:   500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:     700; /* @kind font */
+  --fw-extra:    800; /* @kind font */
+
+  /* ---------- Type scale (rem, 16px base) ---------- */
+  --text-3xs: 0.6875rem;  /* 11 · micro labels */
+  --text-2xs: 0.75rem;    /* 12 · captions */
+  --text-xs:  0.8125rem;  /* 13 */
+  --text-sm:  0.875rem;   /* 14 · secondary UI */
+  --text-md:  1rem;       /* 16 · body */
+  --text-lg:  1.125rem;   /* 18 · lead */
+  --text-xl:  1.375rem;   /* 22 · h4 */
+  --text-2xl: 1.75rem;    /* 28 · h3 */
+  --text-3xl: 2.25rem;    /* 36 · h2 */
+  --text-4xl: 2.875rem;   /* 46 · h1 */
+  --text-5xl: 3.75rem;    /* 60 · display */
+  --text-6xl: 4.75rem;    /* 76 · hero */
+
+  /* ---------- Line heights ---------- */
+  --leading-tight:  1.1;
+  --leading-snug:   1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;   /* JP reading comfort */
+
+  /* ---------- Letter spacing ---------- */
+  --tracking-tight:  -0.02em;
+  --tracking-snug:   -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.04em;
+  --tracking-caps:   0.12em;  /* eyebrow / overline */
+}
+
+/* ============================================================
+   Kotoba — Spacing & layout tokens
+   Base unit: 4px. Use the --space-* scale for all gaps,
+   padding and margins. Container widths for app surfaces.
+   ============================================================ */
+
+:root {
+  --space-0:   0;
+  --space-1:   0.25rem;  /* 4 */
+  --space-2:   0.5rem;   /* 8 */
+  --space-3:   0.75rem;  /* 12 */
+  --space-4:   1rem;     /* 16 */
+  --space-5:   1.25rem;  /* 20 */
+  --space-6:   1.5rem;   /* 24 */
+  --space-7:   2rem;     /* 32 */
+  --space-8:   2.5rem;   /* 40 */
+  --space-9:   3rem;     /* 48 */
+  --space-10:  4rem;     /* 64 */
+  --space-11:  5rem;     /* 80 */
+  --space-12:  6rem;     /* 96 */
+
+  /* Component-level rhythm */
+  --gutter:        var(--space-5);   /* screen edge padding (mobile) */
+  --stack-tight:   var(--space-2);
+  --stack:         var(--space-4);
+  --stack-loose:   var(--space-6);
+
+  /* Layout widths */
+  --app-width:     420px;   /* mobile app canvas */
+  --content-max:   1120px;  /* marketing content */
+  --tap-min:       48px;    /* min hit target (>=44 a11y) */
+}
+
+/* ============================================================
+   Kotoba — Elevation: radii, borders, shadows
+   Shadows are soft and indigo-tinted (not neutral grey) so the
+   light-first UI feels airy. The "press" tokens drive the
+   tactile 3-D button: a solid darker edge that compresses on
+   :active — the satisfying click that signals progress.
+   ============================================================ */
+
+:root {
+  /* ---------- Corner radii ---------- */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;   /* default card */
+  --radius-xl:   28px;
+  --radius-2xl:  36px;
+  --radius-pill: 999px;  /* primary buttons, chips */
+
+  /* ---------- Border widths ---------- */
+  --border-thin:  1px;
+  --border-base:  1.5px;
+  --border-thick: 2px;
+
+  /* ---------- Soft indigo-tinted shadows ---------- */
+  --shadow-xs:  0 1px 2px rgba(31, 40, 79, 0.06);
+  --shadow-sm:  0 2px 6px rgba(31, 40, 79, 0.08);
+  --shadow-md:  0 6px 16px rgba(31, 40, 79, 0.10);
+  --shadow-lg:  0 14px 32px rgba(31, 40, 79, 0.14);
+  --shadow-xl:  0 24px 56px rgba(31, 40, 79, 0.18);
+
+  /* Colored glow for celebratory / focal states */
+  --glow-accent: 0 8px 24px rgba(241, 95, 44, 0.32);
+  --glow-brand:  0 8px 24px rgba(79, 97, 190, 0.32);
+  --glow-success: 0 8px 24px rgba(47, 156, 69, 0.30);
+
+  /* ---------- Tactile press (3-D button) ---------- */
+  --press-depth:        4px;   /* solid bottom edge height */
+  --press-shadow:       inset 0 -4px 0 rgba(0,0,0,0.18);
+  --press-shadow-soft:  inset 0 -3px 0 rgba(0,0,0,0.10);
+
+  /* Focus ring */
+  --ring: 0 0 0 4px rgba(110, 127, 208, 0.35);
+}
+
+/* ============================================================
+   Kotoba — Motion tokens
+   Movement is purposeful and a little springy: things ease out
+   calmly, and rewards (level-ups, correct answers, streaks)
+   get an overshoot "pop". No infinite decorative loops on
+   content. Respect prefers-reduced-motion in product.
+   ============================================================ */
+
+:root {
+  /* Durations */
+  --dur-instant: 80ms;  /* @kind other */
+  --dur-fast:    140ms; /* @kind other */
+  --dur-base:    220ms; /* @kind other */
+  --dur-slow:    340ms; /* @kind other */
+  --dur-slower:  520ms; /* @kind other */
+
+  /* Easing */
+  --ease-out:     cubic-bezier(0.22, 0.80, 0.30, 1);   /* @kind other */
+  --ease-in-out:  cubic-bezier(0.65, 0.05, 0.36, 1);   /* @kind other */
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);   /* @kind other */
+  --ease-emphas:  cubic-bezier(0.16, 1, 0.30, 1);      /* @kind other */
+}
+
+/* ============================================================
+   Kotoba — base element defaults & helpers
+   Light, opinionated reset so specimen cards and product
+   surfaces share a baseline. Kept minimal on purpose.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--text-body);
+  background: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-strong);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+  font-weight: var(--fw-bold);
+}
+
+p { margin: 0; }
+
+a { color: var(--text-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Japanese text helper */
+.jp { font-family: var(--font-jp); line-height: var(--leading-relaxed); }
+.jp-display { font-family: var(--font-jp-display); }
+
+/* Tabular numerals for stats */
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+
+/* Eyebrow / overline */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--radius-sm);
+}
+
+</style>
+<style>body{margin:0;padding:30px;background:var(--bg-canvas);font-family:var(--font-body)}
+.grp{display:flex;align-items:flex-end;gap:26px;margin-bottom:26px;flex-wrap:wrap}
+.lbl{width:100%;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint)}</style>
+</head><body><div id=root></div>
+<script type="text/babel">
+const {PixelSprite, Companion}=(function(){
+
+
+/**
+ * Kotoba Companion — the learner's kotodama (言霊, "word spirit"), a pixel-art
+ * chibi companion that walks the path with you and evolves as your Japanese
+ * grows. Rendered from pixel matrices as crisp SVG — no image assets needed.
+ * Stage 1: newborn spirit · Stage 2: persimmon scarf traveler · Stage 3: gold-touched guardian.
+ */
+
+const PALETTE = {
+  O: '#1F284F', // outline · ai-900
+  B: '#4F61BE', // body · ai-500
+  L: '#94A2DF', // body highlight · ai-300
+  W: '#FFFFFF', // eye white
+  K: '#171A24', // pupil
+  S: '#F15F2C', // scarf · kaki-500
+  D: '#D94A1C', // scarf shade · kaki-600
+  G: '#ECBC49', // gold · kihada-300
+  R: '#FFC2A8', // blush · kaki-200
+};
+
+// 12 columns wide. '.' = transparent.
+const STAGE_1 = [
+  '....OOOO....',
+  '..OOBBBBOO..',
+  '.OBBLBBLBBO.',
+  '.OBBBBBBBBO.',
+  'OBWWBBBBWWBO',
+  'OBWKBBBBWKBO',
+  'OBBBBBBBBBBO',
+  'OBRBBBBBBRBO',
+  '.OBBBBBBBBO.',
+  '.OBBBBBBBBO.',
+  '..OBBOOBBO..',
+  '...OBO.OBO..',
+  '....O...O...',
+];
+
+const STAGE_2 = [
+  '....OOOO....',
+  '..OOBBBBOO..',
+  '.OBBLBBLBBO.',
+  '.OBBBBBBBBO.',
+  'OBWWBBBBWWBO',
+  'OBWKBBBBWKBO',
+  'OBBBBBBBBBBO',
+  'OSSSSSSSSSSO',
+  '.OSSDDDDSSO.',
+  '.OBBBBBBBBO.',
+  '..OBBOOBBO..',
+  '...OBO.OBO..',
+  '....O...O...',
+];
+
+const STAGE_3 = [
+  '.G..OOOO..G.',
+  '..OOBBBBOO..',
+  '.OGGGGGGGGO.',
+  '.OBBLBBLBBO.',
+  'OBWWBBBBWWBO',
+  'OBWKBBBBWKBO',
+  'OBBBBBBBBBBO',
+  'OSSSSSSSSSSO',
+  '.OSSDDDDSSO.',
+  '.OBBBBBBBBO.',
+  'G.OBBOOBBO.G',
+  '...OBO.OBO..',
+  '....O...O...',
+];
+
+const STAGES = { 1: STAGE_1, 2: STAGE_2, 3: STAGE_3 };
+
+const CSS = `
+.kotoba-companion{ display:inline-flex; }
+.kotoba-companion[data-floating="true"]{ animation:kotoba-companion-float 2.6s ease-in-out infinite; }
+@keyframes kotoba-companion-float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-7%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .kotoba-companion[data-floating="true"]{ animation:none; }
+}
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+/** Renders any pixel matrix as crisp SVG. Shared by Companion and BossNode. */
+function PixelSprite({ matrix, palette = PALETTE, size = 72, className = '', style, ...rest }) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+  const rects = [];
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const c = matrix[y][x];
+      if (c === '.' || !palette[c]) continue;
+      rects.push(<rect key={`${x}-${y}`} x={x} y={y} width="1.02" height="1.02" fill={palette[c]} />);
+    }
+  }
+  return (
+    <svg
+      viewBox={`0 0 ${cols} ${rows}`}
+      width={size}
+      height={(size * rows) / cols}
+      shapeRendering="crispEdges"
+      className={className}
+      style={{ imageRendering: 'pixelated', ...style }}
+      aria-hidden="true"
+      {...rest}
+    >
+      {rects}
+    </svg>
+  );
+}
+
+function Companion({
+  stage = 1,
+  size = 72,
+  floating = false,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-companion-css', CSS);
+  const matrix = STAGES[stage] || STAGE_1;
+  return (
+    <span className={`kotoba-companion ${className}`} data-floating={floating || undefined} {...rest}>
+      <PixelSprite matrix={matrix} size={size} />
+    </span>
+  );
+}
+
+
+
+return {PixelSprite, Companion};})();
+const {ToriiGate}=(function(){
+/**
+ * Kotoba ToriiGate — the vermillion gate. Marks passage: unit checkpoints on
+ * the path, grand JLPT tier gates, and celebratory brand moments. Drawn as
+ * flat geometric SVG in Shu vermillion with an optional plaque (gaku) label.
+ */
+
+const CSS = `
+.kotoba-torii{ display:inline-flex; flex-direction:column; align-items:center; gap:8px; }
+.kotoba-torii .kotoba-torii-caption{
+  font-family:var(--font-body); font-weight:600; font-size:var(--text-xs);
+  color:var(--text-muted); text-align:center;
+}
+.kotoba-torii[data-state="locked"] svg{ opacity:0.9; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function ToriiGate({
+  size = 96,
+  state = 'open',          // open | locked | passed
+  plaque,                  // short label on the gaku (e.g. "二" or "N4")
+  caption,                 // text under the gate
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-torii-css', CSS);
+  const locked = state === 'locked';
+  const main = locked ? 'var(--sumi-300)' : 'var(--torii)';
+  const deep = locked ? 'var(--sumi-400)' : 'var(--torii-deep)';
+  const plaqueBg = locked ? 'var(--sumi-100)' : '#FFF7F0';
+  const plaqueInk = locked ? 'var(--text-faint)' : 'var(--torii-deep)';
+  const w = size;
+  const h = size * 0.92;
+  return (
+    <span className={`kotoba-torii ${className}`} data-state={state} {...rest}>
+      <svg width={w} height={h} viewBox="0 0 120 110" fill="none" aria-hidden="true">
+        {/* kasagi — top lintel, gently upswept */}
+        <path d="M4 22 Q60 8 116 22 L116 13 Q60 -1 4 13 Z" fill={deep} />
+        {/* shimaki — band under the kasagi */}
+        <path d="M10 24 Q60 13 110 24 L110 32 Q60 22 10 32 Z" fill={main} />
+        {/* gakuzuka — center strut */}
+        <rect x="55.5" y="30" width="9" height="22" fill={main} />
+        {/* nuki — crossbar */}
+        <rect x="14" y="50" width="92" height="9" rx="1.5" fill={main} />
+        {/* pillars — slight inward lean */}
+        <path d="M22 30 L34 30 L31 104 L19 104 Z" fill={main} />
+        <path d="M86 30 L98 30 L101 104 L89 104 Z" fill={main} />
+        {/* pillar feet */}
+        <rect x="16.5" y="100" width="17" height="7" rx="2" fill={deep} />
+        <rect x="86.5" y="100" width="17" height="7" rx="2" fill={deep} />
+        {/* gaku — hanging plaque */}
+        {plaque != null && (
+          <g>
+            <rect x="48" y="31" width="24" height="20" rx="3" fill={plaqueBg} stroke={deep} strokeWidth="2" />
+            <text x="60" y="45.5" textAnchor="middle" fontFamily="'Zen Maru Gothic','Space Grotesk',sans-serif"
+                  fontWeight="700" fontSize="12" fill={plaqueInk}>{plaque}</text>
+          </g>
+        )}
+        {/* passed — small check seal on the right pillar */}
+        {state === 'passed' && (
+          <g>
+            <circle cx="94" cy="72" r="10" fill="var(--success)" stroke="#fff" strokeWidth="2.5" />
+            <path d="M89.5 72 L92.8 75.3 L98.5 68.8" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </g>
+        )}
+      </svg>
+      {caption && <span className="kotoba-torii-caption">{caption}</span>}
+    </span>
+  );
+}
+
+
+return {ToriiGate};})();
+function App(){return <div>
+ <div className="grp"><span className="lbl">Kotodama — stages 1–3 (sm + lg)</span>
+  <Companion stage={1} size={48}/>
+  <Companion stage={2} size={48}/>
+  <Companion stage={3} size={48}/>
+  <Companion stage={1} size={110}/>
+  <Companion stage={2} size={110} floating/>
+  <Companion stage={3} size={110}/>
+ </div>
+ <div className="grp"><span className="lbl">Torii — open / plaque / passed / locked / grand</span>
+  <ToriiGate size={72}/>
+  <ToriiGate size={96} plaque="二" caption="Unit 2"/>
+  <ToriiGate size={96} state="passed" plaque="一"/>
+  <ToriiGate size={96} state="locked" plaque="N4" caption="Reach N4"/>
+  <ToriiGate size={150} plaque="N5"/>
+ </div>
+ <div className="grp" style={{background:'var(--ai-700)',padding:24,borderRadius:16}}><span className="lbl" style={{color:'rgba(255,255,255,.6)'}}>On indigo</span>
+  <Companion stage={2} size={90}/>
+  <ToriiGate size={90} plaque="三"/>
+ </div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

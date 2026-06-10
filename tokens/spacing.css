@@ -1,0 +1,32 @@
+/* ============================================================
+   Kotoba — Spacing & layout tokens
+   Base unit: 4px. Use the --space-* scale for all gaps,
+   padding and margins. Container widths for app surfaces.
+   ============================================================ */
+
+:root {
+  --space-0:   0;
+  --space-1:   0.25rem;  /* 4 */
+  --space-2:   0.5rem;   /* 8 */
+  --space-3:   0.75rem;  /* 12 */
+  --space-4:   1rem;     /* 16 */
+  --space-5:   1.25rem;  /* 20 */
+  --space-6:   1.5rem;   /* 24 */
+  --space-7:   2rem;     /* 32 */
+  --space-8:   2.5rem;   /* 40 */
+  --space-9:   3rem;     /* 48 */
+  --space-10:  4rem;     /* 64 */
+  --space-11:  5rem;     /* 80 */
+  --space-12:  6rem;     /* 96 */
+
+  /* Component-level rhythm */
+  --gutter:        var(--space-5);   /* screen edge padding (mobile) */
+  --stack-tight:   var(--space-2);
+  --stack:         var(--space-4);
+  --stack-loose:   var(--space-6);
+
+  /* Layout widths */
+  --app-width:     420px;   /* mobile app canvas */
+  --content-max:   1120px;  /* marketing content */
+  --tap-min:       48px;    /* min hit target (>=44 a11y) */
+}

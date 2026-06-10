@@ -1,0 +1,162 @@
+/* ============================================================
+   Kotoba — Color tokens
+   Palette story:
+   - Ai (藍 indigo)      : the brand. Trust, focus, the deep "summit".
+   - Kaki (柿 persimmon) : energy & streaks. The daily flame.
+   - Wakaba (若葉 green) : growth, success, "you advanced".
+   - Sumi (墨 ink)       : neutral text & surfaces, faint indigo cast.
+   - Tier scale          : the JLPT path, brightening to a deep summit.
+   Light-first. All base ramps + semantic aliases live here.
+   ============================================================ */
+
+:root {
+  /* ---------- Ai · indigo (primary) ---------- */
+  --ai-50:  #EEF0FB;
+  --ai-100: #DDE2F6;
+  --ai-200: #BBC5EC;
+  --ai-300: #94A2DF;
+  --ai-400: #6E7FD0;
+  --ai-500: #4F61BE;
+  --ai-600: #3D4CA0;
+  --ai-700: #313E82;
+  --ai-800: #283367;
+  --ai-900: #1F284F;
+  --ai-950: #141A36;
+
+  /* ---------- Kaki · persimmon (accent / energy) ---------- */
+  --kaki-50:  #FFF2EC;
+  --kaki-100: #FFE1D3;
+  --kaki-200: #FFC2A8;
+  --kaki-300: #FF9D74;
+  --kaki-400: #FB7948;
+  --kaki-500: #F15F2C;
+  --kaki-600: #D94A1C;
+  --kaki-700: #B23A18;
+  --kaki-800: #8E301A;
+  --kaki-900: #722A19;
+
+  /* ---------- Wakaba · green (success / growth) ---------- */
+  --wakaba-50:  #EEF8EE;
+  --wakaba-100: #D6EFD7;
+  --wakaba-200: #AEDFB0;
+  --wakaba-300: #7CCA80;
+  --wakaba-400: #4FB45A;
+  --wakaba-500: #2F9C45;
+  --wakaba-600: #237D38;
+  --wakaba-700: #1E632F;
+  --wakaba-800: #1A4F2A;
+  --wakaba-900: #154023;
+
+  /* ---------- Kihada · gold (warning / highlight) ---------- */
+  --kihada-50:  #FDF6E3;
+  --kihada-100: #FAEABF;
+  --kihada-200: #F4D484;
+  --kihada-300: #ECBC49;
+  --kihada-400: #E2A52E;
+  --kihada-500: #C9881C;
+  --kihada-600: #A36916;
+  --kihada-700: #7E5114;
+
+  /* ---------- Beni · rose (error / wrong answer) ---------- */
+  --beni-50:  #FDEDF0;
+  --beni-100: #FAD3DB;
+  --beni-200: #F2A3B3;
+  --beni-300: #E66E87;
+  --beni-400: #D8556E;
+  --beni-500: #C13355;
+  --beni-600: #A02343;
+  --beni-700: #7E1C36;
+
+  /* ---------- Shu · vermillion (torii red · RPG layer) ---------- */
+  --shu-50:  #FDEFEA;
+  --shu-100: #FAD9CE;
+  --shu-200: #F3B09C;
+  --shu-300: #E88066;
+  --shu-400: #DA5839;
+  --shu-500: #C93A1D;
+  --shu-600: #A82E16;
+  --shu-700: #862513;
+  --shu-800: #6B2013;
+  --shu-900: #571C12;
+
+  /* ---------- Sumi · neutral ink (faint indigo cast) ---------- */
+  --sumi-0:   #FFFFFF;
+  --sumi-50:  #F7F8FB;
+  --sumi-100: #EFF1F6;
+  --sumi-200: #E2E5EE;
+  --sumi-300: #CBD0DE;
+  --sumi-400: #9AA1B5;
+  --sumi-500: #6B7287;
+  --sumi-600: #4D5468;
+  --sumi-700: #383E4F;
+  --sumi-800: #262B38;
+  --sumi-900: #171A24;
+  --sumi-950: #0E1019;
+
+  /* ---------- JLPT tier path (brightening climb to summit) ---------- */
+  --tier-pre: #7FB2D9;   /* Pre-N5 · sora · the start */
+  --tier-n5:  #5FB87A;   /* N5 · wakaba */
+  --tier-n4:  #E2B23C;   /* N4 · kihada */
+  --tier-n3:  #ED7A3D;   /* N3 · kaki */
+  --tier-n2:  #D8556E;   /* N2 · beni */
+  --tier-n1:  #4F61BE;   /* N1 · ai · the summit */
+
+  /* ============================================================
+     Semantic aliases — reference these in product, not raw ramps
+     ============================================================ */
+
+  /* Brand */
+  --brand:            var(--ai-600);
+  --brand-strong:     var(--ai-700);
+  --brand-soft:       var(--ai-100);
+  --brand-subtle:     var(--ai-50);
+  --on-brand:         var(--sumi-0);
+
+  /* Accent / energy (streaks, flames, key CTAs) */
+  --accent:           var(--kaki-500);
+  --accent-strong:    var(--kaki-600);
+  --accent-soft:      var(--kaki-100);
+  --on-accent:        var(--sumi-0);
+
+  /* Text */
+  --text-strong:      var(--sumi-900);
+  --text-body:        var(--sumi-700);
+  --text-muted:       var(--sumi-500);
+  --text-faint:       var(--sumi-400);
+  --text-on-dark:     var(--sumi-0);
+  --text-link:        var(--ai-600);
+
+  /* Surfaces / backgrounds */
+  --bg-canvas:        var(--sumi-50);
+  --bg-raised:        var(--sumi-0);
+  --surface-card:     var(--sumi-0);
+  --surface-sunken:   var(--sumi-100);
+  --surface-inverse:  var(--sumi-900);
+
+  /* Borders / dividers */
+  --border-subtle:    var(--sumi-200);
+  --border-default:   var(--sumi-300);
+  --border-strong:    var(--sumi-400);
+  --border-brand:     var(--ai-300);
+
+  /* Status */
+  --success:          var(--wakaba-500);
+  --success-soft:     var(--wakaba-100);
+  --on-success:       var(--sumi-0);
+  --warning:          var(--kihada-500);
+  --warning-soft:     var(--kihada-100);
+  --danger:           var(--beni-500);
+  --danger-soft:      var(--beni-100);
+  --on-danger:        var(--sumi-0);
+
+  /* Focus ring */
+  --focus-ring:       var(--ai-400);
+
+  /* RPG layer · torii & power */
+  --torii:            var(--shu-500);
+  --torii-deep:       var(--shu-700);
+  --torii-soft:       var(--shu-50);
+  --power:            var(--kihada-400);
+  --power-deep:       var(--kihada-600);
+  --power-soft:       var(--kihada-50);
+}

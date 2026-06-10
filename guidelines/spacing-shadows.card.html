@@ -1,0 +1,26 @@
+<!-- @dsCard group="Spacing" viewport="700x200" name="Elevation & Shadows" subtitle="Soft indigo-tinted shadows, plus colored glows for focal moments." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 26px 22px; background: var(--bg-canvas); font-family: var(--font-body); }
+  .row { display: flex; gap: 22px; flex-wrap: wrap; }
+  .item { text-align: center; }
+  .box { width: 96px; height: 64px; background: var(--surface-card); border-radius: var(--radius-md); }
+  .n { font-family: var(--font-num); font-size: 11px; color: var(--text-body); margin-top: 12px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item"><div class="box" style="box-shadow:var(--shadow-xs)"></div><div class="n">xs</div></div>
+    <div class="item"><div class="box" style="box-shadow:var(--shadow-sm)"></div><div class="n">sm</div></div>
+    <div class="item"><div class="box" style="box-shadow:var(--shadow-md)"></div><div class="n">md</div></div>
+    <div class="item"><div class="box" style="box-shadow:var(--shadow-lg)"></div><div class="n">lg</div></div>
+    <div class="item"><div class="box" style="box-shadow:var(--shadow-xl)"></div><div class="n">xl</div></div>
+    <div class="item"><div class="box" style="box-shadow:var(--glow-accent)"></div><div class="n">glow-accent</div></div>
+    <div class="item"><div class="box" style="box-shadow:var(--glow-brand)"></div><div class="n">glow-brand</div></div>
+  </div>
+</body>
+</html>

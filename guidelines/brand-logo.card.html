@@ -1,0 +1,31 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Logo Lockups" subtitle="Primary lockup, app mark, and reversed wordmark on indigo." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 0; background: var(--bg-raised); font-family: var(--font-body); display: grid; grid-template-columns: 1.3fr 0.7fr 1fr; }
+  .cell { padding: 22px; display:flex; flex-direction:column; gap:14px; justify-content:center; border-right: 1px solid var(--border-subtle); }
+  .cell:last-child { border-right: none; }
+  .dark { background: var(--ai-700); }
+  img { display:block; }
+  .cap { font-size: 11px; color: var(--text-muted); }
+  .dark .cap { color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+  <div class="cell">
+    <img src="../assets/kotoba-logo.svg" alt="Kotoba logo" height="48">
+    <div class="cap">Primary lockup · light backgrounds</div>
+  </div>
+  <div class="cell">
+    <img src="../assets/kotoba-mark.svg" alt="Kotoba mark" height="72">
+    <div class="cap">App mark</div>
+  </div>
+  <div class="cell dark">
+    <img src="../assets/kotoba-wordmark-white.svg" alt="Kotoba reversed" height="34">
+    <div class="cap">Reversed · on Ai indigo</div>
+  </div>
+</body>
+</html>

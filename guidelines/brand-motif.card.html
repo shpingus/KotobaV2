@@ -1,0 +1,32 @@
+<!-- @dsCard group="Brand" viewport="700x190" name="Motif · Path, Torii & Seigaiha" subtitle="The stepping-stone path, the vermillion gate, and the seigaiha texture." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 0; background: var(--bg-raised); font-family: var(--font-body); display:flex; }
+  .stones { flex: 0 0 200px; padding: 22px; display:flex; flex-direction:column; gap:10px; justify-content:center; border-right:1px solid var(--border-subtle); }
+  .torii-cell { flex: 0 0 130px; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border-subtle); }
+  .stonerow { display:flex; align-items:flex-end; gap:10px; height: 86px; }
+  .s { border-radius: 999px; }
+  .cap { font-size: 11px; color: var(--text-muted); }
+  .wave { flex: 1; background-color: var(--ai-700);
+          background-image: url('../assets/seigaiha.svg'); background-size: 110px; }
+</style>
+</head>
+<body>
+  <div class="stones">
+    <div class="stonerow">
+      <div class="s" style="width:24px;height:24px;background:var(--sumi-300)"></div>
+      <div class="s" style="width:34px;height:34px;background:var(--ai-400)"></div>
+      <div class="s" style="width:48px;height:48px;background:var(--accent);box-shadow:var(--glow-accent)"></div>
+    </div>
+    <div class="cap">Ascending stones — the next step always in reach.</div>
+  </div>
+  <div class="torii-cell">
+    <img src="../assets/torii.svg" alt="Torii gate" width="86" height="79">
+  </div>
+  <div class="wave"></div>
+</body>
+</html>

@@ -1,0 +1,3428 @@
+<!DOCTYPE html><html><head><meta charset=utf8>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>/* ============================================================
+   Kotoba — Color tokens
+   Palette story:
+   - Ai (藍 indigo)      : the brand. Trust, focus, the deep "summit".
+   - Kaki (柿 persimmon) : energy & streaks. The daily flame.
+   - Wakaba (若葉 green) : growth, success, "you advanced".
+   - Sumi (墨 ink)       : neutral text & surfaces, faint indigo cast.
+   - Tier scale          : the JLPT path, brightening to a deep summit.
+   Light-first. All base ramps + semantic aliases live here.
+   ============================================================ */
+
+:root {
+  /* ---------- Ai · indigo (primary) ---------- */
+  --ai-50:  #EEF0FB;
+  --ai-100: #DDE2F6;
+  --ai-200: #BBC5EC;
+  --ai-300: #94A2DF;
+  --ai-400: #6E7FD0;
+  --ai-500: #4F61BE;
+  --ai-600: #3D4CA0;
+  --ai-700: #313E82;
+  --ai-800: #283367;
+  --ai-900: #1F284F;
+  --ai-950: #141A36;
+
+  /* ---------- Kaki · persimmon (accent / energy) ---------- */
+  --kaki-50:  #FFF2EC;
+  --kaki-100: #FFE1D3;
+  --kaki-200: #FFC2A8;
+  --kaki-300: #FF9D74;
+  --kaki-400: #FB7948;
+  --kaki-500: #F15F2C;
+  --kaki-600: #D94A1C;
+  --kaki-700: #B23A18;
+  --kaki-800: #8E301A;
+  --kaki-900: #722A19;
+
+  /* ---------- Wakaba · green (success / growth) ---------- */
+  --wakaba-50:  #EEF8EE;
+  --wakaba-100: #D6EFD7;
+  --wakaba-200: #AEDFB0;
+  --wakaba-300: #7CCA80;
+  --wakaba-400: #4FB45A;
+  --wakaba-500: #2F9C45;
+  --wakaba-600: #237D38;
+  --wakaba-700: #1E632F;
+  --wakaba-800: #1A4F2A;
+  --wakaba-900: #154023;
+
+  /* ---------- Kihada · gold (warning / highlight) ---------- */
+  --kihada-50:  #FDF6E3;
+  --kihada-100: #FAEABF;
+  --kihada-200: #F4D484;
+  --kihada-300: #ECBC49;
+  --kihada-400: #E2A52E;
+  --kihada-500: #C9881C;
+  --kihada-600: #A36916;
+  --kihada-700: #7E5114;
+
+  /* ---------- Beni · rose (error / wrong answer) ---------- */
+  --beni-50:  #FDEDF0;
+  --beni-100: #FAD3DB;
+  --beni-200: #F2A3B3;
+  --beni-300: #E66E87;
+  --beni-400: #D8556E;
+  --beni-500: #C13355;
+  --beni-600: #A02343;
+  --beni-700: #7E1C36;
+
+  /* ---------- Shu · vermillion (torii red · RPG layer) ---------- */
+  --shu-50:  #FDEFEA;
+  --shu-100: #FAD9CE;
+  --shu-200: #F3B09C;
+  --shu-300: #E88066;
+  --shu-400: #DA5839;
+  --shu-500: #C93A1D;
+  --shu-600: #A82E16;
+  --shu-700: #862513;
+  --shu-800: #6B2013;
+  --shu-900: #571C12;
+
+  /* ---------- Sumi · neutral ink (faint indigo cast) ---------- */
+  --sumi-0:   #FFFFFF;
+  --sumi-50:  #F7F8FB;
+  --sumi-100: #EFF1F6;
+  --sumi-200: #E2E5EE;
+  --sumi-300: #CBD0DE;
+  --sumi-400: #9AA1B5;
+  --sumi-500: #6B7287;
+  --sumi-600: #4D5468;
+  --sumi-700: #383E4F;
+  --sumi-800: #262B38;
+  --sumi-900: #171A24;
+  --sumi-950: #0E1019;
+
+  /* ---------- JLPT tier path (brightening climb to summit) ---------- */
+  --tier-pre: #7FB2D9;   /* Pre-N5 · sora · the start */
+  --tier-n5:  #5FB87A;   /* N5 · wakaba */
+  --tier-n4:  #E2B23C;   /* N4 · kihada */
+  --tier-n3:  #ED7A3D;   /* N3 · kaki */
+  --tier-n2:  #D8556E;   /* N2 · beni */
+  --tier-n1:  #4F61BE;   /* N1 · ai · the summit */
+
+  /* ============================================================
+     Semantic aliases — reference these in product, not raw ramps
+     ============================================================ */
+
+  /* Brand */
+  --brand:            var(--ai-600);
+  --brand-strong:     var(--ai-700);
+  --brand-soft:       var(--ai-100);
+  --brand-subtle:     var(--ai-50);
+  --on-brand:         var(--sumi-0);
+
+  /* Accent / energy (streaks, flames, key CTAs) */
+  --accent:           var(--kaki-500);
+  --accent-strong:    var(--kaki-600);
+  --accent-soft:      var(--kaki-100);
+  --on-accent:        var(--sumi-0);
+
+  /* Text */
+  --text-strong:      var(--sumi-900);
+  --text-body:        var(--sumi-700);
+  --text-muted:       var(--sumi-500);
+  --text-faint:       var(--sumi-400);
+  --text-on-dark:     var(--sumi-0);
+  --text-link:        var(--ai-600);
+
+  /* Surfaces / backgrounds */
+  --bg-canvas:        var(--sumi-50);
+  --bg-raised:        var(--sumi-0);
+  --surface-card:     var(--sumi-0);
+  --surface-sunken:   var(--sumi-100);
+  --surface-inverse:  var(--sumi-900);
+
+  /* Borders / dividers */
+  --border-subtle:    var(--sumi-200);
+  --border-default:   var(--sumi-300);
+  --border-strong:    var(--sumi-400);
+  --border-brand:     var(--ai-300);
+
+  /* Status */
+  --success:          var(--wakaba-500);
+  --success-soft:     var(--wakaba-100);
+  --on-success:       var(--sumi-0);
+  --warning:          var(--kihada-500);
+  --warning-soft:     var(--kihada-100);
+  --danger:           var(--beni-500);
+  --danger-soft:      var(--beni-100);
+  --on-danger:        var(--sumi-0);
+
+  /* Focus ring */
+  --focus-ring:       var(--ai-400);
+
+  /* RPG layer · torii & power */
+  --torii:            var(--shu-500);
+  --torii-deep:       var(--shu-700);
+  --torii-soft:       var(--shu-50);
+  --power:            var(--kihada-400);
+  --power-deep:       var(--kihada-600);
+  --power-soft:       var(--kihada-50);
+}
+
+/* ============================================================
+   Kotoba — Typography tokens
+   Display & numerals : Space Grotesk  (crisp, characterful stats)
+   Body & UI (Latin)  : Plus Jakarta Sans (warm, friendly, readable)
+   Japanese body      : Zen Kaku Gothic New
+   Japanese display    : Zen Maru Gothic (big friendly kana)
+   ============================================================ */
+
+:root {
+  /* ---------- Families ---------- */
+  --font-display: 'Space Grotesk', 'Zen Maru Gothic', system-ui, sans-serif;
+  --font-body:    'Plus Jakarta Sans', 'Zen Kaku Gothic New', system-ui, sans-serif;
+  --font-jp:      'Zen Kaku Gothic New', 'Plus Jakarta Sans', sans-serif;
+  --font-jp-display: 'Zen Maru Gothic', 'Space Grotesk', sans-serif;
+  --font-num:     'Space Grotesk', system-ui, sans-serif; /* tabular stats */
+
+  /* ---------- Weights ---------- */
+  --fw-regular:  400; /* @kind font */
+  --fw-medium:   500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:     700; /* @kind font */
+  --fw-extra:    800; /* @kind font */
+
+  /* ---------- Type scale (rem, 16px base) ---------- */
+  --text-3xs: 0.6875rem;  /* 11 · micro labels */
+  --text-2xs: 0.75rem;    /* 12 · captions */
+  --text-xs:  0.8125rem;  /* 13 */
+  --text-sm:  0.875rem;   /* 14 · secondary UI */
+  --text-md:  1rem;       /* 16 · body */
+  --text-lg:  1.125rem;   /* 18 · lead */
+  --text-xl:  1.375rem;   /* 22 · h4 */
+  --text-2xl: 1.75rem;    /* 28 · h3 */
+  --text-3xl: 2.25rem;    /* 36 · h2 */
+  --text-4xl: 2.875rem;   /* 46 · h1 */
+  --text-5xl: 3.75rem;    /* 60 · display */
+  --text-6xl: 4.75rem;    /* 76 · hero */
+
+  /* ---------- Line heights ---------- */
+  --leading-tight:  1.1;
+  --leading-snug:   1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;   /* JP reading comfort */
+
+  /* ---------- Letter spacing ---------- */
+  --tracking-tight:  -0.02em;
+  --tracking-snug:   -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.04em;
+  --tracking-caps:   0.12em;  /* eyebrow / overline */
+}
+
+/* ============================================================
+   Kotoba — Spacing & layout tokens
+   Base unit: 4px. Use the --space-* scale for all gaps,
+   padding and margins. Container widths for app surfaces.
+   ============================================================ */
+
+:root {
+  --space-0:   0;
+  --space-1:   0.25rem;  /* 4 */
+  --space-2:   0.5rem;   /* 8 */
+  --space-3:   0.75rem;  /* 12 */
+  --space-4:   1rem;     /* 16 */
+  --space-5:   1.25rem;  /* 20 */
+  --space-6:   1.5rem;   /* 24 */
+  --space-7:   2rem;     /* 32 */
+  --space-8:   2.5rem;   /* 40 */
+  --space-9:   3rem;     /* 48 */
+  --space-10:  4rem;     /* 64 */
+  --space-11:  5rem;     /* 80 */
+  --space-12:  6rem;     /* 96 */
+
+  /* Component-level rhythm */
+  --gutter:        var(--space-5);   /* screen edge padding (mobile) */
+  --stack-tight:   var(--space-2);
+  --stack:         var(--space-4);
+  --stack-loose:   var(--space-6);
+
+  /* Layout widths */
+  --app-width:     420px;   /* mobile app canvas */
+  --content-max:   1120px;  /* marketing content */
+  --tap-min:       48px;    /* min hit target (>=44 a11y) */
+}
+
+/* ============================================================
+   Kotoba — Elevation: radii, borders, shadows
+   Shadows are soft and indigo-tinted (not neutral grey) so the
+   light-first UI feels airy. The "press" tokens drive the
+   tactile 3-D button: a solid darker edge that compresses on
+   :active — the satisfying click that signals progress.
+   ============================================================ */
+
+:root {
+  /* ---------- Corner radii ---------- */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;   /* default card */
+  --radius-xl:   28px;
+  --radius-2xl:  36px;
+  --radius-pill: 999px;  /* primary buttons, chips */
+
+  /* ---------- Border widths ---------- */
+  --border-thin:  1px;
+  --border-base:  1.5px;
+  --border-thick: 2px;
+
+  /* ---------- Soft indigo-tinted shadows ---------- */
+  --shadow-xs:  0 1px 2px rgba(31, 40, 79, 0.06);
+  --shadow-sm:  0 2px 6px rgba(31, 40, 79, 0.08);
+  --shadow-md:  0 6px 16px rgba(31, 40, 79, 0.10);
+  --shadow-lg:  0 14px 32px rgba(31, 40, 79, 0.14);
+  --shadow-xl:  0 24px 56px rgba(31, 40, 79, 0.18);
+
+  /* Colored glow for celebratory / focal states */
+  --glow-accent: 0 8px 24px rgba(241, 95, 44, 0.32);
+  --glow-brand:  0 8px 24px rgba(79, 97, 190, 0.32);
+  --glow-success: 0 8px 24px rgba(47, 156, 69, 0.30);
+
+  /* ---------- Tactile press (3-D button) ---------- */
+  --press-depth:        4px;   /* solid bottom edge height */
+  --press-shadow:       inset 0 -4px 0 rgba(0,0,0,0.18);
+  --press-shadow-soft:  inset 0 -3px 0 rgba(0,0,0,0.10);
+
+  /* Focus ring */
+  --ring: 0 0 0 4px rgba(110, 127, 208, 0.35);
+}
+
+/* ============================================================
+   Kotoba — Motion tokens
+   Movement is purposeful and a little springy: things ease out
+   calmly, and rewards (level-ups, correct answers, streaks)
+   get an overshoot "pop". No infinite decorative loops on
+   content. Respect prefers-reduced-motion in product.
+   ============================================================ */
+
+:root {
+  /* Durations */
+  --dur-instant: 80ms;  /* @kind other */
+  --dur-fast:    140ms; /* @kind other */
+  --dur-base:    220ms; /* @kind other */
+  --dur-slow:    340ms; /* @kind other */
+  --dur-slower:  520ms; /* @kind other */
+
+  /* Easing */
+  --ease-out:     cubic-bezier(0.22, 0.80, 0.30, 1);   /* @kind other */
+  --ease-in-out:  cubic-bezier(0.65, 0.05, 0.36, 1);   /* @kind other */
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);   /* @kind other */
+  --ease-emphas:  cubic-bezier(0.16, 1, 0.30, 1);      /* @kind other */
+}
+
+/* ============================================================
+   Kotoba — base element defaults & helpers
+   Light, opinionated reset so specimen cards and product
+   surfaces share a baseline. Kept minimal on purpose.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--text-body);
+  background: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-strong);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+  font-weight: var(--fw-bold);
+}
+
+p { margin: 0; }
+
+a { color: var(--text-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Japanese text helper */
+.jp { font-family: var(--font-jp); line-height: var(--leading-relaxed); }
+.jp-display { font-family: var(--font-jp-display); }
+
+/* Tabular numerals for stats */
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+
+/* Eyebrow / overline */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--radius-sm);
+}
+
+</style>
+<style>html,body{margin:0;height:100%}body{display:flex;align-items:flex-start;justify-content:center;min-height:100vh;background:radial-gradient(120% 120% at 50% 0%, var(--ai-50), var(--sumi-100));font-family:var(--font-body);padding:24px;box-sizing:border-box}
+@keyframes kotoba-sheet-up{from{transform:translateY(100%)}to{transform:translateY(0)}}@keyframes kotoba-pop{0%{transform:scale(0.4);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes kotoba-fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.screen-fade{animation:kotoba-fade .26s var(--ease-out) both;height:100%}</style></head><body><div id=root></div>
+<script type="text/babel">window.__ds={};
+
+(function(){
+
+/**
+ * Kotoba Button — the primary tactile action.
+ * Pill-shaped with a solid 3-D bottom edge that compresses on press,
+ * giving the satisfying "click" that signals forward progress.
+ */
+
+const CSS = `
+.kotoba-btn{
+  --edge: var(--ai-800);
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--font-body); font-weight:700; line-height:1;
+  border:none; cursor:pointer; white-space:nowrap; text-decoration:none;
+  border-radius:var(--radius-pill);
+  background:var(--brand); color:var(--on-brand);
+  box-shadow:0 var(--press-depth) 0 var(--edge);
+  transition:transform var(--dur-fast) var(--ease-out),
+             box-shadow var(--dur-fast) var(--ease-out),
+             background var(--dur-fast) var(--ease-out),
+             filter var(--dur-fast) var(--ease-out);
+  -webkit-tap-highlight-color:transparent; user-select:none;
+}
+.kotoba-btn:hover{ filter:brightness(1.04); }
+.kotoba-btn:active{ transform:translateY(var(--press-depth)); box-shadow:0 0 0 var(--edge); }
+.kotoba-btn:focus-visible{ outline:none; box-shadow:0 var(--press-depth) 0 var(--edge), var(--ring); }
+
+.kotoba-btn[data-size="sm"]{ padding:9px 16px; font-size:var(--text-sm); min-height:40px; }
+.kotoba-btn[data-size="md"]{ padding:13px 22px; font-size:var(--text-md); min-height:48px; }
+.kotoba-btn[data-size="lg"]{ padding:17px 30px; font-size:var(--text-lg); min-height:56px; }
+
+.kotoba-btn[data-variant="accent"]{ background:var(--accent); color:var(--on-accent); --edge:var(--kaki-700); }
+.kotoba-btn[data-variant="success"]{ background:var(--success); color:var(--on-success); --edge:var(--wakaba-700); }
+.kotoba-btn[data-variant="danger"]{ background:var(--danger); color:var(--on-danger); --edge:var(--beni-700); }
+.kotoba-btn[data-variant="secondary"]{
+  background:var(--surface-card); color:var(--brand-strong);
+  --edge:var(--sumi-300); box-shadow:0 var(--press-depth) 0 var(--edge); border:var(--border-thin) solid var(--border-default);
+}
+.kotoba-btn[data-variant="ghost"]{
+  background:transparent; color:var(--text-body); box-shadow:none; font-weight:600;
+}
+.kotoba-btn[data-variant="ghost"]:hover{ background:var(--surface-sunken); filter:none; }
+.kotoba-btn[data-variant="ghost"]:active{ transform:none; }
+
+.kotoba-btn[data-full="true"]{ width:100%; }
+.kotoba-btn[disabled]{ opacity:0.5; cursor:not-allowed; filter:none; transform:none; box-shadow:0 var(--press-depth) 0 var(--edge); }
+.kotoba-btn[data-variant="ghost"][disabled]{ box-shadow:none; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function Button({
+  children,
+  variant = 'primary',
+  size = 'md',
+  fullWidth = false,
+  icon = null,
+  iconRight = null,
+  as = 'button',
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-btn-css', CSS);
+  const Tag = as;
+  const v = variant === 'primary' ? undefined : variant;
+  return (
+    <Tag
+      className={`kotoba-btn ${className}`}
+      data-variant={v}
+      data-size={size}
+      data-full={fullWidth || undefined}
+      {...rest}
+    >
+      {icon}
+      {children}
+      {iconRight}
+    </Tag>
+  );
+}
+
+Object.assign(window.__ds,{Button});})();
+
+(function(){
+
+/**
+ * Kotoba IconButton — a compact, icon-only action.
+ * Circular by default; used for nav, close, audio replay, etc.
+ */
+
+const CSS = `
+.kotoba-iconbtn{
+  display:inline-flex; align-items:center; justify-content:center;
+  border:none; cursor:pointer; padding:0;
+  border-radius:var(--radius-pill);
+  background:var(--surface-sunken); color:var(--text-body);
+  transition:background var(--dur-fast) var(--ease-out),
+             transform var(--dur-fast) var(--ease-out),
+             color var(--dur-fast) var(--ease-out);
+  -webkit-tap-highlight-color:transparent;
+}
+.kotoba-iconbtn:hover{ background:var(--sumi-200); }
+.kotoba-iconbtn:active{ transform:scale(0.92); }
+.kotoba-iconbtn:focus-visible{ outline:none; box-shadow:var(--ring); }
+.kotoba-iconbtn[data-size="sm"]{ width:36px; height:36px; }
+.kotoba-iconbtn[data-size="md"]{ width:44px; height:44px; }
+.kotoba-iconbtn[data-size="lg"]{ width:52px; height:52px; }
+.kotoba-iconbtn[data-variant="brand"]{ background:var(--brand-soft); color:var(--brand-strong); }
+.kotoba-iconbtn[data-variant="brand"]:hover{ background:var(--ai-200); }
+.kotoba-iconbtn[data-variant="accent"]{ background:var(--accent); color:var(--on-accent); }
+.kotoba-iconbtn[data-variant="accent"]:hover{ filter:brightness(1.05); background:var(--accent); }
+.kotoba-iconbtn[data-variant="ghost"]{ background:transparent; }
+.kotoba-iconbtn[data-variant="ghost"]:hover{ background:var(--surface-sunken); }
+.kotoba-iconbtn[data-square="true"]{ border-radius:var(--radius-md); }
+.kotoba-iconbtn[disabled]{ opacity:0.45; cursor:not-allowed; }
+.kotoba-iconbtn svg, .kotoba-iconbtn i{ width:55%; height:55%; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function IconButton({
+  children,
+  variant = 'neutral',
+  size = 'md',
+  square = false,
+  label,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-iconbtn-css', CSS);
+  const v = variant === 'neutral' ? undefined : variant;
+  return (
+    <button
+      className={`kotoba-iconbtn ${className}`}
+      data-variant={v}
+      data-size={size}
+      data-square={square || undefined}
+      aria-label={label}
+      {...rest}
+    >
+      {children}
+    </button>
+  );
+}
+
+Object.assign(window.__ds,{IconButton});})();
+
+(function(){
+
+/**
+ * Kotoba Badge — a small status/count pill. Soft-filled by default.
+ */
+
+const CSS = `
+.kotoba-badge{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--font-body); font-weight:700; line-height:1;
+  font-size:var(--text-2xs); letter-spacing:0.01em;
+  padding:5px 10px; border-radius:var(--radius-pill);
+  background:var(--brand-soft); color:var(--brand-strong);
+}
+.kotoba-badge[data-size="sm"]{ font-size:var(--text-3xs); padding:3px 8px; }
+.kotoba-badge[data-size="lg"]{ font-size:var(--text-sm); padding:7px 13px; }
+.kotoba-badge[data-tone="accent"]{ background:var(--accent-soft); color:var(--kaki-700); }
+.kotoba-badge[data-tone="success"]{ background:var(--success-soft); color:var(--wakaba-700); }
+.kotoba-badge[data-tone="warning"]{ background:var(--warning-soft); color:var(--kihada-700); }
+.kotoba-badge[data-tone="danger"]{ background:var(--danger-soft); color:var(--beni-700); }
+.kotoba-badge[data-tone="neutral"]{ background:var(--surface-sunken); color:var(--text-body); }
+.kotoba-badge[data-solid="true"]{ color:#fff; }
+.kotoba-badge[data-solid="true"][data-tone="brand"]{ background:var(--brand); }
+.kotoba-badge[data-solid="true"][data-tone="accent"]{ background:var(--accent); }
+.kotoba-badge[data-solid="true"][data-tone="success"]{ background:var(--success); }
+.kotoba-badge[data-solid="true"][data-tone="danger"]{ background:var(--danger); }
+.kotoba-badge .kotoba-badge-dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function Badge({
+  children,
+  tone = 'brand',
+  size = 'md',
+  solid = false,
+  dot = false,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-badge-css', CSS);
+  return (
+    <span
+      className={`kotoba-badge ${className}`}
+      data-tone={tone}
+      data-size={size === 'md' ? undefined : size}
+      data-solid={solid || undefined}
+      {...rest}
+    >
+      {dot && <span className="kotoba-badge-dot" />}
+      {children}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{Badge});})();
+
+(function(){
+
+/**
+ * Kotoba Tag — a chip for topics/filters. Can be selectable or removable.
+ */
+
+const CSS = `
+.kotoba-tag{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--font-body); font-weight:600; font-size:var(--text-sm);
+  padding:7px 13px; border-radius:var(--radius-pill);
+  background:var(--surface-card); color:var(--text-body);
+  border:var(--border-thin) solid var(--border-default);
+  cursor:default; transition:all var(--dur-fast) var(--ease-out);
+  -webkit-tap-highlight-color:transparent;
+}
+.kotoba-tag[data-clickable="true"]{ cursor:pointer; }
+.kotoba-tag[data-clickable="true"]:hover{ border-color:var(--border-brand); color:var(--brand-strong); }
+.kotoba-tag[data-selected="true"]{ background:var(--brand-soft); border-color:var(--ai-300); color:var(--brand-strong); }
+.kotoba-tag .kotoba-tag-x{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:16px; height:16px; border-radius:50%; margin-right:-3px;
+  background:var(--surface-sunken); cursor:pointer; font-size:11px; line-height:1;
+}
+.kotoba-tag .kotoba-tag-x:hover{ background:var(--sumi-300); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function Tag({
+  children,
+  selected = false,
+  onRemove,
+  icon = null,
+  onClick,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-tag-css', CSS);
+  const clickable = !!onClick || selected !== undefined && onClick;
+  return (
+    <span
+      className={`kotoba-tag ${className}`}
+      data-selected={selected || undefined}
+      data-clickable={onClick ? 'true' : undefined}
+      onClick={onClick}
+      {...rest}
+    >
+      {icon}
+      {children}
+      {onRemove && (
+        <span
+          className="kotoba-tag-x"
+          role="button"
+          aria-label="Remove"
+          onClick={(e) => { e.stopPropagation(); onRemove(e); }}
+        >×</span>
+      )}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{Tag});})();
+
+(function(){
+
+/**
+ * Kotoba Card — the base surface. Soft indigo-tinted shadow, generous radius.
+ * Pass `interactive` for a hover-lift (use on tappable cards).
+ */
+
+const CSS = `
+.kotoba-card{
+  background:var(--surface-card);
+  border:var(--border-thin) solid var(--border-subtle);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);
+  padding:var(--space-5);
+  transition:transform var(--dur-base) var(--ease-out),
+             box-shadow var(--dur-base) var(--ease-out);
+}
+.kotoba-card[data-pad="sm"]{ padding:var(--space-4); }
+.kotoba-card[data-pad="lg"]{ padding:var(--space-7); }
+.kotoba-card[data-pad="none"]{ padding:0; }
+.kotoba-card[data-elevation="flat"]{ box-shadow:none; }
+.kotoba-card[data-elevation="md"]{ box-shadow:var(--shadow-md); }
+.kotoba-card[data-elevation="lg"]{ box-shadow:var(--shadow-lg); }
+.kotoba-card[data-interactive="true"]{ cursor:pointer; }
+.kotoba-card[data-interactive="true"]:hover{ transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+.kotoba-card[data-interactive="true"]:active{ transform:translateY(-1px); }
+.kotoba-card[data-tone="brand"]{ background:var(--brand-subtle); border-color:var(--ai-100); }
+.kotoba-card[data-tone="inverse"]{ background:var(--surface-inverse); border-color:transparent; color:var(--text-on-dark); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function Card({
+  children,
+  pad = 'md',
+  elevation = 'sm',
+  tone = 'default',
+  interactive = false,
+  as = 'div',
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-card-css', CSS);
+  const Tag = as;
+  return (
+    <Tag
+      className={`kotoba-card ${className}`}
+      data-pad={pad === 'md' ? undefined : pad}
+      data-elevation={elevation === 'sm' ? undefined : elevation}
+      data-tone={tone === 'default' ? undefined : tone}
+      data-interactive={interactive || undefined}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+Object.assign(window.__ds,{Card});})();
+
+(function(){
+
+/**
+ * Kotoba Avatar — circular user image or initials, with an optional
+ * progress ring (used to show streak/level around the profile photo).
+ */
+
+const CSS = `
+.kotoba-avatar{
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:50%; background:var(--ai-200); color:var(--brand-strong);
+  font-family:var(--font-display); font-weight:700; overflow:hidden; flex:none;
+}
+.kotoba-avatar img{ width:100%; height:100%; object-fit:cover; }
+.kotoba-avatar[data-size="sm"]{ width:36px; height:36px; font-size:14px; }
+.kotoba-avatar[data-size="md"]{ width:48px; height:48px; font-size:18px; }
+.kotoba-avatar[data-size="lg"]{ width:64px; height:64px; font-size:24px; }
+.kotoba-avatar[data-size="xl"]{ width:88px; height:88px; font-size:32px; }
+.kotoba-avatar-wrap{ position:relative; display:inline-flex; padding:4px; border-radius:50%; }
+.kotoba-avatar-wrap[data-ring="true"]{ background:conic-gradient(var(--accent) var(--ring-pct,70%), var(--surface-sunken) 0); }
+.kotoba-avatar-wrap[data-ring="true"] .kotoba-avatar{ border:3px solid var(--surface-card); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function Avatar({
+  src,
+  name = '',
+  size = 'md',
+  ring = false,
+  ringPercent = 70,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-avatar-css', CSS);
+  const initials = name
+    .split(' ')
+    .map((p) => p[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+  const inner = (
+    <span className={`kotoba-avatar ${className}`} data-size={size} {...rest}>
+      {src ? <img src={src} alt={name} /> : initials || '?'}
+    </span>
+  );
+  if (!ring) return inner;
+  return (
+    <span
+      className="kotoba-avatar-wrap"
+      data-ring="true"
+      style={{ '--ring-pct': `${ringPercent}%` }}
+    >
+      {inner}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{Avatar});})();
+
+(function(){
+
+/**
+ * Kotoba Input — labelled text field with helper/error states and optional
+ * leading icon. Calm by default, indigo focus ring, persimmon-free errors.
+ */
+
+const CSS = `
+.kotoba-field{ display:flex; flex-direction:column; gap:6px; font-family:var(--font-body); }
+.kotoba-field-label{ font-size:var(--text-sm); font-weight:600; color:var(--text-strong); }
+.kotoba-field-label .req{ color:var(--danger); margin-left:2px; }
+.kotoba-input-wrap{ position:relative; display:flex; align-items:center; }
+.kotoba-input-wrap .kotoba-input-icon{
+  position:absolute; left:14px; display:inline-flex; color:var(--text-muted); pointer-events:none;
+}
+.kotoba-input-wrap .kotoba-input-icon svg, .kotoba-input-wrap .kotoba-input-icon i{ width:18px; height:18px; }
+.kotoba-input{
+  width:100%; box-sizing:border-box; font-family:var(--font-body); font-size:var(--text-md);
+  color:var(--text-strong); background:var(--surface-card);
+  border:var(--border-base) solid var(--border-default);
+  border-radius:var(--radius-md); padding:12px 14px; min-height:48px;
+  transition:border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  outline:none;
+}
+.kotoba-input::placeholder{ color:var(--text-faint); }
+.kotoba-input:hover{ border-color:var(--border-strong); }
+.kotoba-input:focus{ border-color:var(--brand); box-shadow:var(--ring); }
+.kotoba-input-wrap[data-has-icon="true"] .kotoba-input{ padding-left:42px; }
+.kotoba-field[data-invalid="true"] .kotoba-input{ border-color:var(--danger); }
+.kotoba-field[data-invalid="true"] .kotoba-input:focus{ box-shadow:0 0 0 4px var(--danger-soft); }
+.kotoba-field-help{ font-size:var(--text-xs); color:var(--text-muted); }
+.kotoba-field[data-invalid="true"] .kotoba-field-help{ color:var(--danger); }
+.kotoba-input:disabled{ background:var(--surface-sunken); color:var(--text-faint); cursor:not-allowed; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function Input({
+  label,
+  helperText,
+  error,
+  icon = null,
+  required = false,
+  id,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-input-css', CSS);
+  const autoId = React.useId();
+  const fieldId = id || autoId;
+  const invalid = !!error;
+  const help = error || helperText;
+  return (
+    <div className={`kotoba-field ${className}`} data-invalid={invalid || undefined}>
+      {label && (
+        <label className="kotoba-field-label" htmlFor={fieldId}>
+          {label}{required && <span className="req">*</span>}
+        </label>
+      )}
+      <div className="kotoba-input-wrap" data-has-icon={icon ? 'true' : undefined}>
+        {icon && <span className="kotoba-input-icon">{icon}</span>}
+        <input
+          id={fieldId}
+          className="kotoba-input"
+          aria-invalid={invalid || undefined}
+          required={required}
+          {...rest}
+        />
+      </div>
+      {help && <span className="kotoba-field-help">{help}</span>}
+    </div>
+  );
+}
+
+Object.assign(window.__ds,{Input});})();
+
+(function(){
+
+/**
+ * Kotoba ProgressRing — circular progress indicator (SVG). Renders any content
+ * in the center (a number, icon, or %). Used for daily goals and lesson sets.
+ */
+
+function ProgressRing({
+  value = 0,
+  max = 100,
+  size = 72,
+  thickness = 8,
+  color = 'var(--brand)',
+  track = 'var(--surface-sunken)',
+  rounded = true,
+  children,
+  className = '',
+  ...rest
+}) {
+  const pct = Math.max(0, Math.min(1, max ? value / max : 0));
+  const r = (size - thickness) / 2;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - pct);
+  return (
+    <div
+      className={`kotoba-ring ${className}`}
+      style={{ position: 'relative', width: size, height: size, display: 'inline-flex' }}
+      role="progressbar"
+      aria-valuenow={value}
+      aria-valuemin={0}
+      aria-valuemax={max}
+      {...rest}
+    >
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={track} strokeWidth={thickness} />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={thickness}
+          strokeLinecap={rounded ? 'round' : 'butt'}
+          strokeDasharray={c}
+          strokeDashoffset={offset}
+          style={{ transition: 'stroke-dashoffset var(--dur-slow) var(--ease-out)' }}
+        />
+      </svg>
+      <div
+        style={{
+          position: 'absolute', inset: 0, display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          fontFamily: 'var(--font-num)', fontWeight: 700, color: 'var(--text-strong)',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window.__ds,{ProgressRing});})();
+
+(function(){
+
+/**
+ * Kotoba StreakCounter — the daily flame. Shows consecutive-day count with a
+ * persimmon flame. Goes muted/grey when the streak is at risk or broken.
+ */
+
+const Flame = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 2c.5 3 2 4.9 4 6.5 2 1.6 3 3.5 3 5.7A7 7 0 0 1 5 14.2c0-1.6.6-3 1.6-4.2.3 1 1 1.8 2 2.1.5-2 .2-4 1.4-5.6C12.2 5 12.4 3.5 12 2z" />
+  </svg>
+);
+
+const CSS = `
+.kotoba-streak{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-num); font-weight:800; line-height:1;
+  color:var(--accent);
+}
+.kotoba-streak .kotoba-streak-flame{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:1.6em; height:1.6em; border-radius:50%;
+  background:var(--accent-soft); color:var(--accent);
+}
+.kotoba-streak[data-size="sm"]{ font-size:18px; }
+.kotoba-streak[data-size="md"]{ font-size:24px; }
+.kotoba-streak[data-size="lg"]{ font-size:40px; }
+.kotoba-streak .kotoba-streak-label{ font-family:var(--font-body); font-weight:600; font-size:0.5em; color:var(--text-muted); }
+.kotoba-streak[data-state="risk"]{ color:var(--kihada-500); }
+.kotoba-streak[data-state="risk"] .kotoba-streak-flame{ background:var(--warning-soft); color:var(--kihada-500); }
+.kotoba-streak[data-state="off"]{ color:var(--text-faint); }
+.kotoba-streak[data-state="off"] .kotoba-streak-flame{ background:var(--surface-sunken); color:var(--text-faint); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function StreakCounter({
+  days = 0,
+  size = 'md',
+  state = 'active',
+  showLabel = true,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-streak-css', CSS);
+  return (
+    <span className={`kotoba-streak ${className}`} data-size={size} data-state={state === 'active' ? undefined : state} {...rest}>
+      <span className="kotoba-streak-flame"><Flame size="1em" /></span>
+      <span>{days}</span>
+      {showLabel && <span className="kotoba-streak-label">day{days === 1 ? '' : 's'}</span>}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{StreakCounter});})();
+
+(function(){
+
+/**
+ * Kotoba XPBar — horizontal experience bar toward the next level. Shows the
+ * current level chip, a filled track, and the value/goal.
+ */
+
+const CSS = `
+.kotoba-xp{ display:flex; flex-direction:column; gap:6px; font-family:var(--font-body); width:100%; }
+.kotoba-xp-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.kotoba-xp-level{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--font-num); font-weight:800; font-size:var(--text-sm);
+  color:var(--brand-strong);
+}
+.kotoba-xp-level .lvl{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:24px; height:24px; padding:0 7px; border-radius:var(--radius-pill);
+  background:var(--brand); color:var(--on-brand); font-size:var(--text-xs);
+}
+.kotoba-xp-count{ font-family:var(--font-num); font-weight:600; font-size:var(--text-xs); color:var(--text-muted); }
+.kotoba-xp-track{
+  position:relative; height:12px; border-radius:var(--radius-pill);
+  background:var(--surface-sunken); overflow:hidden;
+}
+.kotoba-xp-fill{
+  height:100%; border-radius:var(--radius-pill);
+  background:linear-gradient(90deg, var(--kaki-400), var(--accent));
+  transition:width var(--dur-slow) var(--ease-out);
+}
+.kotoba-xp[data-tone="brand"] .kotoba-xp-fill{ background:linear-gradient(90deg, var(--ai-400), var(--brand)); }
+.kotoba-xp[data-tone="success"] .kotoba-xp-fill{ background:linear-gradient(90deg, var(--wakaba-400), var(--success)); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function XPBar({
+  value = 0,
+  max = 100,
+  level,
+  tone = 'accent',
+  showCount = true,
+  unit = 'XP',
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-xp-css', CSS);
+  const pct = Math.max(0, Math.min(100, max ? (value / max) * 100 : 0));
+  return (
+    <div className={`kotoba-xp ${className}`} data-tone={tone === 'accent' ? undefined : tone} {...rest}>
+      {(level != null || showCount) && (
+        <div className="kotoba-xp-head">
+          {level != null ? (
+            <span className="kotoba-xp-level"><span className="lvl">Lv {level}</span></span>
+          ) : <span />}
+          {showCount && <span className="kotoba-xp-count">{value.toLocaleString()} / {max.toLocaleString()} {unit}</span>}
+        </div>
+      )}
+      <div className="kotoba-xp-track">
+        <div className="kotoba-xp-fill" style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window.__ds,{XPBar});})();
+
+(function(){
+
+/**
+ * Kotoba LevelBadge — the JLPT tier marker (Pre-N5 → N1). Each tier carries its
+ * own belt-color. Optionally shows progress *within* the tier as a base bar.
+ */
+
+const CSS = `
+.kotoba-level{
+  --tier:var(--tier-n5);
+  position:relative; display:inline-flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  border-radius:var(--radius-lg); color:#fff; overflow:hidden;
+  font-family:var(--font-display); font-weight:700; line-height:1;
+  background:var(--tier); box-shadow:var(--shadow-sm);
+}
+.kotoba-level[data-tier="pre"]{ --tier:var(--tier-pre); }
+.kotoba-level[data-tier="n5"]{ --tier:var(--tier-n5); }
+.kotoba-level[data-tier="n4"]{ --tier:var(--tier-n4); }
+.kotoba-level[data-tier="n3"]{ --tier:var(--tier-n3); }
+.kotoba-level[data-tier="n2"]{ --tier:var(--tier-n2); }
+.kotoba-level[data-tier="n1"]{ --tier:var(--tier-n1); }
+.kotoba-level[data-size="sm"]{ width:40px; height:40px; font-size:14px; }
+.kotoba-level[data-size="md"]{ width:60px; height:60px; font-size:22px; }
+.kotoba-level[data-size="lg"]{ width:96px; height:96px; font-size:36px; border-radius:var(--radius-xl); }
+.kotoba-level .kotoba-level-cap{ font-family:var(--font-body); font-weight:700; font-size:0.42em; opacity:0.85; letter-spacing:0.05em; margin-bottom:2px; }
+.kotoba-level .kotoba-level-prog{ position:absolute; left:0; right:0; bottom:0; height:0.18em; background:rgba(255,255,255,0.28); }
+.kotoba-level .kotoba-level-prog > i{ display:block; height:100%; background:rgba(255,255,255,0.95); transition:width var(--dur-slow) var(--ease-out); }
+.kotoba-level[data-soft="true"]{ background:color-mix(in srgb, var(--tier) 16%, white); color:var(--tier); box-shadow:none; border:var(--border-base) solid color-mix(in srgb, var(--tier) 35%, white); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+const LABELS = { pre: 'PRE', n5: 'N5', n4: 'N4', n3: 'N3', n2: 'N2', n1: 'N1' };
+
+function LevelBadge({
+  tier = 'n5',
+  size = 'md',
+  soft = false,
+  showCaption = true,
+  progress = null,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-level-css', CSS);
+  const isPre = tier === 'pre';
+  return (
+    <span className={`kotoba-level ${className}`} data-tier={tier} data-size={size} data-soft={soft || undefined} {...rest}>
+      {showCaption && !isPre && <span className="kotoba-level-cap">JLPT</span>}
+      <span>{isPre ? 'Pre' : LABELS[tier].replace('N', 'N')}</span>
+      {progress != null && (
+        <span className="kotoba-level-prog"><i style={{ width: `${Math.max(0, Math.min(100, progress))}%` }} /></span>
+      )}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{LevelBadge});})();
+
+(function(){
+
+/**
+ * Kotoba LessonNode — a stepping stone on the learning path. Circular, tactile,
+ * with states for locked / available / current / complete. The "current" node
+ * pulses to always show the learner their next step.
+ */
+
+const Icons = {
+  check: <path d="M20 6 9 17l-5-5" />,
+  lock: <g><rect width="16" height="10" x="4" y="11" rx="2.5" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></g>,
+  star: <path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z" />,
+  book: <g><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" /><path d="M4 19V5" /></g>,
+  crown: <path d="M3 7l4 4 5-7 5 7 4-4-2 12H5z" />,
+};
+
+const CSS = `
+.kotoba-node-wrap{ display:inline-flex; flex-direction:column; align-items:center; gap:8px; }
+.kotoba-node{
+  --face:var(--brand); --edge:var(--ai-800); --ink:#fff;
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  width:68px; height:68px; border-radius:50%; border:none; cursor:pointer; padding:0;
+  background:var(--face); color:var(--ink);
+  box-shadow:0 6px 0 var(--edge);
+  transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), filter var(--dur-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+.kotoba-node svg{ width:30px; height:30px; }
+.kotoba-node:hover{ filter:brightness(1.05); }
+.kotoba-node:active{ transform:translateY(6px); box-shadow:0 0 0 var(--edge); }
+.kotoba-node:focus-visible{ outline:none; box-shadow:0 6px 0 var(--edge), var(--ring); }
+
+.kotoba-node[data-size="sm"]{ width:52px; height:52px; box-shadow:0 5px 0 var(--edge); }
+.kotoba-node[data-size="sm"] svg{ width:22px; height:22px; }
+.kotoba-node[data-size="lg"]{ width:84px; height:84px; box-shadow:0 7px 0 var(--edge); }
+.kotoba-node[data-size="lg"] svg{ width:38px; height:38px; }
+
+.kotoba-node[data-state="complete"]{ --face:var(--success); --edge:var(--wakaba-700); }
+.kotoba-node[data-state="mastered"]{ --face:var(--kihada-400); --edge:var(--kihada-600); --ink:var(--sumi-900); }
+.kotoba-node[data-state="locked"]{ --face:var(--surface-sunken); --edge:var(--sumi-300); --ink:var(--text-faint); cursor:not-allowed; }
+.kotoba-node[data-state="locked"]:hover{ filter:none; }
+.kotoba-node[data-state="locked"]:active{ transform:none; box-shadow:0 6px 0 var(--edge); }
+.kotoba-node[data-state="available"]{ --face:var(--surface-card); --edge:var(--sumi-200); --ink:var(--brand); border:var(--border-base) solid var(--border-subtle); }
+
+.kotoba-node[data-current="true"]::before{
+  content:""; position:absolute; inset:-9px; border-radius:50%;
+  border:3px solid var(--accent); opacity:0.6;
+  animation:kotoba-node-pulse 1.8s var(--ease-out) infinite;
+}
+@keyframes kotoba-node-pulse{
+  0%{ transform:scale(0.96); opacity:0.7; }
+  70%{ transform:scale(1.12); opacity:0; }
+  100%{ opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){ .kotoba-node[data-current="true"]::before{ animation:none; opacity:0.5; } }
+
+.kotoba-node-start{
+  position:absolute; top:-22px; left:50%; transform:translateX(-50%);
+  font-family:var(--font-body); font-weight:800; font-size:11px; letter-spacing:0.08em;
+  color:var(--accent); background:var(--surface-card); border:var(--border-base) solid var(--accent);
+  padding:2px 9px; border-radius:var(--radius-pill); box-shadow:var(--shadow-sm); white-space:nowrap;
+}
+.kotoba-node-label{ font-family:var(--font-body); font-weight:600; font-size:var(--text-xs); color:var(--text-muted); max-width:96px; text-align:center; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function LessonNode({
+  state = 'available',
+  icon = 'book',
+  size = 'md',
+  current = false,
+  label,
+  startLabel = 'START',
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-node-css', CSS);
+  let glyph = icon;
+  if (state === 'locked') glyph = 'lock';
+  else if (state === 'complete') glyph = 'check';
+  else if (state === 'mastered') glyph = 'crown';
+  const node = Icons[glyph] || Icons.book;
+  const stroke = glyph === 'check';
+  return (
+    <span className="kotoba-node-wrap">
+      <button
+        className={`kotoba-node ${className}`}
+        data-state={state}
+        data-size={size === 'md' ? undefined : size}
+        data-current={current || undefined}
+        disabled={state === 'locked'}
+        {...rest}
+      >
+        {current && <span className="kotoba-node-start">{startLabel}</span>}
+        <svg viewBox="0 0 24 24" fill={stroke ? 'none' : 'currentColor'}
+             stroke={stroke ? 'currentColor' : 'none'} strokeWidth="3"
+             strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          {node}
+        </svg>
+      </button>
+      {label && <span className="kotoba-node-label">{label}</span>}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{LessonNode});})();
+
+(function(){
+
+/**
+ * Kotoba KanaTile — a character study/answer tile. Big kana or kanji with
+ * optional reading (romaji/furigana) and meaning. Used in lessons, review
+ * grids, and multiple-choice answers (with selected/correct/wrong states).
+ */
+
+const CSS = `
+.kotoba-tile{
+  display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  min-width:84px; padding:16px 18px; border-radius:var(--radius-lg); cursor:pointer;
+  background:var(--surface-card); border:var(--border-base) solid var(--border-default);
+  box-shadow:0 4px 0 var(--sumi-200);
+  transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast), background var(--dur-fast);
+  -webkit-tap-highlight-color:transparent; text-align:center;
+}
+.kotoba-tile:hover{ border-color:var(--border-brand); }
+.kotoba-tile:active{ transform:translateY(4px); box-shadow:0 0 0 var(--sumi-200); }
+.kotoba-tile:focus-visible{ outline:none; box-shadow:0 4px 0 var(--sumi-200), var(--ring); }
+.kotoba-tile[data-static="true"]{ cursor:default; }
+.kotoba-tile[data-static="true"]:hover{ border-color:var(--border-default); }
+.kotoba-tile[data-static="true"]:active{ transform:none; box-shadow:0 4px 0 var(--sumi-200); }
+
+.kotoba-tile .glyph{ font-family:var(--font-jp-display); font-weight:700; color:var(--text-strong); line-height:1; }
+.kotoba-tile .reading{ font-family:var(--font-num); font-weight:600; font-size:var(--text-sm); color:var(--brand-strong); }
+.kotoba-tile .meaning{ font-family:var(--font-body); font-size:var(--text-xs); color:var(--text-muted); }
+.kotoba-tile[data-size="sm"] .glyph{ font-size:30px; }
+.kotoba-tile[data-size="md"] .glyph{ font-size:44px; }
+.kotoba-tile[data-size="lg"] .glyph{ font-size:64px; }
+
+.kotoba-tile[data-state="selected"]{ background:var(--brand-soft); border-color:var(--ai-300); box-shadow:0 4px 0 var(--ai-200); }
+.kotoba-tile[data-state="correct"]{ background:var(--success-soft); border-color:var(--wakaba-400); box-shadow:0 4px 0 var(--wakaba-200); }
+.kotoba-tile[data-state="correct"] .reading{ color:var(--wakaba-700); }
+.kotoba-tile[data-state="wrong"]{ background:var(--danger-soft); border-color:var(--beni-300); box-shadow:0 4px 0 var(--beni-200); }
+.kotoba-tile[data-state="wrong"] .glyph{ color:var(--beni-700); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function KanaTile({
+  glyph,
+  reading,
+  meaning,
+  size = 'md',
+  state = 'default',
+  interactive = true,
+  as,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-tile-css', CSS);
+  const Tag = as || (interactive ? 'button' : 'div');
+  return (
+    <Tag
+      className={`kotoba-tile ${className}`}
+      data-size={size}
+      data-state={state === 'default' ? undefined : state}
+      data-static={!interactive || undefined}
+      {...rest}
+    >
+      <span className="glyph jp-display">{glyph}</span>
+      {reading && <span className="reading">{reading}</span>}
+      {meaning && <span className="meaning">{meaning}</span>}
+    </Tag>
+  );
+}
+
+Object.assign(window.__ds,{KanaTile});})();
+
+(function(){
+
+/**
+ * Kotoba Companion — the learner's kotodama (言霊, "word spirit"), a pixel-art
+ * chibi companion that walks the path with you and evolves as your Japanese
+ * grows. Rendered from pixel matrices as crisp SVG — no image assets needed.
+ * Stage 1: newborn spirit · Stage 2: persimmon scarf traveler · Stage 3: gold-touched guardian.
+ */
+
+const PALETTE = {
+  O: '#1F284F', // outline · ai-900
+  B: '#4F61BE', // body · ai-500
+  L: '#94A2DF', // body highlight · ai-300
+  W: '#FFFFFF', // eye white
+  K: '#171A24', // pupil
+  S: '#F15F2C', // scarf · kaki-500
+  D: '#D94A1C', // scarf shade · kaki-600
+  G: '#ECBC49', // gold · kihada-300
+  R: '#FFC2A8', // blush · kaki-200
+};
+
+// 12 columns wide. '.' = transparent.
+const STAGE_1 = [
+  '....OOOO....',
+  '..OOBBBBOO..',
+  '.OBBLBLBBBO.',
+  '.OBBBBBBBBO.',
+  '.OBWWBBWWBO.',
+  '.OBWKBBWKBO.',
+  'OBRBBOOBBRBO',
+  'OBBBBBBBBBBO',
+  '.OBBBBBBBBO.',
+  '.OBBBBBBBBO.',
+  '..OBBOOBBO..',
+  '...OBO.OBO..',
+  '....O...O...',
+];
+
+const STAGE_2 = [
+  '....OOOO....',
+  '..OOBBBBOO..',
+  '.OBBLBLBBBO.',
+  '.OBBBBBBBBO.',
+  '.OBWWBBWWBO.',
+  '.OBWKBBWKBO.',
+  'OBBBBOOBBBBO',
+  'OBBBBBBBBBBO',
+  '.OSSSSSSSSO.',
+  '.OSSDDDDSSO.',
+  '..OBBOOBSSO.',
+  '...OBO.OSO..',
+  '....O...O...',
+];
+
+const STAGE_3 = [
+  '.G..OOOO..G.',
+  '..OOBBBBOO..',
+  '.OBBLBLBBBO.',
+  '.OGGGGGGGGO.',
+  '.OBWWBBWWBO.',
+  '.OBWKBBWKBO.',
+  'OBBBBOOBBBBO',
+  'OBBBBBBBBBBO',
+  '.OSSSSSSSSO.',
+  '.OSSDDDDSSO.',
+  'G.OBBOOBSSO.',
+  '...OBO.OSO..',
+  '....O...O...',
+];
+
+const STAGES = { 1: STAGE_1, 2: STAGE_2, 3: STAGE_3 };
+
+const CSS = `
+.kotoba-companion{ display:inline-flex; }
+.kotoba-companion[data-floating="true"]{ animation:kotoba-companion-float 2.6s ease-in-out infinite; }
+@keyframes kotoba-companion-float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-7%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .kotoba-companion[data-floating="true"]{ animation:none; }
+}
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+/** Renders any pixel matrix as crisp SVG. Shared by Companion and BossNode. */
+function PixelSprite({ matrix, palette = PALETTE, size = 72, className = '', style, ...rest }) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+  const rects = [];
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const c = matrix[y][x];
+      if (c === '.' || !palette[c]) continue;
+      rects.push(<rect key={`${x}-${y}`} x={x} y={y} width="1.02" height="1.02" fill={palette[c]} />);
+    }
+  }
+  return (
+    <svg
+      viewBox={`0 0 ${cols} ${rows}`}
+      width={size}
+      height={(size * rows) / cols}
+      shapeRendering="crispEdges"
+      className={className}
+      style={{ imageRendering: 'pixelated', ...style }}
+      aria-hidden="true"
+      {...rest}
+    >
+      {rects}
+    </svg>
+  );
+}
+
+function Companion({
+  stage = 1,
+  size = 72,
+  floating = false,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-companion-css', CSS);
+  const matrix = STAGES[stage] || STAGE_1;
+  return (
+    <span className={`kotoba-companion ${className}`} data-floating={floating || undefined} {...rest}>
+      <PixelSprite matrix={matrix} size={size} />
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{PixelSprite,Companion});})();
+
+(function(){
+
+/**
+ * Kotoba ToriiGate — the vermillion gate. Marks passage: unit checkpoints on
+ * the path, grand JLPT tier gates, and celebratory brand moments. Drawn as
+ * flat geometric SVG in Shu vermillion with an optional plaque (gaku) label.
+ */
+
+const CSS = `
+.kotoba-torii{ display:inline-flex; flex-direction:column; align-items:center; gap:8px; }
+.kotoba-torii .kotoba-torii-caption{
+  font-family:var(--font-body); font-weight:600; font-size:var(--text-xs);
+  color:var(--text-muted); text-align:center;
+}
+.kotoba-torii[data-state="locked"] svg{ opacity:0.9; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function ToriiGate({
+  size = 96,
+  state = 'open',          // open | locked | passed
+  plaque,                  // short label on the gaku (e.g. "二" or "N4")
+  caption,                 // text under the gate
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-torii-css', CSS);
+  const locked = state === 'locked';
+  const main = locked ? 'var(--sumi-300)' : 'var(--torii)';
+  const deep = locked ? 'var(--sumi-400)' : 'var(--torii-deep)';
+  const plaqueBg = locked ? 'var(--sumi-100)' : '#FFF7F0';
+  const plaqueInk = locked ? 'var(--text-faint)' : 'var(--torii-deep)';
+  const w = size;
+  const h = size * 0.92;
+  return (
+    <span className={`kotoba-torii ${className}`} data-state={state} {...rest}>
+      <svg width={w} height={h} viewBox="0 0 120 110" fill="none" aria-hidden="true">
+        {/* kasagi — top lintel, gently upswept */}
+        <path d="M4 22 Q60 8 116 22 L116 13 Q60 -1 4 13 Z" fill={deep} />
+        {/* shimaki — band under the kasagi */}
+        <path d="M10 24 Q60 13 110 24 L110 32 Q60 22 10 32 Z" fill={main} />
+        {/* gakuzuka — center strut */}
+        <rect x="55.5" y="30" width="9" height="22" fill={main} />
+        {/* nuki — crossbar */}
+        <rect x="14" y="50" width="92" height="9" rx="1.5" fill={main} />
+        {/* pillars — slight inward lean */}
+        <path d="M22 30 L34 30 L31 104 L19 104 Z" fill={main} />
+        <path d="M86 30 L98 30 L101 104 L89 104 Z" fill={main} />
+        {/* pillar feet */}
+        <rect x="16.5" y="100" width="17" height="7" rx="2" fill={deep} />
+        <rect x="86.5" y="100" width="17" height="7" rx="2" fill={deep} />
+        {/* gaku — hanging plaque */}
+        {plaque != null && (
+          <g>
+            <rect x="48" y="31" width="24" height="20" rx="3" fill={plaqueBg} stroke={deep} strokeWidth="2" />
+            <text x="60" y="45.5" textAnchor="middle" fontFamily="'Zen Maru Gothic','Space Grotesk',sans-serif"
+                  fontWeight="700" fontSize="12" fill={plaqueInk}>{plaque}</text>
+          </g>
+        )}
+        {/* passed — small check seal on the right pillar */}
+        {state === 'passed' && (
+          <g>
+            <circle cx="94" cy="72" r="10" fill="var(--success)" stroke="#fff" strokeWidth="2.5" />
+            <path d="M89.5 72 L92.8 75.3 L98.5 68.8" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </g>
+        )}
+      </svg>
+      {caption && <span className="kotoba-torii-caption">{caption}</span>}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{ToriiGate});})();
+
+(function(){
+
+/**
+ * Kotoba StatBar — one character skill stat: kanji chip + label + bar + value.
+ * The four canonical stats are Vocabulary 語彙, Grammar 文法, Listening 聴解,
+ * Reading 読解. These feed boss challenges and the aggregate Power level.
+ */
+
+const CSS = `
+.kotoba-stat{ display:flex; align-items:center; gap:12px; font-family:var(--font-body); width:100%; }
+.kotoba-stat .kotoba-stat-kanji{
+  flex:none; width:38px; height:38px; border-radius:var(--radius-sm);
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--font-jp-display); font-weight:700; font-size:17px;
+  background:var(--brand-soft); color:var(--brand-strong);
+}
+.kotoba-stat-main{ flex:1; min-width:0; }
+.kotoba-stat-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+.kotoba-stat-label{ font-size:var(--text-sm); font-weight:700; color:var(--text-strong); }
+.kotoba-stat-val{ font-family:var(--font-num); font-weight:700; font-size:var(--text-xs); color:var(--text-muted); }
+.kotoba-stat-track{ height:8px; border-radius:999px; background:var(--surface-sunken); overflow:hidden; }
+.kotoba-stat-fill{ height:100%; border-radius:999px; background:var(--brand); transition:width var(--dur-slow) var(--ease-out); }
+.kotoba-stat[data-tone="accent"] .kotoba-stat-kanji{ background:var(--accent-soft); color:var(--kaki-700); }
+.kotoba-stat[data-tone="accent"] .kotoba-stat-fill{ background:var(--accent); }
+.kotoba-stat[data-tone="success"] .kotoba-stat-kanji{ background:var(--success-soft); color:var(--wakaba-700); }
+.kotoba-stat[data-tone="success"] .kotoba-stat-fill{ background:var(--success); }
+.kotoba-stat[data-tone="gold"] .kotoba-stat-kanji{ background:var(--power-soft); color:var(--power-deep); }
+.kotoba-stat[data-tone="gold"] .kotoba-stat-fill{ background:var(--power); }
+.kotoba-stat[data-tone="torii"] .kotoba-stat-kanji{ background:var(--torii-soft); color:var(--torii-deep); }
+.kotoba-stat[data-tone="torii"] .kotoba-stat-fill{ background:var(--torii); }
+.kotoba-stat[data-weak="true"] .kotoba-stat-val{ color:var(--torii); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function StatBar({
+  label,
+  jp,
+  value = 0,
+  max = 100,
+  tone = 'brand',
+  weak = false,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-stat-css', CSS);
+  const pct = Math.max(0, Math.min(100, max ? (value / max) * 100 : 0));
+  return (
+    <div className={`kotoba-stat ${className}`} data-tone={tone === 'brand' ? undefined : tone} data-weak={weak || undefined} {...rest}>
+      {jp && <span className="kotoba-stat-kanji jp-display">{jp}</span>}
+      <div className="kotoba-stat-main">
+        <div className="kotoba-stat-head">
+          <span className="kotoba-stat-label">{label}</span>
+          <span className="kotoba-stat-val">{value}{weak && ' · focus'}</span>
+        </div>
+        <div className="kotoba-stat-track"><div className="kotoba-stat-fill" style={{ width: `${pct}%` }} /></div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window.__ds,{StatBar});})();
+
+(function(){
+
+/**
+ * Kotoba PowerLevel — the aggregate "word power" (言力) medallion. One number
+ * that sums the four skill stats; used to gate boss challenges.
+ */
+
+const CSS = `
+.kotoba-power{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--font-num); line-height:1;
+}
+.kotoba-power .kotoba-power-medal{
+  display:inline-flex; flex-direction:column; align-items:center; justify-content:center;
+  border-radius:50%; background:var(--power); color:var(--sumi-900);
+  box-shadow:0 4px 0 var(--power-deep), var(--shadow-sm);
+  border:3px solid #fff;
+}
+.kotoba-power[data-size="sm"] .kotoba-power-medal{ width:44px; height:44px; }
+.kotoba-power[data-size="md"] .kotoba-power-medal{ width:60px; height:60px; }
+.kotoba-power[data-size="lg"] .kotoba-power-medal{ width:84px; height:84px; }
+.kotoba-power .kotoba-power-kanji{ font-family:var(--font-jp-display); font-weight:900; }
+.kotoba-power[data-size="sm"] .kotoba-power-kanji{ font-size:18px; }
+.kotoba-power[data-size="md"] .kotoba-power-kanji{ font-size:26px; }
+.kotoba-power[data-size="lg"] .kotoba-power-kanji{ font-size:38px; }
+.kotoba-power .kotoba-power-num{ font-weight:800; color:var(--text-strong); }
+.kotoba-power[data-size="sm"] .kotoba-power-num{ font-size:20px; }
+.kotoba-power[data-size="md"] .kotoba-power-num{ font-size:28px; }
+.kotoba-power[data-size="lg"] .kotoba-power-num{ font-size:40px; }
+.kotoba-power .kotoba-power-label{ font-family:var(--font-body); font-weight:600; font-size:12px; color:var(--text-muted); margin-top:3px; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function PowerLevel({
+  value = 0,
+  size = 'md',
+  label = 'Power',
+  showLabel = true,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-power-css', CSS);
+  return (
+    <span className={`kotoba-power ${className}`} data-size={size} {...rest}>
+      <span className="kotoba-power-medal"><span className="kotoba-power-kanji">力</span></span>
+      <span style={{ display: 'inline-flex', flexDirection: 'column' }}>
+        <span className="kotoba-power-num">{value}</span>
+        {showLabel && <span className="kotoba-power-label">{label}</span>}
+      </span>
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{PowerLevel});})();
+
+(function(){
+
+/**
+ * Kotoba QuestCard — a quest woven into the path: a goal, progress, and a
+ * reward. Quests are optional momentum-builders, never fear-based.
+ */
+
+const CSS = `
+.kotoba-quest{
+  display:flex; align-items:center; gap:14px; width:100%; box-sizing:border-box;
+  background:var(--surface-card); border:var(--border-thin) solid var(--border-subtle);
+  border-radius:var(--radius-lg); padding:14px 16px; box-shadow:var(--shadow-sm);
+  font-family:var(--font-body); text-align:left;
+}
+.kotoba-quest .kotoba-quest-icon{
+  flex:none; width:44px; height:44px; border-radius:var(--radius-md);
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--torii-soft); color:var(--torii);
+}
+.kotoba-quest .kotoba-quest-icon svg, .kotoba-quest .kotoba-quest-icon i{ width:22px; height:22px; }
+.kotoba-quest-main{ flex:1; min-width:0; }
+.kotoba-quest-title{ font-size:var(--text-sm); font-weight:700; color:var(--text-strong); }
+.kotoba-quest-sub{ font-size:var(--text-2xs); color:var(--text-muted); margin-top:1px; }
+.kotoba-quest-track{ height:6px; border-radius:999px; background:var(--surface-sunken); overflow:hidden; margin-top:7px; }
+.kotoba-quest-fill{ height:100%; border-radius:999px; background:var(--torii); transition:width var(--dur-slow) var(--ease-out); }
+.kotoba-quest-reward{
+  flex:none; display:inline-flex; align-items:center; gap:4px;
+  font-family:var(--font-num); font-weight:800; font-size:var(--text-xs);
+  color:var(--power-deep); background:var(--power-soft);
+  padding:6px 10px; border-radius:var(--radius-pill);
+}
+.kotoba-quest[data-done="true"] .kotoba-quest-icon{ background:var(--success-soft); color:var(--success); }
+.kotoba-quest[data-done="true"] .kotoba-quest-fill{ background:var(--success); }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function QuestCard({
+  title,
+  icon = null,
+  value = 0,
+  max = 1,
+  reward,
+  subtitle,
+  done = false,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-quest-css', CSS);
+  const pct = done ? 100 : Math.max(0, Math.min(100, max ? (value / max) * 100 : 0));
+  return (
+    <div className={`kotoba-quest ${className}`} data-done={done || undefined} {...rest}>
+      {icon && <span className="kotoba-quest-icon">{icon}</span>}
+      <div className="kotoba-quest-main">
+        <div className="kotoba-quest-title">{title}</div>
+        <div className="kotoba-quest-sub">{subtitle || `${value} / ${max}`}</div>
+        <div className="kotoba-quest-track"><div className="kotoba-quest-fill" style={{ width: `${pct}%` }} /></div>
+      </div>
+      {reward && <span className="kotoba-quest-reward">{reward}</span>}
+    </div>
+  );
+}
+
+Object.assign(window.__ds,{QuestCard});})();
+
+(function(){
+const PixelSprite=window.__ds.PixelSprite;
+
+/**
+ * Kotoba BossNode — an optional boss encounter on (or near) the path. A pixel
+ * oni guards bonus rewards; defeating it is a special challenge that uses the
+ * learner's stats. Never blocks the main path — bosses are side-quests.
+ */
+
+const ONI_PALETTE = {
+  O: '#571C12',  // outline · shu-900
+  R: '#DA5839',  // body · shu-400
+  D: '#A82E16',  // shade · shu-600
+  W: '#FFFFFF',  // eyes/teeth
+  K: '#171A24',  // pupil/brow
+  G: '#ECBC49',  // horns · gold
+};
+
+const ONI = [
+  '.G........G.',
+  '.GG......GG.',
+  '..OOOOOOOO..',
+  '.ORRRRRRRRO.',
+  '.ORKRRRRKRO.',
+  '.ORWKRRKWRO.',
+  'ORRRRRRRRRRO',
+  'ORWWWWWWWWRO',
+  '.ORRDDDDRRO.',
+  '..ORRRRRRO..',
+  '..ORO..ORO..',
+  '...O....O...',
+];
+
+const CSS = `
+.kotoba-boss-wrap{ display:inline-flex; flex-direction:column; align-items:center; gap:8px; }
+.kotoba-boss{
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  border:none; cursor:pointer; padding:0; border-radius:50%;
+  background:var(--torii-soft); border:3px solid var(--torii);
+  box-shadow:0 5px 0 var(--torii-deep);
+  transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), filter var(--dur-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+.kotoba-boss:hover{ filter:brightness(1.04); }
+.kotoba-boss:active{ transform:translateY(5px); box-shadow:0 0 0 var(--torii-deep); }
+.kotoba-boss:focus-visible{ outline:none; box-shadow:0 5px 0 var(--torii-deep), var(--ring); }
+.kotoba-boss[data-size="sm"]{ width:56px; height:56px; }
+.kotoba-boss[data-size="md"]{ width:76px; height:76px; }
+.kotoba-boss[data-size="lg"]{ width:96px; height:96px; }
+.kotoba-boss[data-state="locked"]{ filter:grayscale(1) opacity(0.6); cursor:not-allowed; }
+.kotoba-boss[data-state="locked"]:active{ transform:none; box-shadow:0 5px 0 var(--torii-deep); }
+.kotoba-boss[data-state="defeated"]{ background:var(--success-soft); border-color:var(--success); box-shadow:0 5px 0 var(--wakaba-700); filter:saturate(0.7); }
+.kotoba-boss .kotoba-boss-flag{
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  font-family:var(--font-body); font-weight:800; font-size:10px; letter-spacing:0.08em;
+  background:var(--torii); color:#fff; padding:2px 8px; border-radius:var(--radius-pill);
+  white-space:nowrap; box-shadow:var(--shadow-sm);
+}
+.kotoba-boss[data-state="defeated"] .kotoba-boss-flag{ background:var(--success); }
+.kotoba-boss-label{ font-family:var(--font-body); font-weight:600; font-size:var(--text-xs); color:var(--text-muted); max-width:110px; text-align:center; }
+@keyframes kotoba-boss-shake{
+  0%,100%{ transform:translateX(0); }
+  20%{ transform:translateX(-5px) rotate(-4deg); }
+  45%{ transform:translateX(4px) rotate(3deg); }
+  70%{ transform:translateX(-3px); }
+}
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function BossNode({
+  state = 'available',     // available | locked | defeated
+  size = 'md',
+  label,
+  flag = 'BOSS',
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-boss-css', CSS);
+  const spriteSize = size === 'sm' ? 34 : size === 'lg' ? 60 : 46;
+  return (
+    <span className="kotoba-boss-wrap">
+      <button
+        className={`kotoba-boss ${className}`}
+        data-state={state}
+        data-size={size}
+        disabled={state === 'locked'}
+        {...rest}
+      >
+        {flag && <span className="kotoba-boss-flag">{state === 'defeated' ? 'CLEAR' : flag}</span>}
+        <PixelSprite matrix={ONI} palette={ONI_PALETTE} size={spriteSize} />
+      </button>
+      {label && <span className="kotoba-boss-label">{label}</span>}
+    </span>
+  );
+}
+
+/** Bare oni sprite (no node chrome) — for battle headers, intros, lists. */
+function PixelOni({ size = 40, ...rest }) {
+  return <PixelSprite matrix={ONI} palette={ONI_PALETTE} size={size} {...rest} />;
+}
+
+Object.assign(window.__ds,{BossNode,PixelOni});})();
+
+(function(){
+
+/**
+ * Kotoba SenseiCard — the adaptive-learning voice. Sensei notices patterns
+ * (confusions, weak skills, due reviews) and offers a crafted practice set.
+ * This is where the LLM layer surfaces in the UI: specific, kind, actionable.
+ */
+
+const Sparkle = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+    <path d="M12 2l1.9 5.7L20 9.6l-5.4 2.4L12 18l-2.6-6L4 9.6l6.1-1.9L12 2z" />
+    <path d="M19 14l.9 2.6L22.5 18l-2.6 1.4L19 22l-.9-2.6L15.5 18l2.6-1.4L19 14z" opacity="0.7" />
+  </svg>
+);
+
+const CSS = `
+.kotoba-sensei{
+  position:relative; width:100%; box-sizing:border-box;
+  background:var(--brand-subtle);
+  border:var(--border-base) solid var(--ai-200);
+  border-radius:var(--radius-lg); padding:16px;
+  font-family:var(--font-body); overflow:hidden;
+}
+.kotoba-sensei-head{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.kotoba-sensei-chip{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:30px; height:30px; border-radius:50%;
+  background:var(--brand); color:#fff; flex:none;
+}
+.kotoba-sensei-eyebrow{
+  font-size:var(--text-3xs); font-weight:800; letter-spacing:var(--tracking-caps);
+  text-transform:uppercase; color:var(--brand-strong);
+}
+.kotoba-sensei-title{ font-size:var(--text-md); font-weight:700; color:var(--text-strong); line-height:1.3; }
+.kotoba-sensei-body{ font-size:var(--text-sm); color:var(--text-body); line-height:1.5; margin-top:6px; }
+.kotoba-sensei-body .jp, .kotoba-sensei-body .kotoba-sensei-jp{
+  font-family:var(--font-jp-display); font-weight:700; color:var(--brand-strong);
+  background:#fff; border-radius:6px; padding:1px 6px; margin:0 1px;
+}
+.kotoba-sensei-actions{ display:flex; gap:10px; margin-top:14px; align-items:center; }
+`;
+
+function useInjected(id, css) {
+  React.useEffect(() => {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+  }, [id, css]);
+}
+
+function SenseiCard({
+  eyebrow = 'Sensei noticed',
+  title,
+  children,
+  actions,
+  className = '',
+  ...rest
+}) {
+  useInjected('kotoba-sensei-css', CSS);
+  return (
+    <div className={`kotoba-sensei ${className}`} {...rest}>
+      <div className="kotoba-sensei-head">
+        <span className="kotoba-sensei-chip"><Sparkle /></span>
+        <span className="kotoba-sensei-eyebrow">{eyebrow}</span>
+      </div>
+      {title && <div className="kotoba-sensei-title">{title}</div>}
+      {children && <div className="kotoba-sensei-body">{children}</div>}
+      {actions && <div className="kotoba-sensei-actions">{actions}</div>}
+    </div>
+  );
+}
+
+/** Small inline chip marking adaptive content, e.g. on a tuned lesson. */
+function SenseiChip({ children = 'Tuned for you', className = '', ...rest }) {
+  useInjected('kotoba-sensei-css', CSS);
+  return (
+    <span
+      className={className}
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: 5,
+        fontFamily: 'var(--font-body)', fontSize: 'var(--text-2xs)', fontWeight: 700,
+        color: 'var(--brand-strong)', background: 'var(--brand-soft)',
+        padding: '4px 10px', borderRadius: 'var(--radius-pill)',
+      }}
+      {...rest}
+    >
+      <Sparkle />
+      {children}
+    </span>
+  );
+}
+
+Object.assign(window.__ds,{SenseiCard,SenseiChip});})();
+
+(function(){
+
+/**
+ * Kotoba SkillRadar — a 4-axis radar of the learner's skills. The shape makes
+ * weakness obvious at a glance; sensei points at the dent.
+ */
+
+function SkillRadar({
+  stats = [],            // [{ label, jp, value }] — up to 6 axes, typically 4
+  max = 100,
+  size = 180,
+  color = 'var(--brand)',
+  className = '',
+  ...rest
+}) {
+  const n = stats.length || 1;
+  const cx = size / 2, cy = size / 2;
+  const rMax = size * 0.34;
+  const angle = (i) => (Math.PI * 2 * i) / n - Math.PI / 2;
+  const pt = (i, r) => [cx + r * Math.cos(angle(i)), cy + r * Math.sin(angle(i))];
+  const poly = (r) => stats.map((_, i) => pt(i, r).join(',')).join(' ');
+  const dataPoly = stats.map((s, i) => pt(i, rMax * Math.max(0.05, Math.min(1, s.value / max))).join(',')).join(' ');
+  const weakest = stats.reduce((w, s, i) => (s.value < stats[w].value ? i : w), 0);
+
+  return (
+    <div className={`kotoba-radar ${className}`} style={{ display: 'inline-flex' }} {...rest}>
+      <svg width={size} height={size} aria-hidden="true">
+        {[1, 0.66, 0.33].map((f) => (
+          <polygon key={f} points={poly(rMax * f)} fill="none" stroke="var(--border-subtle)" strokeWidth="1.5" />
+        ))}
+        {stats.map((_, i) => {
+          const [x, y] = pt(i, rMax);
+          return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke="var(--border-subtle)" strokeWidth="1.5" />;
+        })}
+        <polygon points={dataPoly} fill={color} opacity="0.22" />
+        <polygon points={dataPoly} fill="none" stroke={color} strokeWidth="2.5" strokeLinejoin="round" />
+        {stats.map((s, i) => {
+          const [x, y] = pt(i, rMax * Math.max(0.05, Math.min(1, s.value / max)));
+          const weak = i === weakest;
+          return <circle key={i} cx={x} cy={y} r={weak ? 5 : 3.5} fill={weak ? 'var(--torii)' : color} stroke="#fff" strokeWidth="2" />;
+        })}
+        {stats.map((s, i) => {
+          const [x, y] = pt(i, rMax + size * 0.105);
+          return (
+            <g key={i}>
+              <text x={x} y={y - 3} textAnchor="middle"
+                    fontFamily="var(--font-jp-display)" fontWeight="700" fontSize={size * 0.075}
+                    fill={i === weakest ? 'var(--torii)' : 'var(--text-strong)'}>{s.jp}</text>
+              <text x={x} y={y + size * 0.062} textAnchor="middle"
+                    fontFamily="var(--font-body)" fontWeight="600" fontSize={size * 0.052}
+                    fill="var(--text-muted)">{s.label}</text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+Object.assign(window.__ds,{SkillRadar});})();
+
+window.MichiDesignSystem_2b01f5=window.__ds;
+</script>
+<script type="text/babel">
+// @ds-adherence-ignore -- omelette starter scaffold (raw elements/hex/px by design)
+
+/* BEGIN USAGE */
+// iOS.jsx — Simplified iOS 26 (Liquid Glass) device frame
+// Based on the iOS 26 UI Kit + Figma status bar spec. No assets, no deps.
+// Exports (to window): IOSDevice, IOSStatusBar, IOSNavBar, IOSGlassPill, IOSList, IOSListRow, IOSKeyboard
+//
+// Usage — wrap your screen content in <IOSDevice> to get the bezel, status bar
+// and home indicator (props: title, dark, keyboard):
+//
+//   <IOSDevice title="Settings">
+//     ...your screen content...
+//   </IOSDevice>
+//   <IOSDevice dark title="Search" keyboard>…</IOSDevice>
+/* END USAGE */
+
+// ─────────────────────────────────────────────────────────────
+// Status bar
+// ─────────────────────────────────────────────────────────────
+function IOSStatusBar({ dark = false, time = '9:41' }) {
+  const c = dark ? '#fff' : '#000';
+  return (
+    <div style={{
+      display: 'flex', gap: 154, alignItems: 'center', justifyContent: 'center',
+      padding: '21px 24px 19px', boxSizing: 'border-box',
+      position: 'relative', zIndex: 20, width: '100%',
+    }}>
+      <div style={{ flex: 1, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 1.5 }}>
+        <span style={{
+          fontFamily: '-apple-system, "SF Pro", system-ui', fontWeight: 590,
+          fontSize: 17, lineHeight: '22px', color: c,
+        }}>{time}</span>
+      </div>
+      <div style={{ flex: 1, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, paddingTop: 1, paddingRight: 1 }}>
+        <svg width="19" height="12" viewBox="0 0 19 12">
+          <rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" fill={c}/>
+          <rect x="4.8" y="5" width="3.2" height="7" rx="0.7" fill={c}/>
+          <rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" fill={c}/>
+          <rect x="14.4" y="0" width="3.2" height="12" rx="0.7" fill={c}/>
+        </svg>
+        <svg width="17" height="12" viewBox="0 0 17 12">
+          <path d="M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z" fill={c}/>
+          <path d="M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z" fill={c}/>
+          <circle cx="8.5" cy="10.5" r="1.5" fill={c}/>
+        </svg>
+        <svg width="27" height="13" viewBox="0 0 27 13">
+          <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke={c} strokeOpacity="0.35" fill="none"/>
+          <rect x="2" y="2" width="20" height="9" rx="2" fill={c}/>
+          <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z" fill={c} fillOpacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Liquid glass pill — blur + tint + shine
+// ─────────────────────────────────────────────────────────────
+function IOSGlassPill({ children, dark = false, style = {} }) {
+  return (
+    <div style={{
+      height: 44, minWidth: 44, borderRadius: 9999,
+      position: 'relative', overflow: 'hidden',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      boxShadow: dark
+        ? '0 2px 6px rgba(0,0,0,0.35), 0 6px 16px rgba(0,0,0,0.2)'
+        : '0 1px 3px rgba(0,0,0,0.07), 0 3px 10px rgba(0,0,0,0.06)',
+      ...style,
+    }}>
+      {/* blur + tint */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 9999,
+        backdropFilter: 'blur(12px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+        background: dark ? 'rgba(120,120,128,0.28)' : 'rgba(255,255,255,0.5)',
+      }} />
+      {/* shine */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 9999,
+        boxShadow: dark
+          ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15), inset -1px -1px 1px rgba(255,255,255,0.08)'
+          : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
+        border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)',
+      }} />
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', padding: '0 4px' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Navigation bar — glass pills + large title
+// ─────────────────────────────────────────────────────────────
+function IOSNavBar({ title = 'Title', dark = false, trailingIcon = true }) {
+  const muted = dark ? 'rgba(255,255,255,0.6)' : '#404040';
+  const text = dark ? '#fff' : '#000';
+  const pillIcon = (content) => (
+    <IOSGlassPill dark={dark}>
+      <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {content}
+      </div>
+    </IOSGlassPill>
+  );
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', gap: 10,
+      paddingTop: 62, paddingBottom: 10, position: 'relative', zIndex: 5,
+    }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 16px',
+      }}>
+        {/* back chevron */}
+        {pillIcon(
+          <svg width="12" height="20" viewBox="0 0 12 20" fill="none" style={{ marginLeft: -1 }}>
+            <path d="M10 2L2 10l8 8" stroke={muted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+        {/* trailing ellipsis */}
+        {trailingIcon && pillIcon(
+          <svg width="22" height="6" viewBox="0 0 22 6">
+            <circle cx="3" cy="3" r="2.5" fill={muted}/>
+            <circle cx="11" cy="3" r="2.5" fill={muted}/>
+            <circle cx="19" cy="3" r="2.5" fill={muted}/>
+          </svg>
+        )}
+      </div>
+      {/* large title */}
+      <div style={{
+        padding: '0 16px',
+        fontFamily: '-apple-system, system-ui',
+        fontSize: 34, fontWeight: 700, lineHeight: '41px',
+        color: text, letterSpacing: 0.4,
+      }}>{title}</div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Grouped list (inset card, r:26) + row (52px)
+// ─────────────────────────────────────────────────────────────
+function IOSListRow({ title, detail, icon, chevron = true, isLast = false, dark = false }) {
+  const text = dark ? '#fff' : '#000';
+  const sec = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
+  const ter = dark ? 'rgba(235,235,245,0.3)' : 'rgba(60,60,67,0.3)';
+  const sep = dark ? 'rgba(84,84,88,0.65)' : 'rgba(60,60,67,0.12)';
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', minHeight: 52,
+      padding: '0 16px', position: 'relative',
+      fontFamily: '-apple-system, system-ui', fontSize: 17,
+      letterSpacing: -0.43,
+    }}>
+      {icon && (
+        <div style={{
+          width: 30, height: 30, borderRadius: 7, background: icon,
+          marginRight: 12, flexShrink: 0,
+        }} />
+      )}
+      <div style={{ flex: 1, color: text }}>{title}</div>
+      {detail && <span style={{ color: sec, marginRight: 6 }}>{detail}</span>}
+      {chevron && (
+        <svg width="8" height="14" viewBox="0 0 8 14" style={{ flexShrink: 0 }}>
+          <path d="M1 1l6 6-6 6" stroke={ter} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      )}
+      {!isLast && (
+        <div style={{
+          position: 'absolute', bottom: 0, right: 0,
+          left: icon ? 58 : 16, height: 0.5, background: sep,
+        }} />
+      )}
+    </div>
+  );
+}
+
+function IOSList({ header, children, dark = false }) {
+  const hc = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
+  const bg = dark ? '#1C1C1E' : '#fff';
+  return (
+    <div>
+      {header && (
+        <div style={{
+          fontFamily: '-apple-system, system-ui', fontSize: 13,
+          color: hc, textTransform: 'uppercase',
+          padding: '8px 36px 6px', letterSpacing: -0.08,
+        }}>{header}</div>
+      )}
+      <div style={{
+        background: bg, borderRadius: 26,
+        margin: '0 16px', overflow: 'hidden',
+      }}>{children}</div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Device frame
+// ─────────────────────────────────────────────────────────────
+function IOSDevice({
+  children, width = 402, height = 874, dark = false,
+  title, keyboard = false,
+}) {
+  return (
+    <div style={{
+      width, height, borderRadius: 48, overflow: 'hidden',
+      position: 'relative', background: dark ? '#000' : '#F2F2F7',
+      boxShadow: '0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.12)',
+      fontFamily: '-apple-system, system-ui, sans-serif',
+      WebkitFontSmoothing: 'antialiased',
+    }}>
+      {/* dynamic island */}
+      <div style={{
+        position: 'absolute', top: 11, left: '50%', transform: 'translateX(-50%)',
+        width: 126, height: 37, borderRadius: 24, background: '#000', zIndex: 50,
+      }} />
+      {/* status bar (absolute) */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+        <IOSStatusBar dark={dark} />
+      </div>
+      {/* nav + content */}
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        {title !== undefined && <IOSNavBar title={title} dark={dark} />}
+        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        {keyboard && <IOSKeyboard dark={dark} />}
+      </div>
+      {/* home indicator — always on top */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 60,
+        height: 34, display: 'flex', justifyContent: 'center', alignItems: 'flex-end',
+        paddingBottom: 8, pointerEvents: 'none',
+      }}>
+        <div style={{
+          width: 139, height: 5, borderRadius: 100,
+          background: dark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.25)',
+        }} />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Keyboard — iOS 26 liquid glass
+// ─────────────────────────────────────────────────────────────
+function IOSKeyboard({ dark = false }) {
+  const glyph = dark ? 'rgba(255,255,255,0.7)' : '#595959';
+  const sugg = dark ? 'rgba(255,255,255,0.6)' : '#333';
+  const keyBg = dark ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.85)';
+
+  // special-key icons
+  const icons = {
+    shift: <svg width="19" height="17" viewBox="0 0 19 17"><path d="M9.5 1L1 9.5h4.5V16h8V9.5H18L9.5 1z" fill={glyph}/></svg>,
+    del: <svg width="23" height="17" viewBox="0 0 23 17"><path d="M7 1h13a2 2 0 012 2v11a2 2 0 01-2 2H7l-6-7.5L7 1z" fill="none" stroke={glyph} strokeWidth="1.6" strokeLinejoin="round"/><path d="M10 5l7 7M17 5l-7 7" stroke={glyph} strokeWidth="1.6" strokeLinecap="round"/></svg>,
+    ret: <svg width="20" height="14" viewBox="0 0 20 14"><path d="M18 1v6H4m0 0l4-4M4 7l4 4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  };
+
+  const key = (content, { w, flex, ret, fs = 25, k } = {}) => (
+    <div key={k} style={{
+      height: 42, borderRadius: 8.5,
+      flex: flex ? 1 : undefined, width: w, minWidth: 0,
+      background: ret ? '#08f' : keyBg,
+      boxShadow: '0 1px 0 rgba(0,0,0,0.075)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: '-apple-system, "SF Compact", system-ui',
+      fontSize: fs, fontWeight: 458, color: ret ? '#fff' : glyph,
+    }}>{content}</div>
+  );
+
+  const row = (keys, pad = 0) => (
+    <div style={{ display: 'flex', gap: 6.5, justifyContent: 'center', padding: `0 ${pad}px` }}>
+      {keys.map(l => key(l, { flex: true, k: l }))}
+    </div>
+  );
+
+  return (
+    <div style={{
+      position: 'relative', zIndex: 15, borderRadius: 27, overflow: 'hidden',
+      padding: '11px 0 2px',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      boxShadow: dark
+        ? '0 -2px 20px rgba(0,0,0,0.09)'
+        : '0 -1px 6px rgba(0,0,0,0.018), 0 -3px 20px rgba(0,0,0,0.012)',
+    }}>
+      {/* liquid glass bg — same recipe as nav pills */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 27,
+        backdropFilter: 'blur(12px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+        background: dark ? 'rgba(120,120,128,0.14)' : 'rgba(255,255,255,0.25)',
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 27,
+        boxShadow: dark
+          ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15)'
+          : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
+        border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* autocorrect bar */}
+      <div style={{
+        display: 'flex', gap: 20, alignItems: 'center',
+        padding: '8px 22px 13px', width: '100%', boxSizing: 'border-box',
+        position: 'relative',
+      }}>
+        {['"The"', 'the', 'to'].map((w, i) => (
+          <React.Fragment key={i}>
+            {i > 0 && <div style={{ width: 1, height: 25, background: '#ccc', opacity: 0.3 }} />}
+            <div style={{
+              flex: 1, textAlign: 'center',
+              fontFamily: '-apple-system, system-ui', fontSize: 17,
+              color: sugg, letterSpacing: -0.43, lineHeight: '22px',
+            }}>{w}</div>
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* key layout */}
+      <div style={{
+        display: 'flex', flexDirection: 'column', gap: 13,
+        padding: '0 6.5px', width: '100%', boxSizing: 'border-box',
+        position: 'relative',
+      }}>
+        {row(['q','w','e','r','t','y','u','i','o','p'])}
+        {row(['a','s','d','f','g','h','j','k','l'], 20)}
+        <div style={{ display: 'flex', gap: 14.25, alignItems: 'center' }}>
+          {key(icons.shift, { w: 45, k: 'shift' })}
+          <div style={{ display: 'flex', gap: 6.5, flex: 1 }}>
+            {['z','x','c','v','b','n','m'].map(l => key(l, { flex: true, k: l }))}
+          </div>
+          {key(icons.del, { w: 45, k: 'del' })}
+        </div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {key('ABC', { w: 92.25, fs: 18, k: 'abc' })}
+          {key('', { flex: true, k: 'space' })}
+          {key(icons.ret, { w: 92.25, ret: true, k: 'ret' })}
+        </div>
+      </div>
+
+      {/* bottom spacer (emoji+mic area, icons omitted) */}
+      <div style={{ height: 56, width: '100%', position: 'relative' }} />
+    </div>
+  );
+}
+
+Object.assign(window, {
+  IOSDevice, IOSStatusBar, IOSNavBar, IOSGlassPill, IOSList, IOSListRow, IOSKeyboard,
+});
+
+</script>
+<script type="text/babel">
+// Kotoba — Onboarding flow (welcome → goal → level → daily goal → ready)
+// Exposes window.Onboarding. Uses DS components from window.MichiDesignSystem_2b01f5.
+
+const Onboarding = (function () {
+  const NS = window.MichiDesignSystem_2b01f5;
+  const { Button, LevelBadge, Card } = NS;
+  const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+  const GOALS = [
+    ['plane', 'Travel in Japan'],
+    ['sparkles', 'Anime & manga'],
+    ['briefcase', 'Work & career'],
+    ['home', 'Living in Japan'],
+    ['heart', 'Just for fun'],
+  ];
+  const LEVELS = [
+    ['pre', 'Brand new', 'I\u2019m starting from zero'],
+    ['n5', 'N5', 'I know some kana'],
+    ['n4', 'N4', 'Basic grammar & ~600 words'],
+    ['n3', 'N3', 'Everyday conversation'],
+  ];
+  const DAILY = [
+    ['5', 'Casual', '5 min · 10 XP'],
+    ['10', 'Steady', '10 min · 20 XP'],
+    ['15', 'Serious', '15 min · 30 XP'],
+    ['20', 'Intense', '20 min · 40 XP'],
+  ];
+
+  const wrap = {
+    display: 'flex', flexDirection: 'column', height: '100%',
+    padding: '70px 24px 28px', boxSizing: 'border-box', background: 'var(--bg-canvas)',
+  };
+  const optionCard = (active) => ({
+    display: 'flex', alignItems: 'center', gap: 14, width: '100%',
+    cursor: 'pointer', textAlign: 'left',
+    border: active ? '2px solid var(--ai-400)' : '2px solid var(--border-subtle)',
+    background: active ? 'var(--brand-soft)' : 'var(--surface-card)',
+  });
+
+  function Dots({ step, total }) {
+    return (
+      <div style={{ display: 'flex', gap: 6, marginBottom: 24 }}>
+        {Array.from({ length: total }).map((_, i) => (
+          <div key={i} style={{
+            height: 6, flex: 1, borderRadius: 999,
+            background: i <= step ? 'var(--brand)' : 'var(--surface-sunken)',
+            transition: 'background var(--dur-base) var(--ease-out)',
+          }} />
+        ))}
+      </div>
+    );
+  }
+
+  return function Onboarding({ onDone }) {
+    const [step, setStep] = React.useState(0);
+    const [goal, setGoal] = React.useState(null);
+    const [level, setLevel] = React.useState(null);
+    const [daily, setDaily] = React.useState('10');
+
+    React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+
+    const next = () => setStep((s) => s + 1);
+    const back = () => setStep((s) => Math.max(0, s - 1));
+
+    // Step 0 — welcome (no dots/back)
+    if (step === 0) {
+      return (
+        <div style={{ ...wrap, justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: 0 }}>
+          <div style={{
+            position: 'absolute', inset: 0, opacity: 0.10, zIndex: 0,
+            backgroundImage: 'url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%20role%3D%22img%22%20aria-label%3D%22Seigaiha%20wave%20pattern%20tile%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22wave%22%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2228%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%224%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3CclipPath%20id%3D%22tile%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2260%22%3E%3C%2Frect%3E%3C%2FclipPath%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cg%20clip-path%3D%22url(%23tile)%22%20color%3D%22%234F61BE%22%20opacity%3D%220.5%22%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%220%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2260%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%22120%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E)', backgroundSize: 130,
+          }} />
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <img src="data:image/svg+xml;utf8,%3Csvg%20width%3D%2296%22%20height%3D%2296%22%20viewBox%3D%220%200%2096%2096%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20aria-label%3D%22Kotoba%20app%20icon%22%3E%0A%20%20%3Crect%20width%3D%2296%22%20height%3D%2296%22%20rx%3D%2224%22%20fill%3D%22%233D4CA0%22%3E%3C%2Frect%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2227%22%20cy%3D%2269%22%20r%3D%229%22%20fill%3D%22%23FFFFFF%22%20fill-opacity%3D%220.55%22%3E%3C%2Fcircle%3E%0A%20%20%3Ccircle%20cx%3D%2248%22%20cy%3D%2250%22%20r%3D%2210.5%22%20fill%3D%22%23FFFFFF%22%20fill-opacity%3D%220.8%22%3E%3C%2Fcircle%3E%0A%20%20%3Ccircle%20cx%3D%2270%22%20cy%3D%2230%22%20r%3D%2212.5%22%20fill%3D%22%23F15F2C%22%3E%3C%2Fcircle%3E%0A%20%20%3Ccircle%20cx%3D%2270%22%20cy%3D%2230%22%20r%3D%2217%22%20stroke%3D%22%23F15F2C%22%20stroke-opacity%3D%220.35%22%20stroke-width%3D%222.5%22%3E%3C%2Fcircle%3E%0A%3C%2Fsvg%3E" alt="Kotoba" width="104" height="104"
+                 style={{ filter: 'drop-shadow(var(--shadow-lg))' }} />
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 48, color: 'var(--text-strong)', marginTop: 22, letterSpacing: '-0.02em' }}>Kotoba</div>
+            <div className="jp-display" style={{ fontSize: 22, color: 'var(--brand)', marginTop: 2 }}>毎日一歩ずつ</div>
+            <div style={{ fontSize: 17, color: 'var(--text-muted)', marginTop: 14, maxWidth: 260, lineHeight: 1.5 }}>
+              Learn Japanese one step at a time. Build a streak you\u2019ll actually keep.
+            </div>
+            <div style={{ height: 36 }} />
+            <Button size="lg" fullWidth onClick={next} style={{ minWidth: 280 }}>Get started</Button>
+            <Button variant="ghost" size="md" onClick={() => onDone()} style={{ marginTop: 8 }}>I already have an account</Button>
+          </div>
+        </div>
+      );
+    }
+
+    const Header = () => (
+      <div>
+        <button onClick={back} aria-label="Back" style={{
+          border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text-muted)',
+          marginBottom: 16, marginLeft: -6, display: 'inline-flex',
+        }}>{I('arrow-left', { style: { width: 24, height: 24 } })}</button>
+        <Dots step={step - 1} total={4} />
+      </div>
+    );
+
+    let title, sub, body, cta = 'Continue', ctaEnabled = true, onCta = next;
+
+    if (step === 1) {
+      title = 'Why are you learning?';
+      sub = 'We\u2019ll tailor your path. Pick one.';
+      ctaEnabled = !!goal;
+      body = (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {GOALS.map(([icon, label]) => (
+            <Card key={label} as="button" pad="sm" elevation="flat" onClick={() => setGoal(label)} style={optionCard(goal === label)}>
+              <span style={{ color: 'var(--brand)', display: 'inline-flex' }}>{I(icon, { style: { width: 22, height: 22 } })}</span>
+              <span style={{ fontWeight: 600, color: 'var(--text-strong)', fontSize: 16 }}>{label}</span>
+            </Card>
+          ))}
+        </div>
+      );
+    } else if (step === 2) {
+      title = 'Where are you starting?';
+      sub = 'Be honest \u2014 you can change this anytime.';
+      ctaEnabled = !!level;
+      body = (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {LEVELS.map(([tier, label, desc]) => (
+            <Card key={tier} as="button" pad="sm" elevation="flat" onClick={() => setLevel(tier)} style={optionCard(level === tier)}>
+              <LevelBadge tier={tier} size="sm" showCaption={false} />
+              <div>
+                <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 16 }}>{label}</div>
+                <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>{desc}</div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      );
+    } else if (step === 3) {
+      title = 'Pick a daily goal';
+      sub = 'Small and steady wins. You can raise it later.';
+      body = (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          {DAILY.map(([v, label, desc]) => (
+            <Card key={v} as="button" elevation="flat" onClick={() => setDaily(v)}
+                  style={{ ...optionCard(daily === v), flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
+              <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 16 }}>{label}</div>
+              <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>{desc}</div>
+            </Card>
+          ))}
+        </div>
+      );
+    } else {
+      title = 'Your path is ready';
+      sub = null;
+      cta = 'Start learning';
+      onCta = () => onDone();
+      body = (
+        <Card tone="brand" pad="lg" style={{ marginTop: 8 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <Row k="Goal" v={goal || 'Just for fun'} />
+            <Row k="Starting level" v={level ? (level === 'pre' ? 'Brand new' : level.toUpperCase()) : 'Brand new'} />
+            <Row k="Daily goal" v={`${daily} min`} />
+            <div style={{ height: 1, background: 'var(--ai-100)' }} />
+            <div style={{ fontSize: 15, color: 'var(--text-body)', lineHeight: 1.5 }}>
+              First stop: <strong style={{ color: 'var(--text-strong)' }}>Hiragana basics</strong>. Let\u2019s take your first step.
+            </div>
+          </div>
+        </Card>
+      );
+    }
+
+    return (
+      <div style={wrap}>
+        <Header />
+        <div style={{ flex: 1, overflow: 'auto' }}>
+          <h2 style={{ fontSize: 28 }}>{title}</h2>
+          {sub && <p style={{ color: 'var(--text-muted)', marginTop: 6, marginBottom: 20, fontSize: 15 }}>{sub}</p>}
+          {!sub && <div style={{ height: 8 }} />}
+          {body}
+        </div>
+        <Button size="lg" fullWidth onClick={onCta} disabled={!ctaEnabled} style={{ marginTop: 16 }}>{cta}</Button>
+      </div>
+    );
+  };
+
+  function Row({ k, v }) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ color: 'var(--text-muted)', fontSize: 14 }}>{k}</span>
+        <span style={{ color: 'var(--text-strong)', fontWeight: 700, fontSize: 15 }}>{v}</span>
+      </div>
+    );
+  }
+})();
+
+Object.assign(window, { Onboarding });
+
+</script>
+<script type="text/babel">
+// Kotoba — Home / learning path (the signature screen)
+// Exposes window.HomePath. Vertical winding stepping-stone path.
+
+const HomePath = (function () {
+  const NS = window.MichiDesignSystem_2b01f5;
+  const { StreakCounter, LevelBadge, LessonNode, Card, Badge, Companion, ToriiGate, BossNode, QuestCard } = NS;
+  const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+  // winding offsets (S-curve) in px
+  const OFFSETS = [0, 64, 90, 64, 0, -64, -90, -64];
+
+  const UNIT = {
+    title: 'Hiragana basics',
+    jp: 'ひらがな',
+    n: 'Unit 1',
+    lessons: [
+      { state: 'mastered', label: 'あ い う', icon: 'star' },
+      { state: 'complete', label: 'か き く' },
+      { state: 'complete', label: 'さ し す' },
+      { state: 'available', current: true, label: 'Greetings' },
+      { state: 'locked', label: 'た ち つ' },
+      { boss: true, label: 'Hiragana Oni' },
+      { state: 'locked', label: 'Review' },
+    ],
+  };
+
+  const UNIT2 = {
+    title: 'First words',
+    jp: 'はじめの言葉',
+    n: 'Unit 2',
+    lessons: [
+      { state: 'locked', label: 'Numbers' },
+      { state: 'locked', label: 'Family' },
+      { state: 'locked', label: 'Food' },
+    ],
+  };
+
+  function UnitBanner({ unit, tone }) {
+    return (
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 14, margin: '8px 0 22px',
+        padding: '16px 18px', borderRadius: 'var(--radius-lg)',
+        background: tone === 'locked' ? 'var(--surface-sunken)' : 'var(--brand)',
+        color: tone === 'locked' ? 'var(--text-muted)' : '#fff',
+        boxShadow: tone === 'locked' ? 'none' : 'var(--shadow-md)',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        {tone !== 'locked' && <div style={{ position: 'absolute', inset: 0, opacity: 0.14, backgroundImage: 'url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%20role%3D%22img%22%20aria-label%3D%22Seigaiha%20wave%20pattern%20tile%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22wave%22%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2228%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%224%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3CclipPath%20id%3D%22tile%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2260%22%3E%3C%2Frect%3E%3C%2FclipPath%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cg%20clip-path%3D%22url(%23tile)%22%20color%3D%22%234F61BE%22%20opacity%3D%220.5%22%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%220%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2260%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%22120%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E)', backgroundSize: 90 }} />}
+        <div style={{ position: 'relative', flex: 1 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.85 }}>{unit.n}</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, marginTop: 2 }}>{unit.title}</div>
+          <div className="jp-display" style={{ fontSize: 14, opacity: 0.85, marginTop: 1 }}>{unit.jp}</div>
+        </div>
+        {tone === 'locked'
+          ? I('lock', { style: { width: 20, height: 20 } })
+          : <span style={{ position: 'relative', display: 'inline-flex' }}>{I('book-open', { style: { width: 22, height: 22 } })}</span>}
+      </div>
+    );
+  }
+
+  function Path({ unit, onStart, onBoss }) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
+        {unit.lessons.map((l, i) => (
+          <div key={i} style={{ transform: `translateX(${OFFSETS[i % OFFSETS.length]}px)`, transition: 'transform .2s', position: 'relative' }}>
+            {l.boss ? (
+              <BossNode label={l.label} onClick={onBoss} />
+            ) : (
+              <LessonNode
+                state={l.state}
+                current={l.current}
+                icon={l.icon || 'book'}
+                size={l.current ? 'lg' : 'md'}
+                label={l.label}
+                onClick={l.current ? onStart : undefined}
+              />
+            )}
+            {l.current && (
+              <span style={{ position: 'absolute', left: -66, bottom: 26, pointerEvents: 'none' }}>
+                <Companion stage={2} size={52} floating />
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return function HomePath({ onStartLesson, onBoss, streak = 28, xp = 1240 }) {
+    React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+    return (
+      <div style={{ minHeight: '100%', background: 'var(--bg-canvas)' }}>
+        {/* sticky stat header */}
+        <div style={{
+          position: 'sticky', top: 0, zIndex: 10,
+          padding: '54px 20px 12px', background: 'rgba(247,248,251,0.86)',
+          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          borderBottom: '1px solid var(--border-subtle)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <LevelBadge tier="n5" size="sm" showCaption={false} />
+            <div>
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>Current level</div>
+              <div style={{ fontFamily: 'var(--font-num)', fontWeight: 800, fontSize: 14, color: 'var(--text-strong)' }}>N5 · 60%</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'var(--font-num)', fontWeight: 800, color: 'var(--brand)' }}>
+              {I('gem', { style: { width: 18, height: 18 } })}{xp.toLocaleString()}
+            </span>
+            <StreakCounter days={streak} showLabel={false} />
+          </div>
+        </div>
+
+        <div style={{ padding: '0 20px 28px' }}>
+          {/* daily goal nudge */}
+          <Card elevation="sm" style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '16px 0 10px' }}>
+            <NS.ProgressRing value={2} max={3} size={52} thickness={7} color="var(--accent)">
+              <span style={{ fontSize: 13 }}>2/3</span>
+            </NS.ProgressRing>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 15 }}>Daily goal — almost there</div>
+              <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>1 more lesson to keep your streak</div>
+            </div>
+            <Badge tone="accent" solid size="sm">+20 XP</Badge>
+          </Card>
+
+          {/* active quest */}
+          <QuestCard
+            title="Defeat the Hiragana Oni"
+            icon={I('swords')}
+            value={0} max={1}
+            reward="+150 XP"
+            subtitle="Boss challenge · waiting on the path"
+            style={{ marginBottom: 4 }}
+          />
+
+          <UnitBanner unit={UNIT} />
+          <Path unit={UNIT} onStart={onStartLesson} onBoss={onBoss} />
+
+          {/* torii checkpoint into the next unit */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 0 8px' }}>
+            <ToriiGate size={104} state="locked" plaque="二" caption="Unit 2 · finish Unit 1 to pass through" />
+          </div>
+          <UnitBanner unit={UNIT2} tone="locked" />
+          <Path unit={UNIT2} />
+        </div>
+      </div>
+    );
+  };
+})();
+
+Object.assign(window, { HomePath });
+
+</script>
+<script type="text/babel">
+// Kotoba — Lesson flow (multiple-choice quiz → feedback → completion)
+// Exposes window.Lesson.
+
+const Lesson = (function () {
+  const NS = window.MichiDesignSystem_2b01f5;
+  const { KanaTile, Button, IconButton, ProgressRing, StreakCounter, SenseiChip } = NS;
+  const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+  const QUESTIONS = [
+    {
+      prompt: 'Which character reads', word: 'mizu', gloss: 'water',
+      options: [
+        { glyph: '水', reading: 'mizu', ok: true },
+        { glyph: '火', reading: 'hi' },
+        { glyph: '木', reading: 'ki' },
+        { glyph: '金', reading: 'kane' },
+      ],
+    },
+    {
+      prompt: 'Tap the hiragana', word: 'ka', gloss: null,
+      options: [
+        { glyph: 'き', reading: 'ki' },
+        { glyph: 'か', reading: 'ka', ok: true },
+        { glyph: 'け', reading: 'ke' },
+        { glyph: 'く', reading: 'ku' },
+      ],
+    },
+    {
+      prompt: 'Which character reads', word: 'neko', gloss: 'cat',
+      options: [
+        { glyph: '犬', reading: 'inu' },
+        { glyph: '鳥', reading: 'tori' },
+        { glyph: '猫', reading: 'neko', ok: true },
+        { glyph: '魚', reading: 'sakana' },
+      ],
+    },
+  ];
+
+  function Feedback({ correct, answer, onNext, last }) {
+    const ok = correct;
+    return (
+      <div style={{
+        position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 20,
+        background: ok ? 'var(--success-soft)' : 'var(--danger-soft)',
+        borderTopLeftRadius: 'var(--radius-xl)', borderTopRightRadius: 'var(--radius-xl)',
+        padding: '22px 24px 40px', boxShadow: 'var(--shadow-xl)',
+        animation: 'kotoba-sheet-up .28s var(--ease-emphas) both',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+          <span style={{
+            width: 40, height: 40, borderRadius: '50%', display: 'inline-flex',
+            alignItems: 'center', justifyContent: 'center', color: '#fff',
+            background: ok ? 'var(--success)' : 'var(--danger)',
+          }}>{I(ok ? 'check' : 'x', { style: { width: 24, height: 24 } })}</span>
+          <div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, color: ok ? 'var(--wakaba-700)' : 'var(--beni-700)' }}>
+              {ok ? 'Nice!' : 'Not quite'}
+            </div>
+            <div style={{ fontSize: 14, color: ok ? 'var(--wakaba-700)' : 'var(--beni-700)' }}>
+              {ok ? 'That\u2019s correct.' : <>The answer is <strong>{answer.glyph}</strong> \u2014 <em>{answer.reading}</em>.</>}
+            </div>
+          </div>
+        </div>
+        <Button fullWidth size="lg" variant={ok ? 'success' : 'danger'} onClick={onNext}>
+          {last ? 'Finish' : 'Continue'}
+        </Button>
+      </div>
+    );
+  }
+
+  function Complete({ onDone, xp = 40, accuracy = 100, streak = 29 }) {
+    React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+    return (
+      <div style={{
+        height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center',
+        justifyContent: 'center', textAlign: 'center', padding: '70px 28px 32px',
+        boxSizing: 'border-box', background: 'var(--brand)', position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.16, backgroundImage: 'url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%20role%3D%22img%22%20aria-label%3D%22Seigaiha%20wave%20pattern%20tile%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22wave%22%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2228%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%224%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3CclipPath%20id%3D%22tile%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2260%22%3E%3C%2Frect%3E%3C%2FclipPath%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cg%20clip-path%3D%22url(%23tile)%22%20color%3D%22%234F61BE%22%20opacity%3D%220.5%22%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%220%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2260%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%22120%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E)', backgroundSize: 120 }} />
+        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <div style={{
+            width: 104, height: 104, borderRadius: '50%', background: '#fff',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: 'var(--glow-accent)', animation: 'kotoba-pop .5s var(--ease-spring) both',
+          }}>{I('trophy', { style: { width: 52, height: 52, color: 'var(--accent)' } })}</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 30, color: '#fff', marginTop: 22 }}>Lesson complete!</div>
+          <div className="jp-display" style={{ fontSize: 18, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>よくできました</div>
+
+          <div style={{ display: 'flex', gap: 12, marginTop: 28, width: '100%' }}>
+            <Stat label="XP earned" value={`+${xp}`} icon="gem" />
+            <Stat label="Accuracy" value={`${accuracy}%`} icon="target" />
+            <Stat label="Streak" value={streak} icon="flame" />
+          </div>
+          <div style={{ height: 28 }} />
+          <Button fullWidth size="lg" variant="accent" onClick={onDone}>Keep going</Button>
+        </div>
+      </div>
+    );
+  }
+
+  function Stat({ label, value, icon }) {
+    return (
+      <div style={{ flex: 1, background: 'rgba(255,255,255,0.14)', borderRadius: 'var(--radius-md)', padding: '14px 6px' }}>
+        <span style={{ color: 'rgba(255,255,255,0.9)', display: 'inline-flex' }}>{I(icon, { style: { width: 18, height: 18 } })}</span>
+        <div style={{ fontFamily: 'var(--font-num)', fontWeight: 800, fontSize: 20, color: '#fff', marginTop: 4 }}>{value}</div>
+        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>{label}</div>
+      </div>
+    );
+  }
+
+  return function Lesson({ onExit, onDone }) {
+    const [qi, setQi] = React.useState(0);
+    const [sel, setSel] = React.useState(null);
+    const [checked, setChecked] = React.useState(false);
+    const [done, setDone] = React.useState(false);
+    const [correctCount, setCorrectCount] = React.useState(0);
+
+    React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+
+    if (done) return <Complete onDone={onDone} accuracy={Math.round((correctCount / QUESTIONS.length) * 100)} />;
+
+    const q = QUESTIONS[qi];
+    const answer = q.options.find((o) => o.ok);
+    const isCorrect = checked && sel != null && q.options[sel].ok;
+    const progress = ((qi + (checked ? 1 : 0)) / QUESTIONS.length) * 100;
+
+    const tileState = (i) => {
+      if (!checked) return sel === i ? 'selected' : 'default';
+      if (q.options[i].ok) return 'correct';
+      if (sel === i) return 'wrong';
+      return 'default';
+    };
+
+    const onCheck = () => {
+      if (sel == null) return;
+      setChecked(true);
+      if (q.options[sel].ok) setCorrectCount((c) => c + 1);
+    };
+    const onNext = () => {
+      if (qi + 1 >= QUESTIONS.length) { setDone(true); return; }
+      setQi(qi + 1); setSel(null); setChecked(false);
+    };
+
+    return (
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-canvas)', position: 'relative' }}>
+        {/* top bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '54px 18px 8px' }}>
+          <IconButton label="Exit lesson" variant="ghost" size="sm" onClick={onExit}>{I('x', { style: { width: 22, height: 22 } })}</IconButton>
+          <div style={{ flex: 1, height: 12, borderRadius: 999, background: 'var(--surface-sunken)', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${progress}%`, borderRadius: 999, background: 'linear-gradient(90deg,var(--kaki-400),var(--accent))', transition: 'width .3s var(--ease-out)' }} />
+          </div>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: 'var(--accent)', fontFamily: 'var(--font-num)', fontWeight: 800 }}>
+            {I('heart', { fill: 'var(--accent)', style: { width: 18, height: 18 } })}5
+          </span>
+        </div>
+
+        {/* question */}
+        <div style={{ flex: 1, padding: '24px 24px 0', overflow: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-faint)' }}>
+              Question {qi + 1} of {QUESTIONS.length}
+            </div>
+            {qi === 0 && <SenseiChip />}
+          </div>
+          <h2 style={{ fontSize: 26, marginTop: 10, lineHeight: 1.25 }}>
+            {q.prompt} <span style={{ color: 'var(--brand)' }}>"{q.word}"</span>{q.gloss && <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}> ({q.gloss})</span>}?
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 26, paddingBottom: 24 }}>
+            {q.options.map((o, i) => (
+              <KanaTile
+                key={i}
+                glyph={o.glyph}
+                reading={checked ? o.reading : ' '}
+                size="lg"
+                state={tileState(i)}
+                interactive={!checked}
+                onClick={() => !checked && setSel(i)}
+                style={{ width: '100%', boxSizing: 'border-box' }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* check button (hidden while feedback sheet shows) */}
+        {!checked && (
+          <div style={{ padding: '12px 24px 36px' }}>
+            <Button fullWidth size="lg" onClick={onCheck} disabled={sel == null}>Check</Button>
+          </div>
+        )}
+        {checked && <Feedback correct={isCorrect} answer={answer} onNext={onNext} last={qi + 1 >= QUESTIONS.length} />}
+      </div>
+    );
+  };
+})();
+
+Object.assign(window, { Lesson });
+
+</script>
+<script type="text/babel">
+// Kotoba — Profile (stats, JLPT tier ladder, achievements)
+// Exposes window.Profile.
+
+const Profile = (function () {
+  const NS = window.MichiDesignSystem_2b01f5;
+  const { Avatar, Card, LevelBadge, StreakCounter, Button, Badge } = NS;
+  const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+  const TIERS = ['pre', 'n5', 'n4', 'n3', 'n2', 'n1'];
+  const CURRENT = 'n5';
+
+  const ACHIEVEMENTS = [
+    { icon: 'flame', label: '7-day streak', earned: true },
+    { icon: 'sunrise', label: 'Early bird', earned: true },
+    { icon: 'star', label: 'First lesson', earned: true },
+    { icon: 'zap', label: '500 XP', earned: true },
+    { icon: 'crown', label: 'Hiragana master', earned: false },
+    { icon: 'gem', label: '30-day streak', earned: false },
+  ];
+
+  function Stat({ icon, value, label, tone }) {
+    return (
+      <Card pad="sm" style={{ flex: 1, textAlign: 'center' }}>
+        <span style={{ color: tone || 'var(--brand)', display: 'inline-flex' }}>{I(icon, { style: { width: 22, height: 22 } })}</span>
+        <div style={{ fontFamily: 'var(--font-num)', fontWeight: 800, fontSize: 22, color: 'var(--text-strong)', marginTop: 4 }}>{value}</div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{label}</div>
+      </Card>
+    );
+  }
+
+  return function Profile({ onReplayIntro }) {
+    React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+    return (
+      <div style={{ minHeight: '100%', background: 'var(--bg-canvas)', padding: '54px 20px 28px' }}>
+        {/* header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+          <h2 style={{ fontSize: 26 }}>Profile</h2>
+          <span style={{ color: 'var(--text-muted)', display: 'inline-flex' }}>{I('settings', { style: { width: 24, height: 24 } })}</span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 22 }}>
+          <Avatar name="Aiko Tanaka" size="xl" ring ringPercent={66} />
+          <div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 22, color: 'var(--text-strong)' }}>Aiko Tanaka</div>
+            <div style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 2 }}>Learning since March · Tokyo time</div>
+            <div style={{ marginTop: 8 }}><Badge tone="brand" solid size="sm">N5 learner</Badge></div>
+          </div>
+        </div>
+
+        {/* stats */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 22 }}>
+          <Stat icon="flame" value="28" label="Day streak" tone="var(--accent)" />
+          <Stat icon="gem" value="1,240" label="Total XP" />
+          <Stat icon="book-marked" value="312" label="Words" tone="var(--success)" />
+        </div>
+
+        {/* tier ladder */}
+        <Card style={{ marginBottom: 18 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 16 }}>
+            <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 16 }}>JLPT path</div>
+            <div style={{ fontFamily: 'var(--font-num)', fontWeight: 700, fontSize: 13, color: 'var(--brand)' }}>N5 · 60%</div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {TIERS.map((t, i) => (
+              <React.Fragment key={t}>
+                {i > 0 && <div style={{ flex: 1, height: 3, borderRadius: 2, background: TIERS.indexOf(CURRENT) >= i ? 'var(--brand)' : 'var(--border-default)' }} />}
+                <div style={{ position: 'relative', opacity: TIERS.indexOf(CURRENT) >= i ? 1 : 0.45 }}>
+                  <LevelBadge tier={t} size="sm" showCaption={false} progress={t === CURRENT ? 60 : undefined} />
+                  {t === CURRENT && (
+                    <div style={{ position: 'absolute', top: -24, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontSize: 10, fontWeight: 800, color: 'var(--accent)' }}>YOU</div>
+                  )}
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </Card>
+
+        {/* achievements */}
+        <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 16, margin: '4px 0 12px' }}>Achievements</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 24 }}>
+          {ACHIEVEMENTS.map((a) => (
+            <div key={a.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center', opacity: a.earned ? 1 : 0.5 }}>
+              <div style={{
+                width: 60, height: 60, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: a.earned ? 'var(--brand-soft)' : 'var(--surface-sunken)',
+                color: a.earned ? 'var(--brand-strong)' : 'var(--text-faint)',
+                border: a.earned ? '2px solid var(--ai-200)' : '2px dashed var(--border-default)',
+              }}>{I(a.earned ? a.icon : 'lock', { style: { width: 26, height: 26 } })}</div>
+              <div style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600, lineHeight: 1.2 }}>{a.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <Button variant="secondary" fullWidth onClick={onReplayIntro} icon={I('rotate-ccw', { style: { width: 18, height: 18 } })}>Replay intro</Button>
+      </div>
+    );
+  };
+})();
+
+Object.assign(window, { Profile });
+
+</script>
+<script type="text/babel">
+// Kotoba — Character sheet (the kotodama: stats, power, radar, quests, challenges)
+// Exposes window.CharacterSheet.
+
+const CharacterSheet = (function () {
+  const NS = window.MichiDesignSystem_2b01f5;
+  const { Companion, PowerLevel, StatBar, SkillRadar, QuestCard, BossNode, SenseiCard, Card, Badge, Button } = NS;
+  const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+  const STATS = [
+    { label: 'Vocabulary', jp: '語彙', value: 62, tone: 'brand' },
+    { label: 'Grammar', jp: '文法', value: 48, tone: 'accent' },
+    { label: 'Listening', jp: '聴解', value: 31, tone: 'torii', weak: true },
+    { label: 'Reading', jp: '読解', value: 55, tone: 'success' },
+  ];
+
+  return function CharacterSheet({ onStartPractice, onBoss }) {
+    React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+    return (
+      <div style={{ minHeight: '100%', background: 'var(--bg-canvas)' }}>
+        {/* hero */}
+        <div style={{
+          position: 'relative', overflow: 'hidden', background: 'var(--ai-700)',
+          padding: '64px 20px 24px', textAlign: 'center',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.13, backgroundImage: 'url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%20role%3D%22img%22%20aria-label%3D%22Seigaiha%20wave%20pattern%20tile%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22wave%22%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2228%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%224%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3CclipPath%20id%3D%22tile%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2260%22%3E%3C%2Frect%3E%3C%2FclipPath%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cg%20clip-path%3D%22url(%23tile)%22%20color%3D%22%234F61BE%22%20opacity%3D%220.5%22%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%220%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2260%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%22120%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E)', backgroundSize: 110 }} />
+          <div style={{ position: 'relative' }}>
+            <Companion stage={2} size={104} floating />
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 26, color: '#fff', marginTop: 10 }}>Yūki <span className="jp-display" style={{ fontSize: 19, opacity: 0.8 }}>勇気</span></div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', marginTop: 2 }}>Your kotodama · Stage 2 — Scarf Traveler</div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 12 }}>
+              <Badge tone="neutral" size="sm" style={{ background: 'rgba(255,255,255,0.16)', color: '#fff' }}>Evolves at Power 60</Badge>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ padding: '18px 20px 28px' }}>
+          {/* power + stats */}
+          <Card style={{ marginBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <PowerLevel value={49} label="Word power 言力" />
+              <Badge tone="brand" size="sm">+2 this week</Badge>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
+              {STATS.map((s) => <StatBar key={s.label} {...s} />)}
+            </div>
+          </Card>
+
+          {/* sensei's read */}
+          <Card style={{ marginBottom: 14, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ alignSelf: 'flex-start', fontWeight: 700, color: 'var(--text-strong)', fontSize: 16, marginBottom: 4 }}>Sensei's read</div>
+            <SkillRadar size={196} stats={STATS} />
+            <SenseiCard
+              style={{ marginTop: 6 }}
+              title="Listening is your opening"
+              actions={<Button size="sm" variant="accent" onClick={onStartPractice}>Train listening · 3 min</Button>}
+            >
+              Audio drills will raise it fastest — and unlock the Grammar Oni gate.
+            </SenseiCard>
+          </Card>
+
+          {/* quests */}
+          <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 16, margin: '4px 0 10px' }}>Active quests</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+            <QuestCard title="Learn 20 food words" icon={I('utensils')} value={13} max={20} reward="+80 XP" />
+            <QuestCard title="Keep a 30-day streak" icon={I('flame')} value={28} max={30} reward="+200 XP" />
+          </div>
+
+          {/* challenges */}
+          <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 16, margin: '4px 0 14px' }}>Boss challenges</div>
+          <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start', paddingBottom: 6 }}>
+            <BossNode state="defeated" size="sm" label="Kana Kappa" />
+            <BossNode label="Hiragana Oni" onClick={onBoss} />
+            <BossNode state="locked" size="sm" flag="POWER 60+" label="Grammar Oni" />
+          </div>
+        </div>
+      </div>
+    );
+  };
+})();
+
+Object.assign(window, { CharacterSheet });
+
+</script>
+<script type="text/babel">
+// Kotoba — Boss battle (intro → quiz battle → victory). Optional challenge:
+// correct answers strike the oni; wrong answers cost a heart. Calm, not scary.
+// Exposes window.BossBattle.
+
+const BossBattle = (function () {
+  const NS = window.MichiDesignSystem_2b01f5;
+  const { BossNode, Companion, KanaTile, Button, IconButton, PowerLevel, Badge } = NS;
+  const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+  const QUESTIONS = [
+    { prompt: 'Strike with the reading of', word: '川', gloss: 'river',
+      options: [{ t: 'kawa', ok: true }, { t: 'yama' }, { t: 'kana' }, { t: 'kawi' }] },
+    { prompt: 'Strike with the kana for', word: 'sa', gloss: null,
+      options: [{ t: 'き' }, { t: 'さ', ok: true }, { t: 'ち' }, { t: 'せ' }] },
+    { prompt: 'Strike with the meaning of', word: '火', gloss: 'hi',
+      options: [{ t: 'water' }, { t: 'tree' }, { t: 'fire', ok: true }, { t: 'gold' }] },
+  ];
+  const BOSS_HP = 3;
+
+  function HPBar({ value, max, color, label }) {
+    return (
+      <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 4 }}>
+          <span>{label}</span><span className="num">{value}/{max}</span>
+        </div>
+        <div style={{ height: 10, borderRadius: 999, background: 'var(--surface-sunken)', overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${(value / max) * 100}%`, background: color, borderRadius: 999, transition: 'width .35s var(--ease-out)' }} />
+        </div>
+      </div>
+    );
+  }
+
+  return function BossBattle({ onExit, onWin }) {
+    const [phase, setPhase] = React.useState('intro');   // intro | battle | victory
+    const [qi, setQi] = React.useState(0);
+    const [bossHp, setBossHp] = React.useState(BOSS_HP);
+    const [hearts, setHearts] = React.useState(3);
+    const [sel, setSel] = React.useState(null);
+    const [checked, setChecked] = React.useState(false);
+    const [shake, setShake] = React.useState(false);
+
+    React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+
+    if (phase === 'intro') {
+      return (
+        <div style={{
+          height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          padding: '70px 26px 32px', boxSizing: 'border-box', textAlign: 'center',
+          background: 'linear-gradient(180deg, var(--torii-soft), var(--bg-canvas) 55%)',
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.12em', color: 'var(--torii)', textTransform: 'uppercase' }}>Boss challenge · optional</div>
+          <h2 style={{ fontSize: 28, marginTop: 8 }}>Hiragana Oni</h2>
+          <div className="jp-display" style={{ fontSize: 16, color: 'var(--text-muted)', marginTop: 2 }}>ひらがなの鬼</div>
+
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 34, margin: '30px 0 22px' }}>
+            <div>
+              <NS.Companion stage={2} size={74} floating />
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--brand)', marginTop: 6 }}>Yūki · 49</div>
+            </div>
+            <div className="jp-display" style={{ fontSize: 22, color: 'var(--text-faint)', paddingBottom: 34 }}>VS</div>
+            <div>
+              <BossNode size="lg" flag={null} style={{ pointerEvents: 'none' }} />
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--torii)', marginTop: 6 }}>Oni · 12</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 26 }}>
+            <Badge tone="warning">Reward: +150 XP</Badge>
+            <Badge tone="brand">Power +2</Badge>
+          </div>
+          <Button size="lg" fullWidth variant="danger" style={{ background: 'var(--torii)' }} onClick={() => setPhase('battle')}>Begin battle</Button>
+          <Button variant="ghost" onClick={onExit} style={{ marginTop: 8 }}>Not yet</Button>
+        </div>
+      );
+    }
+
+    if (phase === 'victory') {
+      return (
+        <div style={{
+          height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          padding: '70px 28px 32px', boxSizing: 'border-box', textAlign: 'center',
+          background: 'var(--ai-700)', position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.14, backgroundImage: 'url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%20role%3D%22img%22%20aria-label%3D%22Seigaiha%20wave%20pattern%20tile%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22wave%22%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2228%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%2212%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%220%22%20cy%3D%220%22%20r%3D%224%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223%22%3E%3C%2Fcircle%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3CclipPath%20id%3D%22tile%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2260%22%3E%3C%2Frect%3E%3C%2FclipPath%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cg%20clip-path%3D%22url(%23tile)%22%20color%3D%22%234F61BE%22%20opacity%3D%220.5%22%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%220%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2260%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%22120%22%20y%3D%2230%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%2260%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2230%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%20%20%3Cuse%20href%3D%22%23wave%22%20x%3D%2290%22%20y%3D%220%22%3E%3C%2Fuse%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E)', backgroundSize: 120 }} />
+          <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <NS.ToriiGate size={130} plaque="勝" />
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 30, color: '#fff', marginTop: 14 }}>Oni defeated!</div>
+            <div className="jp-display" style={{ fontSize: 17, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>見事な勝利</div>
+            <div style={{ display: 'flex', gap: 10, marginTop: 22 }}>
+              <Badge tone="warning" solid>+150 XP</Badge>
+              <Badge tone="brand" solid style={{ background: 'rgba(255,255,255,0.2)' }}>Power 49 → 51</Badge>
+            </div>
+            <div style={{ height: 30 }} />
+            <Button fullWidth size="lg" variant="accent" onClick={onWin}>Claim reward</Button>
+          </div>
+        </div>
+      );
+    }
+
+    // battle
+    const q = QUESTIONS[qi % QUESTIONS.length];
+    const tileState = (i) => {
+      if (!checked) return sel === i ? 'selected' : 'default';
+      if (q.options[i].ok) return 'correct';
+      if (sel === i) return 'wrong';
+      return 'default';
+    };
+    const onCheck = () => {
+      if (sel == null) return;
+      setChecked(true);
+      if (q.options[sel].ok) {
+        setShake(true);
+        setTimeout(() => setShake(false), 450);
+        setBossHp((h) => h - 1);
+      } else {
+        setHearts((h) => Math.max(0, h - 1));
+      }
+    };
+    const onNext = () => {
+      if (bossHp <= 0) { setPhase('victory'); return; }
+      setQi(qi + 1); setSel(null); setChecked(false);
+    };
+
+    return (
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-canvas)' }}>
+        {/* battle header */}
+        <div style={{ padding: '54px 18px 10px', borderBottom: '1px solid var(--border-subtle)', background: 'var(--torii-soft)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <IconButton label="Retreat" variant="ghost" size="sm" onClick={onExit}>{I('flag', { style: { width: 20, height: 20 } })}</IconButton>
+            <HPBar value={hearts} max={3} color="var(--brand)" label="Yūki" />
+            <span style={{
+              display: 'inline-block',
+              animation: shake ? 'kotoba-boss-shake .4s var(--ease-out)' : 'none',
+            }}><NS.PixelOni size={40} /></span>
+            <HPBar value={bossHp} max={BOSS_HP} color="var(--torii)" label="Oni" />
+          </div>
+        </div>
+
+        <div style={{ flex: 1, padding: '22px 24px 0', overflow: 'auto' }}>
+          <h2 style={{ fontSize: 24, lineHeight: 1.3 }}>
+            {q.prompt} <span className="jp-display" style={{ color: 'var(--torii)' }}>{q.word}</span>
+            {q.gloss && <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}> ({q.gloss})</span>}
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 13, marginTop: 22, paddingBottom: 20 }}>
+            {q.options.map((o, i) => (
+              <KanaTile key={i} glyph={o.t} size="sm" state={tileState(i)} interactive={!checked}
+                        onClick={() => !checked && setSel(i)} style={{ width: '100%', boxSizing: 'border-box' }} />
+            ))}
+          </div>
+        </div>
+
+        <div style={{ padding: '12px 24px 36px' }}>
+          {!checked
+            ? <Button fullWidth size="lg" style={{ background: 'var(--torii)' }} onClick={onCheck} disabled={sel == null}>Strike</Button>
+            : <Button fullWidth size="lg" variant={q.options[sel]?.ok ? 'success' : 'secondary'} onClick={onNext}>{bossHp <= 0 ? 'Finish him!' : 'Next'}</Button>}
+        </div>
+      </div>
+    );
+  };
+})();
+
+Object.assign(window, { BossBattle });
+
+</script>
+
+<script type="text/babel">
+const NS = window.MichiDesignSystem_2b01f5;
+const { KanaTile, Button, Card, Badge } = NS;
+const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+const TABS = [
+  ['home', 'Learn', 'map'],
+  ['review', 'Review', 'layers'],
+  ['spirit', 'Spirit', 'ghost'],
+  ['profile', 'Profile', 'user'],
+];
+
+function TabBar({ active, onChange }) {
+  return (
+    <div style={{
+      flex: 'none', display: 'flex', borderTop: '1px solid var(--border-subtle)',
+      background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+      padding: '8px 8px 26px',
+    }}>
+      {TABS.map(([id, label, icon]) => {
+        const on = active === id;
+        return (
+          <button key={id} onClick={() => onChange(id)} style={{
+            flex: 1, border: 'none', background: 'transparent', cursor: 'pointer',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '6px 0',
+            color: on ? 'var(--brand)' : 'var(--text-faint)',
+          }}>
+            {I(icon, { fill: on ? 'var(--brand-soft)' : 'none', style: { width: 24, height: 24 } })}
+            <span style={{ fontSize: 11, fontWeight: 700 }}>{label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+const REVIEW_WORDS = [
+  { glyph: '水', reading: 'mizu', meaning: 'water' },
+  { glyph: '本', reading: 'hon', meaning: 'book' },
+  { glyph: '山', reading: 'yama', meaning: 'mountain' },
+  { glyph: '日', reading: 'hi', meaning: 'day / sun' },
+];
+
+function Review({ onStart }) {
+  const { SenseiCard } = NS;
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div style={{ minHeight: '100%', background: 'var(--bg-canvas)', padding: '54px 20px 28px' }}>
+      <h2 style={{ fontSize: 26 }}>Review</h2>
+      <p style={{ color: 'var(--text-muted)', marginTop: 6, marginBottom: 16, fontSize: 15 }}>Spaced practice keeps words from fading. You have 12 due today.</p>
+      <SenseiCard
+        title={<span>You mix up <span className="jp">ね</span> and <span className="jp">ぬ</span></span>}
+        actions={<Button size="sm" variant="accent" onClick={onStart}>Practice 2 min</Button>}
+        style={{ marginBottom: 14 }}
+      >
+        I crafted a short set focused on the loop endings — 8 cards from your last three sessions.
+      </SenseiCard>
+      <Card tone="brand" pad="lg" style={{ marginBottom: 22, display: 'flex', alignItems: 'center', gap: 16 }}>
+        <NS.ProgressRing value={12} max={12} size={64} color="var(--accent)">
+          <span style={{ fontSize: 15 }}>12</span>
+        </NS.ProgressRing>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 16 }}>Due for review</div>
+          <div style={{ fontSize: 13, color: 'var(--text-body)' }}>~4 min · +30 XP</div>
+        </div>
+      </Card>
+      <Button fullWidth size="lg" variant="accent" onClick={onStart} icon={I('play', { style: { width: 18, height: 18 } })}>Start review</Button>
+      <div style={{ fontWeight: 700, color: 'var(--text-strong)', fontSize: 15, margin: '26px 0 12px' }}>Coming up</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {REVIEW_WORDS.map((w) => (
+          <Card key={w.glyph} pad="sm" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span className="jp-display" style={{ fontSize: 34, color: 'var(--text-strong)', width: 44, textAlign: 'center' }}>{w.glyph}</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: 'var(--font-num)', fontWeight: 700, color: 'var(--brand-strong)' }}>{w.reading}</div>
+              <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>{w.meaning}</div>
+            </div>
+            <Badge tone="neutral" size="sm">Lv 2</Badge>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [screen, setScreen] = React.useState('home'); // home | review | spirit | profile | onboarding | lesson | boss
+  const [tab, setTab] = React.useState('home');
+  const [streak, setStreak] = React.useState(28);
+
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+
+  const IOSDevice = window.IOSDevice;
+  const { Onboarding, HomePath, Lesson, Profile, CharacterSheet, BossBattle } = window;
+
+  let content, showTabs = false;
+  if (screen === 'onboarding') {
+    content = <Onboarding onDone={() => { setScreen('home'); setTab('home'); }} />;
+  } else if (screen === 'lesson') {
+    content = <Lesson onExit={() => setScreen('home')} onDone={() => { setStreak((s) => s + 1); setScreen('home'); setTab('home'); }} />;
+  } else if (screen === 'boss') {
+    content = <BossBattle onExit={() => { setScreen(tab); }} onWin={() => { setScreen('spirit'); setTab('spirit'); }} />;
+  } else {
+    showTabs = true;
+    if (tab === 'home') content = <HomePath onStartLesson={() => setScreen('lesson')} onBoss={() => setScreen('boss')} streak={streak} />;
+    else if (tab === 'review') content = <Review onStart={() => setScreen('lesson')} />;
+    else if (tab === 'spirit') content = <CharacterSheet onStartPractice={() => setScreen('lesson')} onBoss={() => setScreen('boss')} />;
+    else content = <Profile onReplayIntro={() => setScreen('onboarding')} />;
+  }
+
+  return (
+    <IOSDevice>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-canvas)' }}>
+        <div key={screen + tab} className="screen-fade" style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+          {content}
+        </div>
+        {showTabs && <TabBar active={tab} onChange={(t) => { setTab(t); setScreen(t); }} />}
+      </div>
+    </IOSDevice>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 120);
+</script>
+</body></html>

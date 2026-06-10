@@ -1,0 +1,165 @@
+<!-- @dsCard group="Mobile App" viewport="402x874" name="Kotoba — Mobile App" subtitle="Interactive: path → lessons → practice hub (SRS cards, pair match, listening, sentences) → word rain. Tap around." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kotoba — Mobile App</title>
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="challenges/words.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body {
+    display: flex; align-items: center; justify-content: center; min-height: 100vh;
+    background: radial-gradient(120% 120% at 50% 0%, var(--ai-50), var(--sumi-100));
+    font-family: var(--font-body); padding: 24px; box-sizing: border-box;
+  }
+  @keyframes kotoba-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes kotoba-pop { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes kotoba-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes kotoba-shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+  .screen-fade { animation: kotoba-fade .26s var(--ease-out) both; height: 100%; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="challenges/ChallengeShell.jsx"></script>
+<script type="text/babel" src="challenges/ChallengeEngine.jsx"></script>
+<script type="text/babel" src="challenges/SRSCards.jsx"></script>
+<script type="text/babel" src="challenges/PairMatch.jsx"></script>
+<script type="text/babel" src="challenges/WordRain.jsx"></script>
+<script type="text/babel" src="challenges/Practice.jsx"></script>
+<script type="text/babel" src="Onboarding.jsx"></script>
+<script type="text/babel" src="HomePath.jsx"></script>
+<script type="text/babel" src="Lesson.jsx"></script>
+<script type="text/babel" src="GatePassage.jsx"></script>
+<script type="text/babel" src="Profile.jsx"></script>
+<script type="text/babel" src="CharacterSheet.jsx"></script>
+<script type="text/babel" src="BossBattle.jsx"></script>
+<script type="text/babel">
+const NS = window.MichiDesignSystem_2b01f5;
+const { KanaTile, Button, Card, Badge } = NS;
+const I = (n, props = {}) => React.createElement('i', { 'data-lucide': n, ...props });
+
+const TABS = [
+  ['home', 'Learn', 'map'],
+  ['review', 'Practice', 'layers'],
+  ['spirit', 'Spirit', 'ghost'],
+  ['profile', 'Profile', 'user'],
+];
+
+function TabBar({ active, onChange }) {
+  return (
+    <div style={{
+      flex: 'none', display: 'flex', borderTop: '1px solid var(--border-subtle)',
+      background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+      padding: '8px 8px 26px',
+    }}>
+      {TABS.map(([id, label, icon]) => {
+        const on = active === id;
+        return (
+          <button key={id} onClick={() => onChange(id)} style={{
+            flex: 1, border: 'none', background: 'transparent', cursor: 'pointer',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '6px 0',
+            color: on ? 'var(--brand)' : 'var(--text-faint)',
+          }}>
+            {I(icon, { fill: on ? 'var(--brand-soft)' : 'none', style: { width: 24, height: 24 } })}
+            <span style={{ fontSize: 11, fontWeight: 700 }}>{label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "readingAid": "auto",
+  "hearts": true,
+  "rainSpeed": 1
+}/*EDITMODE-END*/;
+
+function App() {
+  const [screen, setScreen] = React.useState('home'); // home | review | spirit | profile | onboarding | lesson | boss | gate | srs | pairs | listen | sentences | wordrain
+  const [tab, setTab] = React.useState('home');
+  const [streak, setStreak] = React.useState(28);
+  const [unitDone, setUnitDone] = React.useState(false);
+  const [gatePassed, setGatePassed] = React.useState(false);
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  // global knobs read by the challenge views
+  window.KotobaAid = {
+    mode: tweaks.readingAid === 'hidden' ? 'none' : tweaks.readingAid,
+    hearts: tweaks.hearts,
+    rainSpeed: tweaks.rainSpeed,
+  };
+
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+
+  const IOSDevice = window.IOSDevice;
+  const { Onboarding, HomePath, Lesson, Profile, CharacterSheet, BossBattle, GatePassage, Practice, SRSCards, PairMatch, WordRain, ChallengeEngine } = window;
+
+  const backToPractice = () => { setScreen('review'); setTab('review'); };
+
+  let content, showTabs = false;
+  if (screen === 'onboarding') {
+    content = <Onboarding onDone={() => { setScreen('home'); setTab('home'); }} />;
+  } else if (screen === 'lesson') {
+    content = <Lesson onExit={() => setScreen('home')} onDone={() => { setStreak((s) => s + 1); setUnitDone(true); setScreen('home'); setTab('home'); }} />;
+  } else if (screen === 'srs') {
+    content = <SRSCards onExit={backToPractice} onDone={backToPractice} />;
+  } else if (screen === 'pairs') {
+    content = <PairMatch onExit={backToPractice} onDone={backToPractice} />;
+  } else if (screen === 'listen') {
+    content = <ChallengeEngine preset="listening" title="Listening" completeTitle="Drill complete!" onExit={backToPractice} onDone={backToPractice} />;
+  } else if (screen === 'sentences') {
+    content = <ChallengeEngine preset="sentences" title="Sentences" completeTitle="Drill complete!" onExit={backToPractice} onDone={backToPractice} />;
+  } else if (screen === 'wordrain') {
+    content = <WordRain onExit={() => { setScreen('home'); setTab('home'); }} onDone={() => { setScreen('home'); setTab('home'); }} />;
+  } else if (screen === 'gate') {
+    content = <GatePassage streak={streak} onEnter={() => { setGatePassed(true); setScreen('home'); setTab('home'); }} />;
+  } else if (screen === 'boss') {
+    content = <BossBattle onExit={() => { setScreen(tab); }} onWin={() => { setScreen('spirit'); setTab('spirit'); }} />;
+  } else {
+    showTabs = true;
+    if (tab === 'home') content = <HomePath onStartLesson={() => setScreen('lesson')} onBoss={() => setScreen('boss')} onGate={() => setScreen('gate')} onWordRain={() => setScreen('wordrain')} unitDone={unitDone} gatePassed={gatePassed} streak={streak} />;
+    else if (tab === 'review') content = <Practice onSRS={() => setScreen('srs')} onPairs={() => setScreen('pairs')} onListening={() => setScreen('listen')} onSentences={() => setScreen('sentences')} />;
+    else if (tab === 'spirit') content = <CharacterSheet onStartPractice={() => setScreen('lesson')} onBoss={() => setScreen('boss')} />;
+    else content = <Profile onReplayIntro={() => setScreen('onboarding')} />;
+  }
+
+  return (
+    <React.Fragment>
+      <IOSDevice>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-canvas)' }}>
+          <div key={screen + tab} className="screen-fade" style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+            {content}
+          </div>
+          {showTabs && <TabBar active={tab} onChange={(t) => { setTab(t); setScreen(t); }} />}
+        </div>
+      </IOSDevice>
+      <TweaksPanel>
+        <TweakSection label="Reading aids" />
+        <TweakSelect label="Mode" value={tweaks.readingAid}
+          options={['auto', 'romaji', 'furigana', 'hidden']}
+          onChange={(v) => setTweak('readingAid', v)} />
+        <TweakSection label="Challenges" />
+        <TweakToggle label="Hearts" value={tweaks.hearts} onChange={(v) => setTweak('hearts', v)} />
+        <TweakSlider label="Rain speed" value={tweaks.rainSpeed} min={0.5} max={2} step={0.1} unit="×" onChange={(v) => setTweak('rainSpeed', v)} />
+        <TweakButton label="Reset word progress" secondary onClick={() => window.KotobaWords.reset()} />
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 120);
+</script>
+</body>
+</html>

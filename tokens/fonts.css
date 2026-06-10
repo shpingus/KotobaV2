@@ -1,0 +1,11 @@
+/* ============================================================
+   Kotoba — Webfonts
+   Loaded from Google Fonts CDN. @import rules MUST be first.
+   Latin display/numerals : Space Grotesk
+   Latin body/UI          : Plus Jakarta Sans
+   Japanese body          : Zen Kaku Gothic New (clean modern gothic)
+   Japanese display        : Zen Maru Gothic (friendly rounded gothic)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap');

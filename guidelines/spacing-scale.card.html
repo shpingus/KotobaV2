@@ -1,0 +1,24 @@
+<!-- @dsCard group="Spacing" viewport="700x190" name="Spacing Scale" subtitle="4px base unit. --space-1 … --space-10 used for all gaps & padding." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--bg-raised); font-family: var(--font-body); }
+  .row { display: flex; align-items: center; gap: 14px; margin-bottom: 7px; }
+  .bar { background: var(--brand); height: 16px; border-radius: 4px; }
+  .lbl { font-family: var(--font-num); font-size: 11px; color: var(--text-body); width: 96px; }
+  .px { font-family: var(--font-num); font-size: 11px; color: var(--text-faint); }
+</style>
+</head>
+<body>
+  <div id="s"></div>
+  <script>
+    const items = [['1','4'],['2','8'],['3','12'],['4','16'],['5','20'],['6','24'],['7','32'],['8','40'],['9','48'],['10','64']];
+    document.getElementById('s').innerHTML = items.map(([n,px]) =>
+      '<div class="row"><div class="lbl">--space-'+n+'</div><div class="bar" style="width:var(--space-'+n+')"></div><div class="px">'+px+'px</div></div>'
+    ).join('');
+  </script>
+</body>
+</html>

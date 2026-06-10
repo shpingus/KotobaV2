@@ -1,0 +1,32 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="JLPT Tier Path" subtitle="The climb — each level its own belt-color, deepening to the indigo summit." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-raised); }
+  .path { display: flex; align-items: center; gap: 0; }
+  .tier { flex: 1; text-align: center; }
+  .dot { height: 56px; border-radius: var(--radius-md); display:flex; align-items:center; justify-content:center;
+         color:#fff; font-family: var(--font-num); font-weight: 800; font-size: 16px; box-shadow: var(--shadow-sm); }
+  .name { font-size: 10px; color: var(--text-muted); margin-top: 6px; font-family: var(--font-body); }
+  .v { font-size: 9px; color: var(--text-faint); font-family: var(--font-num); }
+  .conn { flex: 0 0 18px; height: 3px; background: var(--border-default); border-radius: 2px; }
+  .lead { font-family: var(--font-display); font-size: 15px; color: var(--text-strong); margin-bottom: 16px; }
+</style>
+</head>
+<body>
+  <div class="lead">Pre-N5 → N1 · the path deepens as you climb</div>
+  <div class="path" id="p"></div>
+  <script>
+    const cs = getComputedStyle(document.documentElement);
+    const tiers = [['Pre','pre'],['N5','n5'],['N4','n4'],['N3','n3'],['N2','n2'],['N1','n1']];
+    document.getElementById('p').innerHTML = tiers.map(([l,k],i) => {
+      const v = cs.getPropertyValue('--tier-'+k).trim();
+      const cell = '<div class="tier"><div class="dot" style="background:'+v+'">'+l+'</div><div class="name">'+(k==='pre'?'Foundations':'Level '+l)+'</div><div class="v">'+v+'</div></div>';
+      return i===0 ? cell : '<div class="conn"></div>'+cell;
+    }).join('');
+  </script>
+</body>
+</html>

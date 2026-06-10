@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Xcode
+build/
+DerivedData/
+*.build/
+
+# Xcode user data - NEVER commit these
+xcuserdata/
+**/*xcuserdata/
+**/*.xcuserstate
+**/*xcdebugger/
+**/*.xcscmblueprint
+**/*.xccheckout
+
+# SwiftPM
+.build/
+.swiftpm/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*~
+
+# Misc
+*.log
+*.xcarchive
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60" viewBox="0 0 120 60" role="img" aria-label="Seigaiha wave pattern tile">
+  <defs>
+    <g id="wave">
+      <circle cx="0" cy="0" r="28" fill="none" stroke="currentColor" stroke-width="3"></circle>
+      <circle cx="0" cy="0" r="20" fill="none" stroke="currentColor" stroke-width="3"></circle>
+      <circle cx="0" cy="0" r="12" fill="none" stroke="currentColor" stroke-width="3"></circle>
+      <circle cx="0" cy="0" r="4" fill="none" stroke="currentColor" stroke-width="3"></circle>
+    </g>
+    <clipPath id="tile"><rect x="0" y="0" width="120" height="60"></rect></clipPath>
+  </defs>
+  <g clip-path="url(#tile)" color="#4F61BE" opacity="0.5">
+    <use href="#wave" x="0" y="30"></use>
+    <use href="#wave" x="60" y="30"></use>
+    <use href="#wave" x="120" y="30"></use>
+    <use href="#wave" x="30" y="60"></use>
+    <use href="#wave" x="90" y="60"></use>
+    <use href="#wave" x="30" y="0"></use>
+    <use href="#wave" x="90" y="0"></use>
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<!-- @dsCard group="Colors" viewport="700x190" name="Semantic & Status" subtitle="Brand, accent, and feedback colors with their on-color pairings." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-raised); font-family: var(--font-body); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tok { border-radius: var(--radius-md); padding: 12px 14px; height: 64px; display:flex; flex-direction:column; justify-content:space-between; box-shadow: var(--shadow-xs); }
+  .tok b { font-size: 13px; font-weight: 700; }
+  .tok span { font-size: 10px; opacity: 0.85; font-family: var(--font-num); }
+  .soft { border: 1px solid var(--border-subtle); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="tok" style="background:var(--brand); color:var(--on-brand)"><b>Brand</b><span>--brand · ai-600</span></div>
+    <div class="tok" style="background:var(--accent); color:var(--on-accent)"><b>Accent</b><span>--accent · kaki-500</span></div>
+    <div class="tok" style="background:var(--success); color:var(--on-success)"><b>Success</b><span>--success · wakaba-500</span></div>
+    <div class="tok soft" style="background:var(--brand-soft); color:var(--brand-strong)"><b>Brand soft</b><span>--brand-soft</span></div>
+    <div class="tok soft" style="background:var(--warning-soft); color:var(--kihada-700)"><b>Warning</b><span>--warning</span></div>
+    <div class="tok" style="background:var(--danger); color:var(--on-danger)"><b>Danger</b><span>--danger · beni-500</span></div>
+  </div>
+</body>
+</html>

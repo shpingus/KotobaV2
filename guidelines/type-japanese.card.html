@@ -1,0 +1,28 @@
+<!-- @dsCard group="Type" viewport="700x190" name="Japanese · Zen Kaku & Zen Maru" subtitle="Zen Maru Gothic for friendly display kana; Zen Kaku Gothic New for body." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--bg-raised); display:flex; gap: 28px; }
+  .col { flex: 1; }
+  .kana { font-family: var(--font-jp-display); font-weight: 700; font-size: 58px; color: var(--brand); line-height: 1; }
+  .label { font-family: var(--font-body); font-size: 11px; color: var(--text-muted); margin-top: 10px; }
+  .label b { color: var(--text-body); }
+  .body-jp { font-family: var(--font-jp); font-size: 19px; line-height: 1.7; color: var(--text-strong); }
+  .vline { width: 1px; background: var(--border-subtle); }
+</style>
+</head>
+<body>
+  <div class="col">
+    <div class="kana jp-display">あいう 漢字</div>
+    <div class="label">Zen Maru Gothic · <b>--font-jp-display</b> · big friendly kana on lesson cards</div>
+  </div>
+  <div class="vline"></div>
+  <div class="col">
+    <div class="body-jp jp">今日のレッスンを<br>はじめましょう。<br>毎日少しずつ。</div>
+    <div class="label">Zen Kaku Gothic New · <b>--font-jp</b> · body, 1.7 line-height</div>
+  </div>
+</body>
+</html>

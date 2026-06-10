@@ -1,0 +1,25 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Corner Radii" subtitle="From subtle 6px to fully-rounded pills on primary actions." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 22px; background: var(--bg-raised); font-family: var(--font-body); }
+  .row { display: flex; gap: 14px; align-items: flex-end; }
+  .item { text-align: center; }
+  .box { width: 84px; height: 60px; background: var(--brand-soft); border: var(--border-base) solid var(--ai-300); }
+  .n { font-family: var(--font-num); font-size: 11px; color: var(--text-body); margin-top: 8px; }
+  .v { font-family: var(--font-num); font-size: 10px; color: var(--text-faint); }
+</style>
+</head>
+<body>
+  <div class="row" id="r"></div>
+  <script>
+    const items = [['xs','6'],['sm','10'],['md','14'],['lg','20'],['xl','28'],['pill','pill']];
+    document.getElementById('r').innerHTML = items.map(([k,px]) =>
+      '<div class="item"><div class="box" style="border-radius:var(--radius-'+k+')"></div><div class="n">'+k+'</div><div class="v">'+(px==='pill'?'999':px)+'</div></div>'
+    ).join('');
+  </script>
+</body>
+</html>

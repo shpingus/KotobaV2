@@ -1,0 +1,8 @@
+<svg width="232" height="64" viewBox="0 0 232 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kotoba">
+  <rect x="0" y="0" width="64" height="64" rx="16" fill="#3D4CA0"></rect>
+  <circle cx="18" cy="46" r="6" fill="#FFFFFF" fill-opacity="0.55"></circle>
+  <circle cx="32" cy="33.5" r="7" fill="#FFFFFF" fill-opacity="0.8"></circle>
+  <circle cx="47" cy="20" r="8.5" fill="#F15F2C"></circle>
+  <circle cx="47" cy="20" r="11.5" stroke="#F15F2C" stroke-opacity="0.35" stroke-width="1.8"></circle>
+  <text x="82" y="42" font-family="&#39;Space Grotesk&#39;, system-ui, sans-serif" font-size="34" font-weight="700" letter-spacing="-0.5" fill="#1F284F">Kotoba</text>
+</svg>
