@@ -20,6 +20,7 @@ struct AppRootView: View {
                 PathHomeView(
                     pack: model.pack,
                     state: model.state,
+                    senseiInsight: model.senseiInsight,
                     onStartLesson: { model.startLesson($0) },
                     onStartBoss: { model.startBoss() },
                     onShowSpirit: { model.route = .spirit },
@@ -65,6 +66,7 @@ struct AppRootView: View {
         PathHomeView(
             pack: model.pack,
             state: model.state,
+            senseiInsight: model.senseiInsight,
             onStartLesson: { model.startLesson($0) },
             onStartBoss: { model.startBoss() },
             onShowSpirit: { model.route = .spirit },

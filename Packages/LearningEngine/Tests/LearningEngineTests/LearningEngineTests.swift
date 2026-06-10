@@ -44,4 +44,28 @@ final class LearningEngineTests: XCTestCase {
 
         XCTAssertEqual(StreakCalculator.streak(on: today, sessions: [today, yesterday], calendar: calendar), 2)
     }
+
+    func testSenseiInsightFindsRepeatedConfusion() {
+        let provider = HeuristicSenseiInsightProvider()
+        let history = [
+            SenseiAnswerRecord(exerciseID: "one", stat: .reading, givenAnswer: "nu", correctAnswer: "ne", isCorrect: false),
+            SenseiAnswerRecord(exerciseID: "two", stat: .reading, givenAnswer: "nu", correctAnswer: "ne", isCorrect: false),
+            SenseiAnswerRecord(exerciseID: "three", stat: .grammar, givenAnswer: "wa", correctAnswer: "ha", isCorrect: false)
+        ]
+
+        let insight = provider.insight(from: history, stats: [:])
+
+        XCTAssertEqual(insight.title, "Practice nu and ne")
+        XCTAssertEqual(insight.focusStat, .reading)
+        XCTAssertEqual(insight.practiceExerciseIDs, ["one", "two"])
+    }
+
+    func testSenseiInsightFallsBackToWeakestStat() {
+        let provider = HeuristicSenseiInsightProvider()
+
+        let insight = provider.insight(from: [], stats: [.vocabulary: 20, .grammar: 4, .listening: 12, .reading: 9])
+
+        XCTAssertEqual(insight.focusStat, .grammar)
+        XCTAssertTrue(insight.title.contains("grammar"))
+    }
 }

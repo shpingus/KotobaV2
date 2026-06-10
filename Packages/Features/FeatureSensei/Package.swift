@@ -6,8 +6,11 @@ let package = Package(
     name: "FeatureSensei",
     platforms: [.iOS(.v17)],
     products: [.library(name: "FeatureSensei", targets: ["FeatureSensei"])],
-    dependencies: [.package(path: "../../KotobaDesignSystem")],
+    dependencies: [
+        .package(path: "../../KotobaDesignSystem"),
+        .package(path: "../../LearningEngine")
+    ],
     targets: [
-        .target(name: "FeatureSensei", dependencies: ["KotobaDesignSystem"])
+        .target(name: "FeatureSensei", dependencies: ["KotobaDesignSystem", "LearningEngine"])
     ]
 )

@@ -14,6 +14,7 @@ final class AppModel {
     var lastSummary: LessonSummary?
 
     private let store: LearnerStateStore
+    private let senseiProvider = HeuristicSenseiInsightProvider()
 
     init() {
         let loadedState: LearnerState
@@ -60,6 +61,19 @@ final class AppModel {
 
     func save() {
         try? store.save(state)
+    }
+
+    var senseiInsight: SenseiInsight {
+        let history = state.answerHistory.map {
+            SenseiAnswerRecord(
+                exerciseID: $0.exerciseID,
+                stat: $0.stat,
+                givenAnswer: $0.givenAnswer,
+                correctAnswer: $0.correctAnswer,
+                isCorrect: $0.isCorrect
+            )
+        }
+        return senseiProvider.insight(from: history, stats: state.statScores)
     }
 
     private var currentLesson: Lesson? {

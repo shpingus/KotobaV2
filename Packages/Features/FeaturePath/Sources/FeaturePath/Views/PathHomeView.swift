@@ -8,6 +8,7 @@ import Persistence
 public struct PathHomeView: View {
     private let pack: LanguagePack
     private let state: LearnerState
+    private let senseiInsight: SenseiInsight?
     private let onStartLesson: (Lesson) -> Void
     private let onStartBoss: () -> Void
     private let onShowSpirit: () -> Void
@@ -16,6 +17,7 @@ public struct PathHomeView: View {
     public init(
         pack: LanguagePack,
         state: LearnerState,
+        senseiInsight: SenseiInsight? = nil,
         onStartLesson: @escaping (Lesson) -> Void,
         onStartBoss: @escaping () -> Void,
         onShowSpirit: @escaping () -> Void,
@@ -23,6 +25,7 @@ public struct PathHomeView: View {
     ) {
         self.pack = pack
         self.state = state
+        self.senseiInsight = senseiInsight
         self.onStartLesson = onStartLesson
         self.onStartBoss = onStartBoss
         self.onShowSpirit = onShowSpirit
@@ -33,6 +36,7 @@ public struct PathHomeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: KotobaSpacing.space6) {
                 header
+                senseiCard
                 nextStep
                 rpgActions
                 pathNodes
@@ -58,6 +62,23 @@ public struct PathHomeView: View {
                 KotobaAvatar(name: "Aiko Tanaka", ringPercent: 70)
             }
             .buttonStyle(.plain)
+        }
+    }
+
+    @ViewBuilder
+    private var senseiCard: some View {
+        if let senseiInsight {
+            KotobaSenseiCard(title: senseiInsight.title, message: senseiInsight.message) {
+                HStack {
+                    KotobaSenseiChip("Tuned for you")
+                    Spacer()
+                    if let lesson = currentLesson {
+                        KotobaButton(variant: .secondary, size: .sm, action: { onStartLesson(lesson) }) {
+                            Text("Practice")
+                        }
+                    }
+                }
+            }
         }
     }
 
