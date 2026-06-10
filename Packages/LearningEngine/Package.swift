@@ -8,8 +8,11 @@ let package = Package(
     products: [
         .library(name: "LearningEngine", targets: ["LearningEngine"])
     ],
+    dependencies: [
+        .package(path: "../ContentKit")
+    ],
     targets: [
-        .target(name: "LearningEngine"),
-        .testTarget(name: "LearningEngineTests", dependencies: ["LearningEngine"])
+        .target(name: "LearningEngine", dependencies: ["ContentKit"]),
+        .testTarget(name: "LearningEngineTests", dependencies: ["LearningEngine", "ContentKit"])
     ]
 )

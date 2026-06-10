@@ -1,0 +1,119 @@
+{
+  "id": "ja-pre-n5-sample",
+  "languageCode": "ja",
+  "version": 1,
+  "courses": [
+    {
+      "id": "pre-n5",
+      "title": "Pre-N5 path",
+      "tier": "preN5",
+      "units": [
+        {
+          "id": "u-hiragana-1",
+          "title": "Hiragana basics",
+          "lessons": [
+            {
+              "id": "l-a-row",
+              "title": "A-row kana",
+              "focus": "reading",
+              "rewardXP": 40,
+              "exercises": [
+                {
+                  "id": "ex-a-reading",
+                  "type": "multipleChoice",
+                  "prompt": "Pick the reading for あ",
+                  "answer": "a",
+                  "choices": ["a", "i", "u", "e"],
+                  "vocabularyIDs": ["v-a"],
+                  "stat": "reading"
+                },
+                {
+                  "id": "ex-i-reading",
+                  "type": "multipleChoice",
+                  "prompt": "Pick the reading for い",
+                  "answer": "i",
+                  "choices": ["a", "i", "u", "o"],
+                  "vocabularyIDs": ["v-i"],
+                  "stat": "reading"
+                },
+                {
+                  "id": "ex-u-type",
+                  "type": "typeAnswer",
+                  "prompt": "Type the reading for う",
+                  "answer": "u",
+                  "choices": [],
+                  "vocabularyIDs": ["v-u"],
+                  "stat": "reading"
+                }
+              ]
+            },
+            {
+              "id": "l-greetings",
+              "title": "First greetings",
+              "focus": "vocabulary",
+              "rewardXP": 50,
+              "exercises": [
+                {
+                  "id": "ex-konnichiwa",
+                  "type": "multipleChoice",
+                  "prompt": "What does こんにちは mean?",
+                  "answer": "hello",
+                  "choices": ["hello", "water", "thank you", "good night"],
+                  "vocabularyIDs": ["v-konnichiwa"],
+                  "stat": "vocabulary"
+                },
+                {
+                  "id": "ex-arigatou",
+                  "type": "multipleChoice",
+                  "prompt": "Pick the meaning of ありがとう",
+                  "answer": "thank you",
+                  "choices": ["goodbye", "thank you", "hello", "yes"],
+                  "vocabularyIDs": ["v-arigatou"],
+                  "stat": "vocabulary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "u-hiragana-2",
+          "title": "More kana",
+          "lessons": [
+            {
+              "id": "l-k-row",
+              "title": "K-row preview",
+              "focus": "reading",
+              "rewardXP": 45,
+              "exercises": [
+                {
+                  "id": "ex-ka-reading",
+                  "type": "multipleChoice",
+                  "prompt": "Pick the reading for か",
+                  "answer": "ka",
+                  "choices": ["ka", "ki", "ke", "ko"],
+                  "vocabularyIDs": ["v-ka"],
+                  "stat": "reading"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "id": "v-a", "surface": "あ", "reading": "a", "meaning": "a", "tags": ["hiragana"] },
+    { "id": "v-i", "surface": "い", "reading": "i", "meaning": "i", "tags": ["hiragana"] },
+    { "id": "v-u", "surface": "う", "reading": "u", "meaning": "u", "tags": ["hiragana"] },
+    { "id": "v-ka", "surface": "か", "reading": "ka", "meaning": "ka", "tags": ["hiragana"] },
+    { "id": "v-konnichiwa", "surface": "こんにちは", "reading": "konnichiwa", "meaning": "hello", "tags": ["greeting"] },
+    { "id": "v-arigatou", "surface": "ありがとう", "reading": "arigatou", "meaning": "thank you", "tags": ["greeting"] }
+  ],
+  "grammarNotes": [
+    {
+      "id": "g-greetings",
+      "title": "Greetings are set phrases",
+      "body": "Start by recognizing common greetings as whole phrases."
+    }
+  ]
+}

@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "ContentKit", targets: ["ContentKit"])
     ],
     targets: [
-        .target(name: "ContentKit"),
+        .target(name: "ContentKit", resources: [.process("Resources")]),
         .testTarget(name: "ContentKitTests", dependencies: ["ContentKit"])
     ]
 )

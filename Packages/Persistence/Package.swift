@@ -8,8 +8,12 @@ let package = Package(
     products: [
         .library(name: "Persistence", targets: ["Persistence"])
     ],
+    dependencies: [
+        .package(path: "../ContentKit"),
+        .package(path: "../LearningEngine")
+    ],
     targets: [
-        .target(name: "Persistence"),
-        .testTarget(name: "PersistenceTests", dependencies: ["Persistence"])
+        .target(name: "Persistence", dependencies: ["ContentKit", "LearningEngine"]),
+        .testTarget(name: "PersistenceTests", dependencies: ["Persistence", "ContentKit", "LearningEngine"])
     ]
 )
