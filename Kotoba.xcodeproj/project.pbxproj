@@ -17,16 +17,20 @@
 		93D110BFBF7B60AC1D299D4C /* FeatureSpirit in Frameworks */ = {isa = PBXBuildFile; productRef = DD544A96B7313BEC23DDE249 /* FeatureSpirit */; };
 		A99457C7AF3B465D772DE404 /* KotobaDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 95293935E0D08C39BDA39564 /* KotobaDesignSystem */; };
 		B6155FCB68FF898718A333C9 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3C80E626A9E5E5C6B5A5B0 /* AppRootView.swift */; };
+		B95752F548624A83AA5D8C62 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7331EA59F9B7EC090275DB6C /* ResultsView.swift */; };
 		DAAFEA6A264C732E5E28ABF9 /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = 30A47D2EFCC255849C0408F7 /* Persistence */; };
 		DE07A28F8BB488ACE2A87CF9 /* ContentKit in Frameworks */ = {isa = PBXBuildFile; productRef = 28341647D124D2881F116D76 /* ContentKit */; };
+		ED993DFDFB8E8308B32BF7BA /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F7FED9F260C7F0787FD55D /* AppModel.swift */; };
 		EED0E5C0128A0743B831BDBC /* FeatureBattle in Frameworks */ = {isa = PBXBuildFile; productRef = 9208EEBBE272A20B67F8CE3B /* FeatureBattle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		26F154FE9AA0A9C244C844AD /* FeatureProfile */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeatureProfile; path = Packages/Features/FeatureProfile; sourceTree = SOURCE_ROOT; };
+		37F7FED9F260C7F0787FD55D /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		56E47DBC54395377D28519A4 /* KotobaApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KotobaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D21D172BC7D224985A73DB3 /* FeatureSensei */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeatureSensei; path = Packages/Features/FeatureSensei; sourceTree = SOURCE_ROOT; };
 		6D9565713CD089815E4FACB5 /* ContentKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ContentKit; path = Packages/ContentKit; sourceTree = SOURCE_ROOT; };
+		7331EA59F9B7EC090275DB6C /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		7F99AFE3ED6CA12B97F3F549 /* FeatureBattle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeatureBattle; path = Packages/Features/FeatureBattle; sourceTree = SOURCE_ROOT; };
 		8C408DDEA0DC7490B8243BED /* Persistence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Persistence; path = Packages/Persistence; sourceTree = SOURCE_ROOT; };
 		8E3C4631D871B66F7233A6D5 /* KotobaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KotobaApp.swift; sourceTree = "<group>"; };
@@ -61,6 +65,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1321B48D1892AFE262AB2219 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				37F7FED9F260C7F0787FD55D /* AppModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		7C88ABF60E576484BBC70AB2 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +105,8 @@
 			children = (
 				AF3C80E626A9E5E5C6B5A5B0 /* AppRootView.swift */,
 				8E3C4631D871B66F7233A6D5 /* KotobaApp.swift */,
+				7331EA59F9B7EC090275DB6C /* ResultsView.swift */,
+				1321B48D1892AFE262AB2219 /* Model */,
 			);
 			name = Sources;
 			path = KotobaApp/Sources;
@@ -189,8 +203,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED993DFDFB8E8308B32BF7BA /* AppModel.swift in Sources */,
 				B6155FCB68FF898718A333C9 /* AppRootView.swift in Sources */,
 				8013B068E0D6D960312D10C1 /* KotobaApp.swift in Sources */,
+				B95752F548624A83AA5D8C62 /* ResultsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
