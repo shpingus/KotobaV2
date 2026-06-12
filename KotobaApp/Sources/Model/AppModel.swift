@@ -25,6 +25,10 @@ final class AppModel {
         loadedState = (try? store.load()) ?? LearnerState()
         self.state = loadedState
         self.route = loadedState.onboarded ? .home : .onboarding
+
+        #if DEBUG
+        applyDebugLaunchArguments()
+        #endif
     }
 
     func completeOnboarding() {
@@ -80,6 +84,56 @@ final class AppModel {
         pack.allLessons.first { !state.completedLessonIDs.contains($0.id.rawValue) } ?? pack.allLessons.last
     }
 
+    #if DEBUG
+    private func applyDebugLaunchArguments() {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let routeName = arguments.value(after: "-kotobaRoute") else { return }
+        if arguments.contains("-kotobaDemoState") {
+            state = Self.demoState
+        }
+
+        if routeName != "onboarding" {
+            state.onboarded = true
+        }
+
+        switch routeName {
+        case "onboarding":
+            route = .onboarding
+        case "lesson":
+            activeLesson = currentLesson
+            route = .lesson
+        case "results":
+            lastSummary = LessonSummary(lessonID: "l-a-row", correctCount: 3, totalCount: 3, accuracy: 1, xpAwarded: 40, statGains: [.reading: 12])
+            route = .results
+        case "battle":
+            activeLesson = currentLesson
+            route = .battle
+        case "gate":
+            route = .gate
+        case "spirit":
+            route = .spirit
+        case "profile":
+            route = .profile
+        default:
+            route = .home
+        }
+    }
+
+    private static let demoState = LearnerState(
+        onboarded: true,
+        totalXP: 80,
+        completedLessonIDs: ["l-a-row"],
+        statScores: [.reading: 28, .vocabulary: 16, .grammar: 20, .listening: 8],
+        answerHistory: [
+            AnswerRecord(exerciseID: "ex-konnichiwa", stat: .vocabulary, prompt: "What does こんにちは mean?", givenAnswer: "thank you", correctAnswer: "hello", isCorrect: false),
+            AnswerRecord(exerciseID: "ex-konnichiwa", stat: .vocabulary, prompt: "What does こんにちは mean?", givenAnswer: "thank you", correctAnswer: "hello", isCorrect: false),
+            AnswerRecord(exerciseID: "ex-a-reading", stat: .reading, prompt: "Pick the reading for あ", givenAnswer: "a", correctAnswer: "a", isCorrect: true)
+        ],
+        sessionDays: [Date()],
+        defeatedBossIDs: []
+    )
+    #endif
+
     private static let emptyPack = LanguagePack(
         id: "empty",
         languageCode: "ja",
@@ -100,3 +154,13 @@ enum AppRoute {
     case spirit
     case profile
 }
+
+#if DEBUG
+private extension Array where Element == String {
+    func value(after key: String) -> String? {
+        guard let index = firstIndex(of: key) else { return nil }
+        let valueIndex = self.index(after: index)
+        return indices.contains(valueIndex) ? self[valueIndex] : nil
+    }
+}
+#endif

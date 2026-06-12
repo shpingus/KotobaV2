@@ -39,6 +39,7 @@ public struct KotobaLevelBadge: View {
                     .frame(width: size.side * CGFloat(min(1, max(0, progress / 100))), height: size.side * 0.18)
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: size.radius, style: .continuous))
         .overlay {
             if soft {
                 RoundedRectangle(cornerRadius: size.radius, style: .continuous)

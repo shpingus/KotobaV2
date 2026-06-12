@@ -4,13 +4,14 @@ import KotobaDesignSystem
 import LearningEngine
 import Persistence
 
-/// Home path renders progress and lesson entry points; it does not mutate state directly.
+/// Signature path screen; it renders state and sends navigation intents upward.
 public struct PathHomeView: View {
     private let pack: LanguagePack
     private let state: LearnerState
     private let senseiInsight: SenseiInsight?
     private let onStartLesson: (Lesson) -> Void
     private let onStartBoss: () -> Void
+    private let onShowGate: () -> Void
     private let onShowSpirit: () -> Void
     private let onShowProfile: () -> Void
 
@@ -20,6 +21,7 @@ public struct PathHomeView: View {
         senseiInsight: SenseiInsight? = nil,
         onStartLesson: @escaping (Lesson) -> Void,
         onStartBoss: @escaping () -> Void,
+        onShowGate: @escaping () -> Void,
         onShowSpirit: @escaping () -> Void,
         onShowProfile: @escaping () -> Void
     ) {
@@ -28,40 +30,62 @@ public struct PathHomeView: View {
         self.senseiInsight = senseiInsight
         self.onStartLesson = onStartLesson
         self.onStartBoss = onStartBoss
+        self.onShowGate = onShowGate
         self.onShowSpirit = onShowSpirit
         self.onShowProfile = onShowProfile
     }
 
     public var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: KotobaSpacing.space6) {
-                header
-                senseiCard
-                nextStep
-                rpgActions
-                pathNodes
+        VStack(spacing: 0) {
+            header
+            ScrollView {
+                VStack(alignment: .leading, spacing: KotobaSpacing.space5) {
+                    PathDailyGoalCard(
+                        completed: state.completedLessonIDs.count,
+                        lessonTitle: currentLesson?.title,
+                        onStartLesson: startCurrentLesson
+                    )
+                    senseiCard
+                    activeQuest
+                    unitSections
+                }
+                .padding(.horizontal, KotobaSpacing.gutter)
+                .padding(.vertical, KotobaSpacing.space4)
             }
-            .padding(KotobaSpacing.gutter)
         }
         .background(KotobaColor.canvas)
     }
 
     private var header: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Today’s path")
-                    .font(KotobaFont.display(.text2xl, weight: .bold))
-                    .foregroundStyle(KotobaColor.textStrong)
-                Text("Every step forward.")
-                    .font(KotobaFont.body(.textSm))
+        HStack(spacing: KotobaSpacing.space3) {
+            KotobaLevelBadge(tier: .n5, size: .sm, showCaption: false, progress: tierProgress)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Current level")
+                    .font(KotobaFont.body(.text3xs, weight: .bold))
                     .foregroundStyle(KotobaColor.textMuted)
+                Text("N5 · \(Int(tierProgress))%")
+                    .font(KotobaFont.numeric(.textSm, weight: .bold))
+                    .foregroundStyle(KotobaColor.textStrong)
             }
             Spacer()
-            KotobaIconButton("sparkles", label: "Spirit", variant: .neutral, action: onShowSpirit)
+            Text("XP \(state.totalXP)")
+                .font(KotobaFont.numeric(.textSm, weight: .bold))
+                .foregroundStyle(KotobaColor.brandStrong)
+            KotobaStreakCounter(days: streak, size: .sm, showLabel: false)
+            KotobaIconButton("sparkles", label: "Spirit", size: .sm, action: onShowSpirit)
             Button(action: onShowProfile) {
-                KotobaAvatar(name: "Aiko Tanaka", ringPercent: 70)
+                KotobaAvatar(name: "Aiko Tanaka", size: .sm, ringPercent: 70)
             }
             .buttonStyle(.plain)
+        }
+        .padding(.horizontal, KotobaSpacing.gutter)
+        .padding(.top, KotobaSpacing.space3)
+        .padding(.bottom, KotobaSpacing.space3)
+        .background(KotobaColor.canvas.opacity(0.94))
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(KotobaColor.borderSubtle)
+                .frame(height: 1)
         }
     }
 
@@ -82,64 +106,93 @@ public struct PathHomeView: View {
         }
     }
 
-    private var nextStep: some View {
-        KotobaCard(tone: .brand) {
-            VStack(alignment: .leading, spacing: KotobaSpacing.space4) {
-                HStack {
-                    KotobaStreakCounter(days: StreakCalculator.streak(sessions: state.sessionDays))
-                    Spacer()
-                    let level = XPLeveling.level(for: state.totalXP)
-                    KotobaBadge("Lv \(level.level)", tone: .brand, solid: true)
-                }
-                KotobaXPBar(value: Double(XPLeveling.level(for: state.totalXP).currentLevelXP), max: 100, level: XPLeveling.level(for: state.totalXP).level)
-                if let lesson = currentLesson {
-                    KotobaButton(variant: .accent, fullWidth: true, action: { onStartLesson(lesson) }) {
-                        Text("Begin \(lesson.title.lowercased())")
+    private var activeQuest: some View {
+        KotobaQuestCard(
+            title: "Defeat the Hiragana Oni",
+            subtitle: "Boss challenge · waiting on the path",
+            value: Double(state.defeatedBossIDs.count),
+            max: 1,
+            reward: "+30 XP",
+            done: bossState == .defeated,
+            systemImage: "flame.fill"
+        )
+    }
+
+    private var unitSections: some View {
+        VStack(spacing: KotobaSpacing.space7) {
+            ForEach(Array(units.enumerated()), id: \.element.id.rawValue) { unitIndex, unit in
+                let locked = unitIndex > 0 && !firstUnitComplete
+                VStack(spacing: KotobaSpacing.space5) {
+                    PathUnitBanner(unit: unit, number: unitIndex + 1, locked: locked)
+                    PathLessonMap(
+                        lessons: unit.lessons,
+                        locked: locked,
+                        currentLessonID: currentLesson?.id,
+                        completedIDs: state.completedLessonIDs,
+                        onStartLesson: onStartLesson
+                    )
+                    if unitIndex == 0 {
+                        bossAndGate
                     }
                 }
             }
         }
     }
 
-    private var rpgActions: some View {
-        HStack(spacing: KotobaSpacing.space4) {
+    private var bossAndGate: some View {
+        HStack(alignment: .top, spacing: KotobaSpacing.space8) {
             Button(action: onStartBoss) {
-                KotobaBossNode(state: bossState, size: .md, label: "Kana boss")
+                KotobaBossNode(state: bossState, size: .md, label: "Hiragana Oni")
             }
             .buttonStyle(.plain)
-            .disabled(pack.allLessons.isEmpty)
+            .disabled(bossState == .locked)
 
-            KotobaToriiGate(size: 86, state: bossState == .defeated ? .passed : .open, plaque: "言", caption: "Unit gate")
-            Spacer()
-        }
-        .padding(.vertical, KotobaSpacing.space2)
-    }
-
-    private var pathNodes: some View {
-        VStack(spacing: KotobaSpacing.space6) {
-            ForEach(Array(pack.allLessons.enumerated()), id: \.element.id.rawValue) { index, lesson in
-                let complete = state.completedLessonIDs.contains(lesson.id.rawValue)
-                let current = lesson.id == currentLesson?.id
-                HStack {
-                    if index.isMultiple(of: 2) { Spacer() }
-                    Button {
-                        if !complete { onStartLesson(lesson) }
-                    } label: {
-                        KotobaLessonNode(state: complete ? .complete : current ? .available : .locked, current: current, label: lesson.title)
+            VStack(spacing: KotobaSpacing.space2) {
+                KotobaToriiGate(size: 104, state: firstUnitComplete ? .open : .locked, plaque: "二", caption: gateCaption)
+                if firstUnitComplete {
+                    KotobaButton(variant: .accent, size: .sm, action: onShowGate) {
+                        Text("Pass through")
                     }
-                    .buttonStyle(.plain)
-                    .disabled(!complete && !current)
-                    if !index.isMultiple(of: 2) { Spacer() }
                 }
             }
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
+        .padding(.top, KotobaSpacing.space2)
+    }
+
+    private var units: [ContentKit.Unit] {
+        pack.courses.first?.units ?? []
     }
 
     private var currentLesson: Lesson? {
         pack.allLessons.first { !state.completedLessonIDs.contains($0.id.rawValue) } ?? pack.allLessons.last
     }
 
+    private func startCurrentLesson() {
+        if let currentLesson { onStartLesson(currentLesson) }
+    }
+
+    private var firstUnitComplete: Bool {
+        guard let first = units.first else { return false }
+        return first.lessons.allSatisfy { state.completedLessonIDs.contains($0.id.rawValue) }
+    }
+
     private var bossState: KotobaBossNodeState {
-        state.defeatedBossIDs.contains("sample-kana-boss") ? .defeated : .available
+        guard firstUnitComplete else { return .locked }
+        return state.defeatedBossIDs.contains("sample-kana-boss") ? KotobaBossNodeState.defeated : KotobaBossNodeState.available
+    }
+
+    private var gateCaption: String {
+        firstUnitComplete ? "Unit 1 complete · gate open" : "Finish Unit 1 to pass"
+    }
+
+    private var streak: Int {
+        StreakCalculator.streak(sessions: state.sessionDays)
+    }
+
+    private var tierProgress: Double {
+        guard !pack.allLessons.isEmpty else { return 0 }
+        return Double(state.completedLessonIDs.count) / Double(pack.allLessons.count) * 100
     }
 }

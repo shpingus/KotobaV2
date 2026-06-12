@@ -23,6 +23,7 @@ struct AppRootView: View {
                     senseiInsight: model.senseiInsight,
                     onStartLesson: { model.startLesson($0) },
                     onStartBoss: { model.startBoss() },
+                    onShowGate: { model.route = .gate },
                     onShowSpirit: { model.route = .spirit },
                     onShowProfile: { model.route = .profile }
                 )
@@ -69,6 +70,7 @@ struct AppRootView: View {
             senseiInsight: model.senseiInsight,
             onStartLesson: { model.startLesson($0) },
             onStartBoss: { model.startBoss() },
+            onShowGate: { model.route = .gate },
             onShowSpirit: { model.route = .spirit },
             onShowProfile: { model.route = .profile }
         )
