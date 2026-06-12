@@ -17,35 +17,49 @@ public struct KotobaLevelBadge: View {
     }
 
     public var body: some View {
-        VStack(spacing: 2) {
-            if showCaption && tier != .preN5 {
-                Text("JLPT")
-                    .font(KotobaFont.body(size.captionSize, weight: .bold))
-                    .tracking(0.8)
-                    .opacity(0.85)
-            }
+        ZStack {
+            Circle()
+                .fill(soft ? KotobaColor.tier(tier).opacity(0.16) : KotobaColor.tier(tier))
 
-            Text(tier.label)
-                .font(KotobaFont.display(size.textSize, weight: .bold))
-        }
-        .foregroundStyle(soft ? KotobaColor.tier(tier) : .white)
-        .frame(width: size.side, height: size.side)
-        .background(soft ? KotobaColor.tier(tier).opacity(0.16) : KotobaColor.tier(tier))
-        .clipShape(RoundedRectangle(cornerRadius: size.radius, style: .continuous))
-        .overlay(alignment: .bottomLeading) {
             if let progress {
-                Rectangle()
-                    .fill(soft ? KotobaColor.tier(tier) : .white.opacity(0.9))
-                    .frame(width: size.side * CGFloat(min(1, max(0, progress / 100))), height: size.side * 0.18)
-            }
-        }
-        .clipShape(RoundedRectangle(cornerRadius: size.radius, style: .continuous))
-        .overlay {
-            if soft {
-                RoundedRectangle(cornerRadius: size.radius, style: .continuous)
+                progressRing(progress)
+            } else if soft {
+                Circle()
                     .stroke(KotobaColor.tier(tier).opacity(0.35), lineWidth: KotobaBorder.base)
             }
+
+            VStack(spacing: 2) {
+                if showCaption && tier != .preN5 {
+                    Text("JLPT")
+                        .font(KotobaFont.body(size.captionSize, weight: .bold))
+                        .tracking(0.8)
+                        .opacity(0.85)
+                }
+
+                Text(tier.label)
+                    .font(KotobaFont.display(size.textSize, weight: .bold))
+            }
+            .foregroundStyle(soft ? KotobaColor.tier(tier) : .white)
         }
+        .frame(width: size.side, height: size.side)
+    }
+
+    private func progressRing(_ progress: Double) -> some View {
+        let clamped = CGFloat(min(1, max(0, progress / 100)))
+        let color = soft ? KotobaColor.tier(tier) : Color.white
+
+        return ZStack {
+            Circle()
+                .stroke(color.opacity(0.24), lineWidth: size.ringWidth)
+            Circle()
+                .trim(from: 0, to: clamped)
+                .stroke(
+                    color.opacity(0.92),
+                    style: StrokeStyle(lineWidth: size.ringWidth, lineCap: .round)
+                )
+                .rotationEffect(.degrees(-90))
+        }
+        .padding(size.ringInset)
     }
 }
 
@@ -55,9 +69,10 @@ public enum KotobaLevelBadgeSize {
     case lg
 
     var side: CGFloat { self == .lg ? 96 : self == .sm ? 40 : 60 }
-    var radius: CGFloat { self == .lg ? KotobaRadius.xl : KotobaRadius.lg }
     var textSize: KotobaTextSize { self == .lg ? .text3xl : self == .sm ? .textSm : .textXl }
     var captionSize: KotobaTextSize { self == .lg ? .textXs : .text3xs }
+    var ringWidth: CGFloat { self == .sm ? 3 : 4 }
+    var ringInset: CGFloat { ringWidth / 2 }
 }
 
 private extension KotobaTier {

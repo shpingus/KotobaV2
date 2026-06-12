@@ -78,7 +78,7 @@ public struct ProfileView: View {
             KotobaCard {
                 HStack(spacing: KotobaSpacing.space3) {
                     ForEach(Array(KotobaTier.allCases.enumerated()), id: \.offset) { _, tier in
-                        KotobaLevelBadge(tier: tier, size: .sm, soft: tier != .n5, showCaption: false, progress: tier == .n5 ? 33 : nil)
+                        KotobaLevelBadge(tier: tier, size: .sm, soft: tier != .n5, showCaption: false)
                     }
                 }
             }

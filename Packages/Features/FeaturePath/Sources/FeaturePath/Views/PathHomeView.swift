@@ -58,7 +58,7 @@ public struct PathHomeView: View {
 
     private var header: some View {
         HStack(spacing: KotobaSpacing.space3) {
-            KotobaLevelBadge(tier: .n5, size: .sm, showCaption: false, progress: tierProgress)
+            KotobaLevelBadge(tier: .n5, size: .sm, showCaption: false)
             VStack(alignment: .leading, spacing: 2) {
                 Text("Current level")
                     .font(KotobaFont.body(.text3xs, weight: .bold))
