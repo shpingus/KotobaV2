@@ -21,7 +21,12 @@ struct LessonChoiceRow: View {
                     RoundedRectangle(cornerRadius: KotobaRadius.md, style: .continuous)
                         .stroke(border, lineWidth: KotobaBorder.base)
                 }
-                .shadow(color: edge, radius: 0, x: 0, y: disabled ? 0 : KotobaMotion.pressDepth)
+                .shadow(
+                    color: castsEdge ? edge : .clear,
+                    radius: 0,
+                    x: 0,
+                    y: castsEdge ? KotobaMotion.pressDepth : 0
+                )
         }
         .buttonStyle(.plain)
         .disabled(disabled)
@@ -61,5 +66,9 @@ struct LessonChoiceRow: View {
         case .selected: KotobaColor.brandStrong
         case .default: KotobaColor.textStrong
         }
+    }
+
+    private var castsEdge: Bool {
+        !disabled && state != .default
     }
 }

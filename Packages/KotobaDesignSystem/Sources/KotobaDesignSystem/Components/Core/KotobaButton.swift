@@ -73,7 +73,7 @@ public enum KotobaButtonVariant {
         }
     }
 
-    var hasEdge: Bool { self != .ghost }
+    var hasEdge: Bool { self != .ghost && self != .secondary }
 }
 
 public enum KotobaButtonSize {
