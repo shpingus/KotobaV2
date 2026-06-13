@@ -69,6 +69,6 @@ struct LessonChoiceRow: View {
     }
 
     private var castsEdge: Bool {
-        !disabled && state != .default
+        !disabled && (state == .correct || state == .wrong)
     }
 }
