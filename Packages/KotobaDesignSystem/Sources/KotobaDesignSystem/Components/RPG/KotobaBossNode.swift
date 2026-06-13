@@ -20,8 +20,8 @@ public struct KotobaBossNode: View {
                 Circle()
                     .fill(state.fill)
                     .frame(width: size.side, height: size.side)
-                    .overlay { Circle().stroke(state.border, lineWidth: 3) }
-                    .shadow(color: state.edge, radius: 0, x: 0, y: 5)
+                    .overlay { Circle().stroke(state.border, lineWidth: state == .locked ? 2 : 3) }
+                    .shadow(color: state.shadowColor, radius: 8, x: 0, y: 5)
                     .overlay { KotobaPixelOni(size: size.spriteSize).saturation(state == .locked ? 0 : 1) }
 
                 Text(state == .defeated ? "CLEAR" : flag)
@@ -30,7 +30,7 @@ public struct KotobaBossNode: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(state == .defeated ? KotobaColor.success : KotobaColor.torii)
+                    .background(state.flagColor)
                     .clipShape(Capsule())
                     .offset(y: -13)
             }
@@ -53,9 +53,37 @@ public enum KotobaBossNodeState {
     case locked
     case defeated
 
-    var fill: Color { self == .defeated ? KotobaColor.successSoft : KotobaColor.toriiSoft }
-    var border: Color { self == .defeated ? KotobaColor.success : KotobaColor.torii }
-    var edge: Color { self == .defeated ? KotobaColor.successEdge : KotobaColor.toriiDeep }
+    var fill: Color {
+        switch self {
+        case .available: KotobaColor.toriiSoft
+        case .locked: KotobaColor.surfaceSunken
+        case .defeated: KotobaColor.successSoft
+        }
+    }
+
+    var border: Color {
+        switch self {
+        case .available: KotobaColor.torii
+        case .locked: KotobaColor.borderDefault
+        case .defeated: KotobaColor.success
+        }
+    }
+
+    var shadowColor: Color {
+        switch self {
+        case .available: KotobaColor.toriiDeep.opacity(0.22)
+        case .locked: KotobaColor.borderDefault.opacity(0.3)
+        case .defeated: KotobaColor.successEdge.opacity(0.24)
+        }
+    }
+
+    var flagColor: Color {
+        switch self {
+        case .available: KotobaColor.torii
+        case .locked: KotobaColor.borderDefault
+        case .defeated: KotobaColor.success
+        }
+    }
 }
 
 public enum KotobaBossNodeSize {

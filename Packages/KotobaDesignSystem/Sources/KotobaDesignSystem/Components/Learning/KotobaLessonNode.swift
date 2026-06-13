@@ -28,17 +28,16 @@ public struct KotobaLessonNode: View {
                 if current {
                     Circle()
                         .stroke(KotobaColor.accent.opacity(0.65), lineWidth: 3)
-                        .frame(width: size.side + 18, height: size.side + 18)
-                        .scaleEffect(1.08)
+                        .frame(width: size.side + 22, height: size.side + 22)
                 }
 
                 Circle()
                     .fill(state.fill)
                     .frame(width: size.side, height: size.side)
                     .overlay {
-                        Circle().stroke(state.border, lineWidth: state == .available ? KotobaBorder.base : 0)
+                        Circle().stroke(state.border, lineWidth: state == .available && !current ? KotobaBorder.base : 0)
                     }
-                    .shadow(color: state.edge, radius: 0, x: 0, y: size.edgeDepth)
+                    .shadow(color: state.shadow.color, radius: state.shadow.radius, x: 0, y: state.shadow.y)
                     .overlay {
                         Image(systemName: state.systemImage)
                             .font(.system(size: size.iconSize, weight: .bold))
@@ -95,6 +94,19 @@ public enum KotobaLessonNodeState {
         }
     }
 
+    var shadow: (color: Color, radius: CGFloat, y: CGFloat) {
+        switch self {
+        case .available:
+            (KotobaColor.surfaceEdge.opacity(0.5), 8, 4)
+        case .locked:
+            (KotobaColor.borderDefault.opacity(0.35), 7, 3)
+        case .complete:
+            (KotobaColor.successEdge, 0, 6)
+        case .mastered:
+            (KotobaColor.warningEdge, 0, 6)
+        }
+    }
+
     var border: Color { self == .available ? KotobaColor.borderSubtle : .clear }
     var ink: Color { self == .available ? KotobaColor.brand : self == .locked ? KotobaColor.textFaint : .white }
 
@@ -115,5 +127,4 @@ public enum KotobaLessonNodeSize {
 
     var side: CGFloat { self == .lg ? 84 : self == .sm ? 52 : 68 }
     var iconSize: CGFloat { self == .lg ? 34 : self == .sm ? 20 : 28 }
-    var edgeDepth: CGFloat { self == .lg ? 7 : self == .sm ? 5 : 6 }
 }
