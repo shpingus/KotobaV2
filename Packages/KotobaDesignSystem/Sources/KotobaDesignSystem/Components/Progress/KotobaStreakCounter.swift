@@ -21,8 +21,10 @@ public struct KotobaStreakCounter: View {
 
     public var body: some View {
         HStack(spacing: KotobaSpacing.space2) {
-            FlameShape()
-                .fill(state.color)
+            Image(systemName: "flame.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(state.color)
                 .frame(width: size.iconSide, height: size.iconSide)
 
             Text("\(days)")
@@ -65,17 +67,5 @@ public enum KotobaStreakState {
         case .risk: KotobaColor.warning
         case .off: KotobaColor.textFaint
         }
-    }
-}
-
-private struct FlameShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
-        path.addCurve(to: CGPoint(x: rect.maxX * 0.86, y: rect.maxY * 0.62), control1: CGPoint(x: rect.maxX * 0.82, y: rect.maxY * 0.20), control2: CGPoint(x: rect.maxX, y: rect.maxY * 0.38))
-        path.addCurve(to: CGPoint(x: rect.midX, y: rect.maxY), control1: CGPoint(x: rect.maxX * 0.78, y: rect.maxY * 0.88), control2: CGPoint(x: rect.maxX * 0.62, y: rect.maxY))
-        path.addCurve(to: CGPoint(x: rect.minX * 1.14, y: rect.maxY * 0.62), control1: CGPoint(x: rect.maxX * 0.18, y: rect.maxY), control2: CGPoint(x: rect.minX, y: rect.maxY * 0.82))
-        path.addCurve(to: CGPoint(x: rect.midX, y: rect.minY), control1: CGPoint(x: rect.maxX * 0.18, y: rect.maxY * 0.38), control2: CGPoint(x: rect.maxX * 0.42, y: rect.maxY * 0.22))
-        return path
     }
 }
