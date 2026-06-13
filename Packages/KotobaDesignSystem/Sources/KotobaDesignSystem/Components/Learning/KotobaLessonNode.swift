@@ -24,40 +24,11 @@ public struct KotobaLessonNode: View {
 
     public var body: some View {
         VStack(spacing: KotobaSpacing.space2) {
-            ZStack(alignment: .top) {
-                if current {
-                    Circle()
-                        .stroke(KotobaColor.accent.opacity(0.65), lineWidth: 3)
-                        .frame(width: size.side + 22, height: size.side + 22)
+            nodeFace
+                .overlay(alignment: .top) {
+                    startBadge
                 }
-
-                Circle()
-                    .fill(state.fill)
-                    .frame(width: size.side, height: size.side)
-                    .overlay {
-                        Circle().stroke(state.border, lineWidth: state == .available && !current ? KotobaBorder.base : 0)
-                    }
-                    .shadow(color: state.shadow.color, radius: state.shadow.radius, x: 0, y: state.shadow.y)
-                    .overlay {
-                        Image(systemName: state.systemImage)
-                            .font(.system(size: size.iconSize, weight: .bold))
-                            .foregroundStyle(state.ink)
-                    }
-
-                if current {
-                    Text(startLabel)
-                        .font(KotobaFont.body(.text3xs, weight: .bold))
-                        .tracking(0.8)
-                        .foregroundStyle(KotobaColor.accent)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 3)
-                        .background(KotobaColor.surfaceCard)
-                        .clipShape(Capsule())
-                        .overlay { Capsule().stroke(KotobaColor.accent, lineWidth: KotobaBorder.base) }
-                        .offset(y: -24)
-                }
-            }
-            .padding(.top, current ? 24 : 0)
+                .padding(.top, current ? 24 : 0)
 
             if let label {
                 Text(label)
@@ -66,6 +37,46 @@ public struct KotobaLessonNode: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 96)
             }
+        }
+    }
+
+    private var nodeFace: some View {
+        ZStack {
+            if current {
+                Circle()
+                    .stroke(KotobaColor.accent.opacity(0.65), lineWidth: 3)
+                    .frame(width: size.ringSide, height: size.ringSide)
+            }
+
+            Circle()
+                .fill(state.fill)
+                .frame(width: size.side, height: size.side)
+                .overlay {
+                    Circle().stroke(state.border, lineWidth: state == .available && !current ? KotobaBorder.base : 0)
+                }
+                .shadow(color: state.shadow.color, radius: state.shadow.radius, x: 0, y: state.shadow.y)
+                .overlay {
+                    Image(systemName: state.systemImage)
+                        .font(.system(size: size.iconSize, weight: .bold))
+                        .foregroundStyle(state.ink)
+                }
+        }
+        .frame(width: current ? size.ringSide : size.side, height: current ? size.ringSide : size.side)
+    }
+
+    @ViewBuilder
+    private var startBadge: some View {
+        if current {
+            Text(startLabel)
+                .font(KotobaFont.body(.text3xs, weight: .bold))
+                .tracking(0.8)
+                .foregroundStyle(KotobaColor.accent)
+                .padding(.horizontal, 9)
+                .padding(.vertical, 3)
+                .background(KotobaColor.surfaceCard)
+                .clipShape(Capsule())
+                .overlay { Capsule().stroke(KotobaColor.accent, lineWidth: KotobaBorder.base) }
+                .offset(y: -22)
         }
     }
 }
@@ -82,15 +93,6 @@ public enum KotobaLessonNodeState {
         case .locked: KotobaColor.surfaceSunken
         case .complete: KotobaColor.success
         case .mastered: KotobaColor.warning
-        }
-    }
-
-    var edge: Color {
-        switch self {
-        case .available: KotobaColor.surfaceEdge
-        case .locked: KotobaColor.borderDefault
-        case .complete: KotobaColor.successEdge
-        case .mastered: KotobaColor.warningEdge
         }
     }
 
@@ -126,5 +128,6 @@ public enum KotobaLessonNodeSize {
     case lg
 
     var side: CGFloat { self == .lg ? 84 : self == .sm ? 52 : 68 }
+    var ringSide: CGFloat { side + 22 }
     var iconSize: CGFloat { self == .lg ? 34 : self == .sm ? 20 : 28 }
 }
