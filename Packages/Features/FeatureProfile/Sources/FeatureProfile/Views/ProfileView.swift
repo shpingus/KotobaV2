@@ -7,11 +7,9 @@ import Persistence
 /// Profile shows learner totals, tier progress, streaks, and local settings.
 public struct ProfileView: View {
     private let state: LearnerState
-    private let onClose: () -> Void
 
-    public init(state: LearnerState, onClose: @escaping () -> Void) {
+    public init(state: LearnerState) {
         self.state = state
-        self.onClose = onClose
     }
 
     public var body: some View {
@@ -34,8 +32,6 @@ public struct ProfileView: View {
             Text("Profile")
                 .font(KotobaFont.display(.text3xl, weight: .bold))
                 .foregroundStyle(KotobaColor.textStrong)
-            Spacer()
-            KotobaIconButton("xmark", label: "Close", variant: .ghost, action: onClose)
         }
     }
 

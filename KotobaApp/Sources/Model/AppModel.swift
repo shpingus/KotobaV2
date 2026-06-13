@@ -10,6 +10,7 @@ final class AppModel {
     var pack: LanguagePack
     var state: LearnerState
     var route: AppRoute
+    var initialTab: MainTab
     var activeLesson: Lesson?
     var lastSummary: LessonSummary?
 
@@ -25,6 +26,7 @@ final class AppModel {
         loadedState = (try? store.load()) ?? LearnerState()
         self.state = loadedState
         self.route = loadedState.onboarded ? .home : .onboarding
+        self.initialTab = .learn
 
         #if DEBUG
         applyDebugLaunchArguments()
@@ -40,6 +42,11 @@ final class AppModel {
     func startLesson(_ lesson: Lesson) {
         activeLesson = lesson
         route = .lesson
+    }
+
+    func startPractice() {
+        guard let lesson = currentLesson ?? pack.allLessons.first else { return }
+        startLesson(lesson)
     }
 
     func completeLesson(summary: LessonSummary, answers: [AnswerRecord]) {
@@ -98,6 +105,7 @@ final class AppModel {
 
         switch routeName {
         case "onboarding":
+            state.onboarded = false
             route = .onboarding
         case "lesson":
             activeLesson = currentLesson
@@ -111,9 +119,11 @@ final class AppModel {
         case "gate":
             route = .gate
         case "spirit":
-            route = .spirit
+            initialTab = .spirit
+            route = .home
         case "profile":
-            route = .profile
+            initialTab = .profile
+            route = .home
         default:
             route = .home
         }
@@ -151,8 +161,15 @@ enum AppRoute {
     case results
     case battle
     case gate
-    case spirit
-    case profile
+
+    var isFlow: Bool {
+        switch self {
+        case .lesson, .results, .battle, .gate:
+            true
+        case .onboarding, .home:
+            false
+        }
+    }
 }
 
 #if DEBUG

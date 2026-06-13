@@ -12,8 +12,6 @@ public struct PathHomeView: View {
     private let onStartLesson: (Lesson) -> Void
     private let onStartBoss: () -> Void
     private let onShowGate: () -> Void
-    private let onShowSpirit: () -> Void
-    private let onShowProfile: () -> Void
 
     public init(
         pack: LanguagePack,
@@ -21,9 +19,7 @@ public struct PathHomeView: View {
         senseiInsight: SenseiInsight? = nil,
         onStartLesson: @escaping (Lesson) -> Void,
         onStartBoss: @escaping () -> Void,
-        onShowGate: @escaping () -> Void,
-        onShowSpirit: @escaping () -> Void,
-        onShowProfile: @escaping () -> Void
+        onShowGate: @escaping () -> Void
     ) {
         self.pack = pack
         self.state = state
@@ -31,8 +27,6 @@ public struct PathHomeView: View {
         self.onStartLesson = onStartLesson
         self.onStartBoss = onStartBoss
         self.onShowGate = onShowGate
-        self.onShowSpirit = onShowSpirit
-        self.onShowProfile = onShowProfile
     }
 
     public var body: some View {
@@ -68,15 +62,7 @@ public struct PathHomeView: View {
                     .foregroundStyle(KotobaColor.textStrong)
             }
             Spacer()
-            Text("XP \(state.totalXP)")
-                .font(KotobaFont.numeric(.textSm, weight: .bold))
-                .foregroundStyle(KotobaColor.brandStrong)
             KotobaStreakCounter(days: streak, size: .sm, showLabel: false)
-            KotobaIconButton("sparkles", label: "Spirit", size: .sm, action: onShowSpirit)
-            Button(action: onShowProfile) {
-                KotobaAvatar(name: "Aiko Tanaka", size: .sm, ringPercent: 70)
-            }
-            .buttonStyle(.plain)
         }
         .padding(.horizontal, KotobaSpacing.gutter)
         .padding(.top, KotobaSpacing.space3)

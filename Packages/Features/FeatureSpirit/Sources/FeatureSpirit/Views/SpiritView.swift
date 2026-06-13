@@ -7,11 +7,17 @@ import Persistence
 /// Character sheet for companion growth, power, stats, and lightweight quests.
 public struct SpiritView: View {
     private let state: LearnerState
-    private let onClose: () -> Void
+    private let onStartPractice: () -> Void
+    private let onStartBoss: () -> Void
 
-    public init(state: LearnerState, onClose: @escaping () -> Void) {
+    public init(
+        state: LearnerState,
+        onStartPractice: @escaping () -> Void,
+        onStartBoss: @escaping () -> Void
+    ) {
         self.state = state
-        self.onClose = onClose
+        self.onStartPractice = onStartPractice
+        self.onStartBoss = onStartBoss
     }
 
     public var body: some View {
@@ -19,6 +25,7 @@ public struct SpiritView: View {
             VStack(alignment: .leading, spacing: KotobaSpacing.space6) {
                 header
                 companion
+                actions
                 stats
                 quests
             }
@@ -37,8 +44,6 @@ public struct SpiritView: View {
                     .font(KotobaFont.body(.textSm))
                     .foregroundStyle(KotobaColor.textMuted)
             }
-            Spacer()
-            KotobaIconButton("xmark", label: "Close", variant: .ghost, action: onClose)
         }
     }
 
@@ -50,6 +55,17 @@ public struct SpiritView: View {
                     KotobaPowerLevel(value: PowerAggregator.power(from: state.statScores), size: .lg, label: "Word power")
                     KotobaBadge(stageLabel, tone: .gold, solid: true)
                 }
+            }
+        }
+    }
+
+    private var actions: some View {
+        HStack(spacing: KotobaSpacing.space3) {
+            KotobaButton(variant: .accent, fullWidth: true, action: onStartPractice) {
+                Label("Practice now", systemImage: "sparkles")
+            }
+            KotobaButton(variant: .secondary, fullWidth: true, action: onStartBoss) {
+                Label("Boss battle", systemImage: "flame.fill")
             }
         }
     }
