@@ -4,30 +4,23 @@ import KotobaDesignSystem
 import LearningEngine
 import Persistence
 
-/// Character sheet for companion growth, power, stats, and lightweight quests.
+/// Combined companion, profile stats, and settings screen.
 public struct SpiritView: View {
     private let state: LearnerState
-    private let onStartPractice: () -> Void
-    private let onStartBoss: () -> Void
 
-    public init(
-        state: LearnerState,
-        onStartPractice: @escaping () -> Void,
-        onStartBoss: @escaping () -> Void
-    ) {
+    public init(state: LearnerState) {
         self.state = state
-        self.onStartPractice = onStartPractice
-        self.onStartBoss = onStartBoss
     }
 
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: KotobaSpacing.space6) {
                 header
-                companion
-                actions
-                stats
-                quests
+                companionCard
+                learnerStats
+                tierLadder
+                skillStats
+                settings
             }
             .padding(KotobaSpacing.gutter)
         }
@@ -35,73 +28,113 @@ public struct SpiritView: View {
     }
 
     private var header: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Spirit")
-                    .font(KotobaFont.display(.text3xl, weight: .bold))
-                    .foregroundStyle(KotobaColor.textStrong)
-                Text("Yuki grows with your steady practice.")
-                    .font(KotobaFont.body(.textSm))
-                    .foregroundStyle(KotobaColor.textMuted)
-            }
-        }
-    }
-
-    private var companion: some View {
-        KotobaCard(tone: .brand) {
-            HStack(spacing: KotobaSpacing.space5) {
-                KotobaCompanion(stage: stage, size: 118, floating: true)
-                VStack(alignment: .leading, spacing: KotobaSpacing.space3) {
-                    KotobaPowerLevel(value: PowerAggregator.power(from: state.statScores), size: .lg, label: "Word power")
-                    KotobaBadge(stageLabel, tone: .gold, solid: true)
-                }
-            }
-        }
-    }
-
-    private var actions: some View {
-        HStack(spacing: KotobaSpacing.space3) {
-            KotobaButton(variant: .accent, fullWidth: true, action: onStartPractice) {
-                Label("Practice now", systemImage: "sparkles")
-            }
-            KotobaButton(variant: .secondary, fullWidth: true, action: onStartBoss) {
-                Label("Boss battle", systemImage: "flame.fill")
-            }
-        }
-    }
-
-    private var stats: some View {
-        KotobaCard {
-            VStack(spacing: KotobaSpacing.space5) {
-                KotobaSkillRadar(stats: radarStats, size: 190)
-                ForEach(radarStats, id: \.label) { stat in
-                    KotobaStatBar(label: stat.label, jp: stat.jp, value: stat.value, weak: stat.label == weakestLabel)
-                }
-            }
-        }
-    }
-
-    private var quests: some View {
-        VStack(alignment: .leading, spacing: KotobaSpacing.space3) {
-            Text("Quests")
-                .font(KotobaFont.display(.textLg, weight: .bold))
+        VStack(alignment: .leading, spacing: KotobaSpacing.space1) {
+            Text("Spirit")
+                .font(KotobaFont.display(.text3xl, weight: .bold))
                 .foregroundStyle(KotobaColor.textStrong)
-            KotobaQuestCard(title: "Finish two lessons", subtitle: "Small steps count.", value: Double(state.completedLessonIDs.count), max: 2, reward: "+20 XP", done: state.completedLessonIDs.count >= 2)
-            KotobaQuestCard(title: "Win one boss battle", subtitle: "Optional, never blocking.", value: Double(state.defeatedBossIDs.count), max: 1, reward: "+30 XP", done: !state.defeatedBossIDs.isEmpty, systemImage: "flame.fill")
+            Text("Yuki, progress stats, and settings in one place.")
+                .font(KotobaFont.body(.textSm))
+                .foregroundStyle(KotobaColor.textMuted)
         }
     }
 
-    private var radarStats: [KotobaSkillRadarStat] {
-        [
-            .init(label: "Vocabulary", jp: "語彙", value: value(.vocabulary)),
-            .init(label: "Grammar", jp: "文法", value: value(.grammar)),
-            .init(label: "Listening", jp: "聴解", value: value(.listening)),
-            .init(label: "Reading", jp: "読解", value: value(.reading))
-        ]
+    private var companionCard: some View {
+        KotobaCard(tone: .brand) {
+            VStack(alignment: .leading, spacing: KotobaSpacing.space5) {
+                HStack(spacing: KotobaSpacing.space5) {
+                    KotobaCompanion(stage: stage, size: 112, floating: true)
+                    VStack(alignment: .leading, spacing: KotobaSpacing.space3) {
+                        KotobaBadge(stageLabel, tone: .gold, solid: true)
+                        KotobaPowerLevel(value: PowerAggregator.power(from: state.statScores), size: .md, label: "Word power")
+                    }
+                    Spacer(minLength: 0)
+                }
+
+                KotobaXPBar(
+                    value: Double(levelProgress.currentLevelXP),
+                    max: Double(levelProgress.nextLevelXP),
+                    level: levelProgress.level,
+                    tone: .accent
+                )
+            }
+        }
     }
 
-    private var weakestLabel: String {
-        radarStats.min { $0.value < $1.value }?.label ?? "Vocabulary"
+    private var learnerStats: some View {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: KotobaSpacing.space3), count: 3), spacing: KotobaSpacing.space3) {
+            SpiritMetricTile(title: "Lessons", value: "\(state.completedLessonIDs.count)", subtitle: "Complete")
+            SpiritMetricTile(title: "Streak", value: "\(streak)", subtitle: streak == 1 ? "Day" : "Days")
+            SpiritMetricTile(title: "Bosses", value: "\(state.defeatedBossIDs.count)", subtitle: "Defeated")
+        }
+    }
+
+    private var tierLadder: some View {
+        VStack(alignment: .leading, spacing: KotobaSpacing.space3) {
+            sectionTitle("Tier")
+            KotobaCard {
+                HStack(spacing: KotobaSpacing.space3) {
+                    ForEach(Array(KotobaTier.allCases.enumerated()), id: \.offset) { _, tier in
+                        KotobaLevelBadge(tier: tier, size: .sm, soft: tier != .n5, showCaption: false)
+                    }
+                }
+            }
+        }
+    }
+
+    private var skillStats: some View {
+        VStack(alignment: .leading, spacing: KotobaSpacing.space3) {
+            sectionTitle("Skill stats")
+            KotobaCard {
+                VStack(spacing: KotobaSpacing.space5) {
+                    ForEach(SkillStat.allCases, id: \.rawValue) { stat in
+                        KotobaStatBar(
+                            label: stat.label,
+                            jp: stat.jp,
+                            value: Double(state.statScores[stat, default: 0]),
+                            tone: stat.tone,
+                            weak: stat == weakestStat
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private var settings: some View {
+        VStack(alignment: .leading, spacing: KotobaSpacing.space3) {
+            sectionTitle("Settings")
+            KotobaCard {
+                VStack(spacing: KotobaSpacing.space4) {
+                    settingRow("Romaji support", value: "On for new words", systemImage: "textformat")
+                    settingRow("Daily reminder", value: "Evening", systemImage: "bell.fill")
+                    settingRow("Audio playback", value: "Normal speed", systemImage: "speaker.wave.2.fill")
+                }
+            }
+        }
+    }
+
+    private func sectionTitle(_ text: String) -> some View {
+        Text(text)
+            .font(KotobaFont.display(.textLg, weight: .bold))
+            .foregroundStyle(KotobaColor.textStrong)
+    }
+
+    private func settingRow(_ title: String, value: String, systemImage: String) -> some View {
+        HStack(spacing: KotobaSpacing.space3) {
+            Image(systemName: systemImage)
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(KotobaColor.brand)
+                .frame(width: 34, height: 34)
+                .background(KotobaColor.brandSoft)
+                .clipShape(RoundedRectangle(cornerRadius: KotobaRadius.md, style: .continuous))
+            Text(title)
+                .font(KotobaFont.body(.textSm, weight: .bold))
+                .foregroundStyle(KotobaColor.textStrong)
+            Spacer()
+            Text(value)
+                .font(KotobaFont.body(.textXs, weight: .semibold))
+                .foregroundStyle(KotobaColor.textMuted)
+        }
     }
 
     private var stage: KotobaCompanionStage {
@@ -116,7 +149,71 @@ public struct SpiritView: View {
         }
     }
 
-    private func value(_ stat: SkillStat) -> Double {
-        Double(state.statScores[stat, default: 0])
+    private var levelProgress: LevelProgress {
+        XPLeveling.level(for: state.totalXP)
+    }
+
+    private var streak: Int {
+        StreakCalculator.streak(sessions: state.sessionDays)
+    }
+
+    private var weakestStat: SkillStat {
+        SkillStat.allCases.min { lhs, rhs in
+            state.statScores[lhs, default: 0] < state.statScores[rhs, default: 0]
+        } ?? .vocabulary
+    }
+}
+
+private struct SpiritMetricTile: View {
+    let title: String
+    let value: String
+    let subtitle: String
+
+    var body: some View {
+        KotobaCard(pad: .sm, elevation: .flat) {
+            VStack(alignment: .leading, spacing: KotobaSpacing.space1) {
+                Text(title)
+                    .font(KotobaFont.body(.text3xs, weight: .bold))
+                    .foregroundStyle(KotobaColor.textMuted)
+                Text(value)
+                    .font(KotobaFont.numeric(.text2xl, weight: .bold))
+                    .foregroundStyle(KotobaColor.textStrong)
+                Text(subtitle)
+                    .font(KotobaFont.body(.text3xs, weight: .semibold))
+                    .foregroundStyle(KotobaColor.textMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+}
+
+private extension SkillStat {
+    var label: String {
+        switch self {
+        case .vocabulary: "Vocabulary"
+        case .grammar: "Grammar"
+        case .listening: "Listening"
+        case .reading: "Reading"
+        }
+    }
+
+    var jp: String {
+        switch self {
+        case .vocabulary: "語彙"
+        case .grammar: "文法"
+        case .listening: "聴解"
+        case .reading: "読解"
+        }
+    }
+
+    var tone: KotobaComponentTone {
+        switch self {
+        case .vocabulary: .brand
+        case .grammar: .accent
+        case .listening: .torii
+        case .reading: .success
+        }
     }
 }

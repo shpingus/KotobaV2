@@ -118,11 +118,14 @@ final class AppModel {
             route = .battle
         case "gate":
             route = .gate
+        case "practice":
+            initialTab = .practice
+            route = .home
         case "spirit":
             initialTab = .spirit
             route = .home
         case "profile":
-            initialTab = .profile
+            initialTab = .spirit
             route = .home
         default:
             route = .home

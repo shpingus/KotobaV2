@@ -11,11 +11,11 @@
 		0566642DA028B16655F2D479 /* FeatureSensei in Frameworks */ = {isa = PBXBuildFile; productRef = CCE67D1432F520C5D0D6E11C /* FeatureSensei */; };
 		1BA567278DD5A593F147283A /* FeatureLesson in Frameworks */ = {isa = PBXBuildFile; productRef = A6785ECD374A9F97AF789A80 /* FeatureLesson */; };
 		437D5747F49396EC701CBE45 /* FeaturePath in Frameworks */ = {isa = PBXBuildFile; productRef = 66DA878D9E3D6182CB24B130 /* FeaturePath */; };
-		5BB7BA3047872D29C6D74F73 /* FeatureProfile in Frameworks */ = {isa = PBXBuildFile; productRef = 04C33691410C964243FD2508 /* FeatureProfile */; };
 		666763DEAFA20F538E2CD86C /* LearningEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 011FE56BDF46F9DCA168C874 /* LearningEngine */; };
 		8013B068E0D6D960312D10C1 /* KotobaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3C4631D871B66F7233A6D5 /* KotobaApp.swift */; };
 		0F2E17B4A1C34D8A9F6B1021 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2E17B2A1C34D8A9F6B1021 /* MainTabView.swift */; };
 		0F2E17B5A1C34D8A9F6B1021 /* KotobaTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2E17B3A1C34D8A9F6B1021 /* KotobaTabBar.swift */; };
+		0F2E17B8A1C34D8A9F6B1021 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2E17B6A1C34D8A9F6B1021 /* PracticeView.swift */; };
 		93D110BFBF7B60AC1D299D4C /* FeatureSpirit in Frameworks */ = {isa = PBXBuildFile; productRef = DD544A96B7313BEC23DDE249 /* FeatureSpirit */; };
 		A99457C7AF3B465D772DE404 /* KotobaDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 95293935E0D08C39BDA39564 /* KotobaDesignSystem */; };
 		B6155FCB68FF898718A333C9 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3C80E626A9E5E5C6B5A5B0 /* AppRootView.swift */; };
@@ -27,7 +27,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		26F154FE9AA0A9C244C844AD /* FeatureProfile */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeatureProfile; path = Packages/Features/FeatureProfile; sourceTree = SOURCE_ROOT; };
 		37F7FED9F260C7F0787FD55D /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		56E47DBC54395377D28519A4 /* KotobaApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KotobaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D21D172BC7D224985A73DB3 /* FeatureSensei */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeatureSensei; path = Packages/Features/FeatureSensei; sourceTree = SOURCE_ROOT; };
@@ -41,6 +40,7 @@
 		9DC19C3D3E9D04F7441ADF51 /* FeatureLesson */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeatureLesson; path = Packages/Features/FeatureLesson; sourceTree = SOURCE_ROOT; };
 		A9752BF55FDF7930B33231FD /* LearningEngine */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LearningEngine; path = Packages/LearningEngine; sourceTree = SOURCE_ROOT; };
 		AF3C80E626A9E5E5C6B5A5B0 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		0F2E17B6A1C34D8A9F6B1021 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
 		BFFA575941A8F36DFCF718D9 /* FeaturePath */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeaturePath; path = Packages/Features/FeaturePath; sourceTree = SOURCE_ROOT; };
 		D112C041DCC078E0F530FCA7 /* FeatureOnboarding */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FeatureOnboarding; path = Packages/Features/FeatureOnboarding; sourceTree = SOURCE_ROOT; };
 		DAF792DC7B5FE2634BA23288 /* KotobaDesignSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; name = KotobaDesignSystem; path = Packages/KotobaDesignSystem; sourceTree = SOURCE_ROOT; };
@@ -61,7 +61,6 @@
 				1BA567278DD5A593F147283A /* FeatureLesson in Frameworks */,
 				EED0E5C0128A0743B831BDBC /* FeatureBattle in Frameworks */,
 				93D110BFBF7B60AC1D299D4C /* FeatureSpirit in Frameworks */,
-				5BB7BA3047872D29C6D74F73 /* FeatureProfile in Frameworks */,
 				0566642DA028B16655F2D479 /* FeatureSensei in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,7 +84,6 @@
 				9DC19C3D3E9D04F7441ADF51 /* FeatureLesson */,
 				D112C041DCC078E0F530FCA7 /* FeatureOnboarding */,
 				BFFA575941A8F36DFCF718D9 /* FeaturePath */,
-				26F154FE9AA0A9C244C844AD /* FeatureProfile */,
 				6D21D172BC7D224985A73DB3 /* FeatureSensei */,
 				E84CC554DD2CBBF3E49B6C8A /* FeatureSpirit */,
 				DAF792DC7B5FE2634BA23288 /* KotobaDesignSystem */,
@@ -111,6 +109,7 @@
 				8E3C4631D871B66F7233A6D5 /* KotobaApp.swift */,
 				0F2E17B3A1C34D8A9F6B1021 /* KotobaTabBar.swift */,
 				0F2E17B2A1C34D8A9F6B1021 /* MainTabView.swift */,
+				0F2E17B6A1C34D8A9F6B1021 /* PracticeView.swift */,
 				7331EA59F9B7EC090275DB6C /* ResultsView.swift */,
 				1321B48D1892AFE262AB2219 /* Model */,
 			);
@@ -151,7 +150,6 @@
 				A6785ECD374A9F97AF789A80 /* FeatureLesson */,
 				9208EEBBE272A20B67F8CE3B /* FeatureBattle */,
 				DD544A96B7313BEC23DDE249 /* FeatureSpirit */,
-				04C33691410C964243FD2508 /* FeatureProfile */,
 				CCE67D1432F520C5D0D6E11C /* FeatureSensei */,
 			);
 			productName = KotobaApp;
@@ -187,7 +185,6 @@
 				ED1B0AFCC87A4850A40CD237 /* XCLocalSwiftPackageReference "Packages/Features/FeatureLesson" */,
 				69ADF2F09F19B83E22408616 /* XCLocalSwiftPackageReference "Packages/Features/FeatureOnboarding" */,
 				821CE3A5AF7E1436FE075C1F /* XCLocalSwiftPackageReference "Packages/Features/FeaturePath" */,
-				4C173A43CF3C7E95271AD00A /* XCLocalSwiftPackageReference "Packages/Features/FeatureProfile" */,
 				E3000062EE04E57A962A0B37 /* XCLocalSwiftPackageReference "Packages/Features/FeatureSensei" */,
 				824D93F48264C32A69BB58E8 /* XCLocalSwiftPackageReference "Packages/Features/FeatureSpirit" */,
 				A195CBB947DF00C6F598A437 /* XCLocalSwiftPackageReference "Packages/KotobaDesignSystem" */,
@@ -214,6 +211,7 @@
 				8013B068E0D6D960312D10C1 /* KotobaApp.swift in Sources */,
 				0F2E17B5A1C34D8A9F6B1021 /* KotobaTabBar.swift in Sources */,
 				0F2E17B4A1C34D8A9F6B1021 /* MainTabView.swift in Sources */,
+				0F2E17B8A1C34D8A9F6B1021 /* PracticeView.swift in Sources */,
 				B95752F548624A83AA5D8C62 /* ResultsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,10 +412,6 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/ContentKit;
 		};
-		4C173A43CF3C7E95271AD00A /* XCLocalSwiftPackageReference "Packages/Features/FeatureProfile" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/Features/FeatureProfile;
-		};
 		69ADF2F09F19B83E22408616 /* XCLocalSwiftPackageReference "Packages/Features/FeatureOnboarding" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/Features/FeatureOnboarding;
@@ -456,10 +450,6 @@
 		011FE56BDF46F9DCA168C874 /* LearningEngine */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LearningEngine;
-		};
-		04C33691410C964243FD2508 /* FeatureProfile */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FeatureProfile;
 		};
 		28341647D124D2881F116D76 /* ContentKit */ = {
 			isa = XCSwiftPackageProductDependency;

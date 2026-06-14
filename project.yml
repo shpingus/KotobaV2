@@ -26,8 +26,6 @@ packages:
     path: Packages/Features/FeatureBattle
   FeatureSpirit:
     path: Packages/Features/FeatureSpirit
-  FeatureProfile:
-    path: Packages/Features/FeatureProfile
   FeatureSensei:
     path: Packages/Features/FeatureSensei
 targets:
@@ -58,8 +56,6 @@ targets:
         product: FeatureBattle
       - package: FeatureSpirit
         product: FeatureSpirit
-      - package: FeatureProfile
-        product: FeatureProfile
       - package: FeatureSensei
         product: FeatureSensei
     settings:

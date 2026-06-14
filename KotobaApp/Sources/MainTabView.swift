@@ -1,6 +1,5 @@
 import SwiftUI
 import FeaturePath
-import FeatureProfile
 import FeatureSpirit
 import KotobaDesignSystem
 
@@ -35,14 +34,15 @@ struct MainTabView: View {
                 onStartBoss: { model.startBoss() },
                 onShowGate: { model.route = .gate }
             )
-        case .spirit:
-            SpiritView(
+        case .practice:
+            PracticeView(
+                pack: model.pack,
                 state: model.state,
                 onStartPractice: { model.startPractice() },
                 onStartBoss: { model.startBoss() }
             )
-        case .profile:
-            ProfileView(state: model.state)
+        case .spirit:
+            SpiritView(state: model.state)
         }
     }
 }

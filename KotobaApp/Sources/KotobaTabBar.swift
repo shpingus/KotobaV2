@@ -3,22 +3,22 @@ import KotobaDesignSystem
 
 enum MainTab: CaseIterable, Hashable {
     case learn
+    case practice
     case spirit
-    case profile
 
     var title: String {
         switch self {
         case .learn: "Learn"
+        case .practice: "Practice"
         case .spirit: "Spirit"
-        case .profile: "Profile"
         }
     }
 
     var systemImage: String {
         switch self {
         case .learn: "map"
+        case .practice: "bolt.fill"
         case .spirit: "sparkles"
-        case .profile: "person.crop.circle"
         }
     }
 }
