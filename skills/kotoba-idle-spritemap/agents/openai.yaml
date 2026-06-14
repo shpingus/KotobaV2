@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kotoba Idle Spritemap"
+  short_description: "Build Kotoba idle sprite-frame maps"
+  default_prompt: "Use $kotoba-idle-spritemap to generate design-system idle animation spritemaps for Kotoba pixel sprites."

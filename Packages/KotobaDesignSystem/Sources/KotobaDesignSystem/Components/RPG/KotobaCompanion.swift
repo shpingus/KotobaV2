@@ -5,6 +5,7 @@ public struct KotobaCompanion: View {
     private let stage: KotobaCompanionStage
     private let size: CGFloat
     private let floating: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     public init(stage: KotobaCompanionStage = .newborn, size: CGFloat = 72, floating: Bool = false) {
         self.stage = stage
@@ -13,8 +14,23 @@ public struct KotobaCompanion: View {
     }
 
     public var body: some View {
-        KotobaPixelSprite(matrix: stage.matrix, palette: CompanionPalette.colors, size: size)
-            .offset(y: floating ? -4 : 0)
+        if floating && !reduceMotion {
+            TimelineView(.animation) { context in
+                let frame = KotobaCompanionIdleSpritemap.frame(
+                    for: stage,
+                    elapsed: context.date.timeIntervalSinceReferenceDate
+                )
+                sprite(matrix: frame.matrix)
+                    .offset(y: frame.yOffsetRatio * size)
+            }
+        } else {
+            sprite(matrix: stage.matrix)
+                .offset(y: floating ? -4 : 0)
+        }
+    }
+
+    private func sprite(matrix: [String]) -> some View {
+        KotobaPixelSprite(matrix: matrix, palette: CompanionPalette.colors, size: size)
     }
 }
 
@@ -24,30 +40,8 @@ public enum KotobaCompanionStage: Int {
     case guardian = 3
 
     var matrix: [String] {
-        switch self {
-        case .newborn: Self.stage1
-        case .traveler: Self.stage2
-        case .guardian: Self.stage3
-        }
+        KotobaCompanionIdleSpritemap.still(for: self)
     }
-
-    private static let stage1 = [
-        "....OOOO....", "..OOBBBBOO..", ".OBBLBLBBBO.", ".OBBBBBBBBO.",
-        ".OBWWBBWWBO.", ".OBWKBBWKBO.", "OBRBBOOBBRBO", "OBBBBBBBBBBO",
-        ".OBBBBBBBBO.", ".OBBBBBBBBO.", "..OBBOOBBO..", "...OBO.OBO..", "....O...O..."
-    ]
-
-    private static let stage2 = [
-        "....OOOO....", "..OOBBBBOO..", ".OBBLBLBBBO.", ".OBBBBBBBBO.",
-        ".OBWWBBWWBO.", ".OBWKBBWKBO.", "OBBBBOOBBBBO", "OBBBBBBBBBBO",
-        ".OSSSSSSSSO.", ".OSSDDDDSSO.", "..OBBOOBSSO.", "...OBO.OSO..", "....O...O..."
-    ]
-
-    private static let stage3 = [
-        ".G..OOOO..G.", "..OOBBBBOO..", ".OBBLBLBBBO.", ".OGGGGGGGGO.",
-        ".OBWWBBWWBO.", ".OBWKBBWKBO.", "OBBBBOOBBBBO", "OBBBBBBBBBBO",
-        ".OSSSSSSSSO.", ".OSSDDDDSSO.", "G.OBBOOBSSO.", "...OBO.OSO..", "....O...O..."
-    ]
 }
 
 private enum CompanionPalette {
