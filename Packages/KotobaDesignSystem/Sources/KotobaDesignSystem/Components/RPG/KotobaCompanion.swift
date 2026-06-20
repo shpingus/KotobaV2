@@ -4,17 +4,18 @@ import SwiftUI
 public struct KotobaCompanion: View {
     private let stage: KotobaCompanionStage
     private let size: CGFloat
-    private let floating: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     public init(stage: KotobaCompanionStage = .newborn, size: CGFloat = 72, floating: Bool = false) {
         self.stage = stage
         self.size = size
-        self.floating = floating
     }
 
     public var body: some View {
-        if floating && !reduceMotion {
+        if reduceMotion {
+            sprite(matrix: stage.matrix)
+                .offset(y: KotobaCompanionIdleSpritemap.reducedMotionYOffsetRatio * size)
+        } else {
             TimelineView(.animation) { context in
                 let frame = KotobaCompanionIdleSpritemap.frame(
                     for: stage,
@@ -23,9 +24,6 @@ public struct KotobaCompanion: View {
                 sprite(matrix: frame.matrix)
                     .offset(y: frame.yOffsetRatio * size)
             }
-        } else {
-            sprite(matrix: stage.matrix)
-                .offset(y: floating ? -4 : 0)
         }
     }
 

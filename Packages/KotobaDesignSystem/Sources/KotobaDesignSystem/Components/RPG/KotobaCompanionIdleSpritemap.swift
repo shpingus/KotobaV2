@@ -13,6 +13,8 @@ struct KotobaCompanionIdleFrame: Equatable {
 enum KotobaCompanionIdleSpritemap {
     static let cycleDuration: TimeInterval = 2.50
 
+    static let reducedMotionYOffsetRatio: CGFloat = -0.018
+
     static func frames(for stage: KotobaCompanionStage) -> [KotobaCompanionIdleFrame] {
         switch stage {
         case .newborn: Self.newbornFrames
@@ -59,7 +61,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.32,
-            yOffsetRatio: 0.000
+            yOffsetRatio: 0.010
         ),
         .init(
             matrix: [
@@ -78,7 +80,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.20,
-            yOffsetRatio: -0.018
+            yOffsetRatio: -0.012
         ),
         .init(
             matrix: [
@@ -97,7 +99,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.24,
-            yOffsetRatio: -0.040
+            yOffsetRatio: -0.036
         ),
         .init(
             matrix: [
@@ -116,7 +118,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.10,
-            yOffsetRatio: -0.045
+            yOffsetRatio: -0.040
         ),
         .init(
             matrix: [
@@ -135,7 +137,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.22,
-            yOffsetRatio: -0.040
+            yOffsetRatio: -0.030
         ),
         .init(
             matrix: [
@@ -154,7 +156,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.28,
-            yOffsetRatio: -0.015
+            yOffsetRatio: -0.006
         ),
         .init(
             matrix: [
@@ -173,7 +175,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 1.14,
-            yOffsetRatio: 0.000
+            yOffsetRatio: 0.014
         )
     ]
 
@@ -195,7 +197,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.32,
-            yOffsetRatio: 0.000
+            yOffsetRatio: 0.010
         ),
         .init(
             matrix: [
@@ -214,7 +216,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.20,
-            yOffsetRatio: -0.018
+            yOffsetRatio: -0.012
         ),
         .init(
             matrix: [
@@ -233,7 +235,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.24,
-            yOffsetRatio: -0.040
+            yOffsetRatio: -0.036
         ),
         .init(
             matrix: [
@@ -252,7 +254,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.10,
-            yOffsetRatio: -0.045
+            yOffsetRatio: -0.040
         ),
         .init(
             matrix: [
@@ -271,7 +273,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.22,
-            yOffsetRatio: -0.040
+            yOffsetRatio: -0.030
         ),
         .init(
             matrix: [
@@ -290,7 +292,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.28,
-            yOffsetRatio: -0.015
+            yOffsetRatio: -0.006
         ),
         .init(
             matrix: [
@@ -309,7 +311,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 1.14,
-            yOffsetRatio: 0.000
+            yOffsetRatio: 0.014
         )
     ]
 
@@ -331,7 +333,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.32,
-            yOffsetRatio: 0.000
+            yOffsetRatio: 0.010
         ),
         .init(
             matrix: [
@@ -350,7 +352,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.20,
-            yOffsetRatio: -0.018
+            yOffsetRatio: -0.012
         ),
         .init(
             matrix: [
@@ -369,7 +371,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.24,
-            yOffsetRatio: -0.040
+            yOffsetRatio: -0.036
         ),
         .init(
             matrix: [
@@ -388,7 +390,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.10,
-            yOffsetRatio: -0.045
+            yOffsetRatio: -0.040
         ),
         .init(
             matrix: [
@@ -407,7 +409,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.22,
-            yOffsetRatio: -0.040
+            yOffsetRatio: -0.030
         ),
         .init(
             matrix: [
@@ -426,7 +428,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 0.28,
-            yOffsetRatio: -0.015
+            yOffsetRatio: -0.006
         ),
         .init(
             matrix: [
@@ -445,7 +447,7 @@ enum KotobaCompanionIdleSpritemap {
                 "....O...O...",
             ],
             duration: 1.14,
-            yOffsetRatio: 0.000
+            yOffsetRatio: 0.014
         )
     ]
 }
