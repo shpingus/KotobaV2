@@ -31,8 +31,6 @@ final class KotobaDesignSystemTests: XCTestCase {
     func testCompanionIdleBreathingUsesSubtleContinuousMotionEnvelope() {
         XCTAssertLessThan(KotobaCompanionIdleSpritemap.breathingAmplitudeRatio, 0.04)
         XCTAssertGreaterThan(KotobaCompanionIdleSpritemap.breathingAmplitudeRatio, 0.02)
-        XCTAssertLessThan(KotobaCompanionIdleSpritemap.breathingScaleAmplitude, 0.02)
-        XCTAssertGreaterThan(KotobaCompanionIdleSpritemap.breathingScaleAmplitude, 0)
     }
 
     func testCompanionIdleSpritemapAdvancesThroughBlinkFrame() {

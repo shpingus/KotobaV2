@@ -15,7 +15,6 @@ enum KotobaCompanionIdleSpritemap {
 
     static let breathingRestYOffsetRatio: CGFloat = -0.012
     static let breathingAmplitudeRatio: CGFloat = 0.030
-    static let breathingScaleAmplitude: CGFloat = 0.018
     static let reducedMotionYOffsetRatio: CGFloat = -0.018
 
     static func frames(for stage: KotobaCompanionStage) -> [KotobaCompanionIdleFrame] {

@@ -24,7 +24,6 @@ public struct KotobaCompanion: View {
                     elapsed: elapsed
                 )
                 sprite(matrix: frame.matrix)
-                    .scaleEffect(y: breathingScale(elapsed: elapsed), anchor: .bottom)
                     .offset(y: breathingYOffset(elapsed: elapsed))
             }
         }
@@ -39,11 +38,6 @@ public struct KotobaCompanion: View {
         let ratio = KotobaCompanionIdleSpritemap.breathingRestYOffsetRatio
             - KotobaCompanionIdleSpritemap.breathingAmplitudeRatio * CGFloat(sin(phase))
         return ratio * size
-    }
-
-    private func breathingScale(elapsed: TimeInterval) -> CGFloat {
-        let phase = elapsed / KotobaCompanionIdleSpritemap.cycleDuration * .pi * 2
-        return 1 + KotobaCompanionIdleSpritemap.breathingScaleAmplitude * CGFloat(cos(phase))
     }
 }
 

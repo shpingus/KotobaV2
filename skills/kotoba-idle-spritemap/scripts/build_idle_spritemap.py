@@ -140,7 +140,6 @@ def render_swift(stage_frames: dict[str, list[Frame]]) -> str:
         f"    static let cycleDuration: TimeInterval = {cycle_duration:.2f}\n\n"
         "    static let breathingRestYOffsetRatio: CGFloat = -0.012\n"
         "    static let breathingAmplitudeRatio: CGFloat = 0.030\n"
-        "    static let breathingScaleAmplitude: CGFloat = 0.018\n"
         "    static let reducedMotionYOffsetRatio: CGFloat = -0.018\n\n"
         "    static func frames(for stage: KotobaCompanionStage) -> [KotobaCompanionIdleFrame] {\n"
         "        switch stage {\n"
