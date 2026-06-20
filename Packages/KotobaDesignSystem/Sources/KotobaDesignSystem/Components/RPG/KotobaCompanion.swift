@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 
 /// Kotodama companion sprite; evolution state comes from learner progress elsewhere.
@@ -17,18 +18,32 @@ public struct KotobaCompanion: View {
                 .offset(y: KotobaCompanionIdleSpritemap.reducedMotionYOffsetRatio * size)
         } else {
             TimelineView(.animation) { context in
+                let elapsed = context.date.timeIntervalSinceReferenceDate
                 let frame = KotobaCompanionIdleSpritemap.frame(
                     for: stage,
-                    elapsed: context.date.timeIntervalSinceReferenceDate
+                    elapsed: elapsed
                 )
                 sprite(matrix: frame.matrix)
-                    .offset(y: frame.yOffsetRatio * size)
+                    .scaleEffect(y: breathingScale(elapsed: elapsed), anchor: .bottom)
+                    .offset(y: breathingYOffset(elapsed: elapsed))
             }
         }
     }
 
     private func sprite(matrix: [String]) -> some View {
         KotobaPixelSprite(matrix: matrix, palette: CompanionPalette.colors, size: size)
+    }
+
+    private func breathingYOffset(elapsed: TimeInterval) -> CGFloat {
+        let phase = elapsed / KotobaCompanionIdleSpritemap.cycleDuration * .pi * 2
+        let ratio = KotobaCompanionIdleSpritemap.breathingRestYOffsetRatio
+            - KotobaCompanionIdleSpritemap.breathingAmplitudeRatio * CGFloat(sin(phase))
+        return ratio * size
+    }
+
+    private func breathingScale(elapsed: TimeInterval) -> CGFloat {
+        let phase = elapsed / KotobaCompanionIdleSpritemap.cycleDuration * .pi * 2
+        return 1 + KotobaCompanionIdleSpritemap.breathingScaleAmplitude * CGFloat(cos(phase))
     }
 }
 

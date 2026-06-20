@@ -14,13 +14,11 @@ final class KotobaDesignSystemTests: XCTestCase {
             let frames = KotobaCompanionIdleSpritemap.frames(for: stage)
             XCTAssertEqual(frames.count, 7)
             XCTAssertEqual(frames[0].matrix, stage.matrix)
-            XCTAssertTrue(frames.contains { $0.yOffsetRatio < 0 })
-            XCTAssertTrue(frames.contains { $0.yOffsetRatio > 0 })
 
             for frame in frames {
                 XCTAssertEqual(frame.matrix.count, 13)
                 XCTAssertGreaterThan(frame.duration, 0)
-                XCTAssertLessThanOrEqual(abs(frame.yOffsetRatio), 0.05)
+                XCTAssertEqual(frame.yOffsetRatio, 0)
 
                 for row in frame.matrix {
                     XCTAssertEqual(row.count, 12)
@@ -28,6 +26,13 @@ final class KotobaDesignSystemTests: XCTestCase {
                 }
             }
         }
+    }
+
+    func testCompanionIdleBreathingUsesSubtleContinuousMotionEnvelope() {
+        XCTAssertLessThan(KotobaCompanionIdleSpritemap.breathingAmplitudeRatio, 0.04)
+        XCTAssertGreaterThan(KotobaCompanionIdleSpritemap.breathingAmplitudeRatio, 0.02)
+        XCTAssertLessThan(KotobaCompanionIdleSpritemap.breathingScaleAmplitude, 0.02)
+        XCTAssertGreaterThan(KotobaCompanionIdleSpritemap.breathingScaleAmplitude, 0)
     }
 
     func testCompanionIdleSpritemapAdvancesThroughBlinkFrame() {

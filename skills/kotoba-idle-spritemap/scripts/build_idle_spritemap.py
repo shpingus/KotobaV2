@@ -63,13 +63,13 @@ def frames_for(stage: str) -> list[Frame]:
     base = BASE_MATRICES[stage]
     lifted = sway(stage, base)
     return [
-        Frame(base, 0.32, 0.010),
-        Frame(lifted, 0.20, -0.012),
-        Frame(lifted, 0.24, -0.036),
-        Frame(blink(lifted), 0.10, -0.040),
-        Frame(lifted, 0.22, -0.030),
-        Frame(base, 0.28, -0.006),
-        Frame(base, 1.14, 0.014),
+        Frame(base, 0.32, 0.0),
+        Frame(lifted, 0.20, 0.0),
+        Frame(lifted, 0.24, 0.0),
+        Frame(blink(lifted), 0.10, 0.0),
+        Frame(lifted, 0.22, 0.0),
+        Frame(base, 0.28, 0.0),
+        Frame(base, 1.14, 0.0),
     ]
 
 
@@ -138,6 +138,9 @@ def render_swift(stage_frames: dict[str, list[Frame]]) -> str:
         "}\n\n"
         "enum KotobaCompanionIdleSpritemap {\n"
         f"    static let cycleDuration: TimeInterval = {cycle_duration:.2f}\n\n"
+        "    static let breathingRestYOffsetRatio: CGFloat = -0.012\n"
+        "    static let breathingAmplitudeRatio: CGFloat = 0.030\n"
+        "    static let breathingScaleAmplitude: CGFloat = 0.018\n"
         "    static let reducedMotionYOffsetRatio: CGFloat = -0.018\n\n"
         "    static func frames(for stage: KotobaCompanionStage) -> [KotobaCompanionIdleFrame] {\n"
         "        switch stage {\n"
